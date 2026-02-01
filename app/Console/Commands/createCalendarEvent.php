@@ -41,7 +41,7 @@ class createCalendarEvent extends Command
 
         try {
             foreach ($services as $service){
-                if ($this->createCalendarEvent($service)){
+                if ($this->createCalendarEvent($service), $telegram){
                     $servicesCreatedCounter +1;
                 }
             }
@@ -73,9 +73,13 @@ class createCalendarEvent extends Command
         */
     }
 
-    protected function createCalendarEvent($service) : bool
+    protected function createCalendarEvent($service, $telegram) : bool
     {
         $eventFound = Calendar::where('client_id', $service->client_id)->where('car_id', $service->car_id)->first();
+        
+        $telegram->send(
+            sprintf("Event found: %s", $eventFound->count())
+        );
 
         if (!$eventFound){
             Calendar::insert([
