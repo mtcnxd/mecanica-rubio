@@ -79,7 +79,7 @@ class createCalendarEvent extends Command
             ->first();
         
         $telegram->send(
-            sprintf("Events found while creating one: %s", $eventFound->count())
+            sprintf("Events found while creating event: \n\rClient: %s \n\rCar: %s", $service->client_id, $service->car_id)
         );
 
         if (!$eventFound){

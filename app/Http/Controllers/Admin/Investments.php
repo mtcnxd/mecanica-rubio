@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use NumberFormatter;
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
+use App\Services\InvestmentService;
 use Illuminate\Http\Request;
 use App\Models\Charts;
 use App\Models\{
@@ -15,11 +16,15 @@ use App\Models\{
 
 class Investments extends Controller
 {
-    public function index(BitsoData $bitsoData, Investment $investment, Charts $charts)
+    public function __contruct(InvestmentService $investmentService)
     {
-        $bitso = $bitsoData->where('active', true)->get();
+        $this->investmentService = $investmentService;
+    }
 
-        $investments = $investment->where('active', true)->orderBy('name')->get();
+    public function index(Charts $charts)
+    {
+        $bitso = $this->investmentService->activeTrades();
+        $investments = $this->investmentService->activeInvestments();
 
         return view('admin.investments.index', compact('bitso', 'investments', 'charts'));
     }

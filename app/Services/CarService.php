@@ -27,7 +27,6 @@ class CarService
             if(isset($criteria['id'])){
                 $query->where('id', $criteria['id']);
             }
-
         })->get();
     }
 }
