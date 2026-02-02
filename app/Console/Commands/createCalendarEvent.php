@@ -29,8 +29,6 @@ class createCalendarEvent extends Command
      */
     public function handle(Telegram $telegram)
     {
-        $servicesCreatedCounter = 0;
-
         $services = Service::where('created_at','>', Carbon::now()->subDays(10))
             ->whereIn('service_type',['Mayor','Menor'])
             ->get();
@@ -40,8 +38,9 @@ class createCalendarEvent extends Command
         );
 
         try {
+            $servicesCreatedCounter = 0;
             foreach ($services as $service){
-                if ($this->createCalendarEvent($service), $telegram){
+                if ($this->createCalendarEvent($service, $telegram)){
                     $servicesCreatedCounter +1;
                 }
             }
@@ -75,21 +74,21 @@ class createCalendarEvent extends Command
 
     protected function createCalendarEvent($service, $telegram) : bool
     {
-        $eventFound = Calendar::where('client_id', $service->client_id)->where('car_id', $service->car_id)->first();
+        $eventFound = Calendar::where('client_id', $service->client_id)
+            ->where('car_id', $service->car_id)
+            ->first();
         
         $telegram->send(
-            sprintf("Event found: %s", $eventFound->count())
+            sprintf("Events found while creating one: %s", $eventFound->count())
         );
 
         if (!$eventFound){
-            Calendar::insert([
+            Calendar::create([
                 'name'          => 'Mantenimiento programado',
                 'description'   => 'Mantenimiento programado',
                 'client_id'     => $service->client_id,
                 'car_id'        => $service->car_id,
-                'event_date'    => Carbon::parse($service->finished_date)->addMonths(5),
-                'created_at'    => Carbon::now(),
-                'updated_at'    => Carbon::now(),
+                'event_date'    => Carbon::parse($service->finished_date)->addMonths(5)
             ]);
 
             return true;
