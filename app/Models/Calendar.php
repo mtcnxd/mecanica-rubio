@@ -4,9 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Service;
+use App\Models\{Service, Client, Car};
 use Carbon\Carbon;
-use DB;
 
 class Calendar extends Model
 {
@@ -35,6 +34,11 @@ class Calendar extends Model
     public function service()
     {
         return $this->belongsTo(Service::class, 'service_id');
+    }
+
+    public function car()
+    {
+        return $this->belongsTo(Car::class, 'car_id');
     }
 
     public function currentDay()
@@ -83,10 +87,5 @@ class Calendar extends Model
 
         $month = Carbon::now()->month -1;
         return $monthNames[$month];
-    }
-
-    public function getCalendar()
-    {
-        return $this;
     }
 }

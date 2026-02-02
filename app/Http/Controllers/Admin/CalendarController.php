@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use \DB;
-use Exception;
 use Carbon\Carbon;
-use App\Models\Service;
-use App\Models\Calendar;
+use App\Models\{Service, Calendar};
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Notifications\Telegram;
@@ -41,17 +38,27 @@ class CalendarController extends Controller
         Whatsapp::send();
     }
 
+    public function all()
+    {
+        return response()->json([
+            'success' => true,
+            'data' => [
+                Calendar::all()
+            ]
+        ]);
+    }
+
     public function getEvent(Request $request)
     {
-        $event = Calendar::find($request->id);
+        $calendar = Calendar::find($request->id);
 
         return response()->json([
             "success" => true,
             "data"    => [
-                'event'   => $event,
-                'service' => $event->service,
-                'client'  => $event->service->client,
-                'car'     => $event->service->car,
+                'event'   => $calendar,
+                'service' => $calendar->service,
+                'client'  => $calendar->client,
+                'car'     => $calendar->car,
             ]
         ]);
     }
