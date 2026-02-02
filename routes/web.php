@@ -15,7 +15,7 @@ use App\Http\Controllers\Admin\{
     Employees,
     ExpensesController,
     FinanceController,
-    Investments,
+    InvestmentsController,
     PayrollController,
     Profile,
     QuotesController,
@@ -111,12 +111,12 @@ Route::group(['prefix' => 'admin', 'middleware' => 'isAdmin'], function(){
         Route::get('/client/{client}', [FinanceController::class, 'show'])->name('reports.client');
     });
 
-    Route::group(['prefix' => 'investments'], function(){
-        Route::get('/', [Investments::class, 'index'])->name('investments.index');
-        Route::post('store', [Investments::class, 'store'])->name('investments.store');
-        Route::post('update', [Investments::class, 'update'])->name('investments.update');
+    Route::group(['prefix' => 'investments', 'controller' => InvestmentsController::class], function(){
+        Route::get('/', 'index')->name('investments.index');
+        Route::post('store', 'store')->name('investments.store');
+        Route::post('update', 'update')->name('investments.update');
 
-        Route::get('instrument/{investment_id}', [Investments::class, 'show'])->name('investments.show');
+        Route::get('instrument/{investment_id}', 'show')->name('investments.show');
     });
     
     Route::group(['prefix' => 'profile'], function(){ 

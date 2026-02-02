@@ -14,17 +14,13 @@ use App\Models\{
     BitsoData
 };
 
-class Investments extends Controller
+class InvestmentsController extends Controller
 {
-    public function __contruct()
+    public function index(BitsoData $bitsoData, Investment $investment, Charts $charts)
     {
-        $this->investmentService = new InvestmentService;
-    }
+        $bitso = $bitsoData->where('active', true)->get();
 
-    public function index(Charts $charts)
-    {
-        $bitso = $this->investmentService->activeTrades();
-        $investments = $this->investmentService->activeInvestments();
+        $investments = $investment->where('active', true)->orderBy('name')->get();
 
         return view('admin.investments.index', compact('bitso', 'investments', 'charts'));
     }

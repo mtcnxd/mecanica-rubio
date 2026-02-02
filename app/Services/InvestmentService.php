@@ -16,4 +16,9 @@ class InvestmentService
     {
         return Investment::where('active', true)->orderBy('name')->get();
     }
+
+    public function create(array $data) : Investment
+    {
+        return Investment::create($data);
+    }
 }

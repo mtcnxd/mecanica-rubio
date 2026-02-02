@@ -7,7 +7,7 @@ use App\Http\Controllers\Admin\FinanceController;
 use App\Http\Controllers\Admin\CalendarController;
 
 use App\Http\Controllers\Admin\{
-    CarsController,ClientsController,PayrollController,ExpensesController,ServicesController,Employees,Investments
+    CarsController,ClientsController,PayrollController,ExpensesController,ServicesController,Employees,InvestmentsController
 };
 
 use App\Http\Controllers\Api\{
@@ -103,4 +103,4 @@ Route::group(['prefix' => 'finance'], function(){
 Route::get('calendar/event/all', [CalendarController::class, 'all'])->name('calendar.all');
 Route::get('calendar/event/{id}', [CalendarController::class, 'getEvent'])->name('calendar.getEvent');
 
-Route::get('/bitso/destroy', [Investments::class, 'destroy'])->name('bitso.destroy');
+Route::get('/bitso/destroy', [InvestmentsController::class, 'destroy'])->name('bitso.destroy');
