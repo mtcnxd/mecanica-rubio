@@ -78,8 +78,9 @@ class InvestmentsController extends Controller
 
     public function total()
     {
-        return (new InvestmentService)->getTotal();
-
+        return response()->json([
+            'total' => (new InvestmentService)->getTotal()
+        ]);
     }
 
     public function destroy(Request $request)
