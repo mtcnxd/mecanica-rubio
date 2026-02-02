@@ -16,9 +16,9 @@ use App\Models\{
 
 class Investments extends Controller
 {
-    public function __contruct(InvestmentService $investmentService)
+    public function __contruct()
     {
-        $this->investmentService = $investmentService;
+        $this->investmentService = new InvestmentService;
     }
 
     public function index(Charts $charts)
