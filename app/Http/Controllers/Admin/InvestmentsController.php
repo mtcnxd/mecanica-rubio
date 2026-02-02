@@ -79,7 +79,7 @@ class InvestmentsController extends Controller
     public function total()
     {
         return response()->json([
-            'total' => (new InvestmentService)->getTotal()
+            'total' => number_format((new InvestmentService)->getTotal(), 0)
         ]);
     }
 
