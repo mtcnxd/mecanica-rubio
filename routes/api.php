@@ -100,7 +100,10 @@ Route::group(['prefix' => 'finance'], function(){
     });
 });
 
+Route::group(['prefix' => 'investments', 'controller' => InvestmentsController::class], function(){
+    Route::get('total', 'total')->name('investments.total');
+    Route::get('/bitso/destroy', 'destroy')->name('bitso.destroy');
+});
+
 Route::get('calendar/event/all', [CalendarController::class, 'all'])->name('calendar.all');
 Route::get('calendar/event/{id}', [CalendarController::class, 'getEvent'])->name('calendar.getEvent');
-
-Route::get('/bitso/destroy', [InvestmentsController::class, 'destroy'])->name('bitso.destroy');

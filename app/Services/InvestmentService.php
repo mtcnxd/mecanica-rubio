@@ -21,4 +21,18 @@ class InvestmentService
     {
         return Investment::create($data);
     }
+
+    public function getTotal()
+    {
+        $total = 0;
+        $actives = $this->activeInvestments();
+
+        foreach($actives as $active){
+            if (!is_null($active->investmentData->last())) {
+                $total += $active->investmentData->last()->amount;
+            }
+        }
+
+        return $total;
+    }
 }

@@ -76,6 +76,12 @@ class InvestmentsController extends Controller
         return view('admin.investments.show', compact('investment','investmentData'));
     }
 
+    public function total()
+    {
+        return (new InvestmentService)->getTotal();
+
+    }
+
     public function destroy(Request $request)
     {
         try {
