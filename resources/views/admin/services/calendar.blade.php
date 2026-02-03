@@ -57,7 +57,7 @@
                                 <input type="text" class="form-control" id="service" disabled>
                             </div>
                         </div>
-                        <div class="row mt-4">
+                        <div class="row mt-3">
                             <div class="col-md-12">
                                 <label for="car">Auto</label>
                                 <input type="text" class="form-control" id="car" disabled>
@@ -72,7 +72,7 @@
                                 <input type="text" class="form-control" id="client" disabled>
                             </div>
                         </div>
-                        <div class="row mt-4">
+                        <div class="row mt-3">
                             <div class="col-md-12">
                                 <label for="phone">Teléfono</label>
                                 <input type="text" class="form-control" id="phone" disabled>
@@ -81,7 +81,7 @@
                     </div>
                 </div>
 
-                <div class="row mt-4">
+                <div class="row mt-3">
                     <div class="col-md-12">
                         <textarea class="form-control" id="description" disabled rows="5"></textarea>
                     </div>

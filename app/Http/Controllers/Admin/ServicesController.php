@@ -76,17 +76,17 @@ class ServicesController extends Controller
 
     public function show(string $id)
     {
-        $service = Service::find($id);
+        $service = $this->servicesService->find($id);
         return view('admin.services.show', compact('service'));
     }
 
     public function update(Request $request, string $id)
     {
-        $service = Service::find($id);
-        $finishedDate = Carbon::now();
+        $finishedDate = now();
+        $service = $this->servicesService->find($id);
 
         if ($request->status == 'Entregado'){
-            $finishedDate = isset($request->finished_date) ? $request->finished_date : Carbon::now();
+            $finishedDate = $request->finished_date ? $request->finished_date : now();
         }
         
         $request->merge([
@@ -96,7 +96,6 @@ class ServicesController extends Controller
 
         try {
             $service->update($request->except('_token','_method'));
-            
             session()->flash('success', 'Guardado con exito');
         }
 

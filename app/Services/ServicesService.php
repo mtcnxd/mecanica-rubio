@@ -11,6 +11,11 @@ class ServicesService
         return Service::all();
     }
 
+    public function find(string $id) : Service
+    {
+        return Service::find($id);
+    }
+
     public function create(array $data) : Service
     {
         return Service::create($data);

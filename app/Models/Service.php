@@ -32,6 +32,10 @@ class Service extends Model
         'finished_date',
     ];
 
+    protected $with = [
+        'serviceItems'
+    ];
+
     public function client()
     {
         return $this->belongsTo(Client::class, 'client_id');
