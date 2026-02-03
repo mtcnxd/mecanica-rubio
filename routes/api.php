@@ -7,7 +7,13 @@ use App\Http\Controllers\Admin\FinanceController;
 use App\Http\Controllers\Admin\CalendarController;
 
 use App\Http\Controllers\Admin\{
-    CarsController,ClientsController,PayrollController,ExpensesController,ServicesController,Employees,InvestmentsController
+    CarsController,
+    ClientsController,
+    PayrollController,
+    ExpensesController,
+    ServicesController,
+    EmployeesController,
+    InvestmentsController
 };
 
 use App\Http\Controllers\Api\{
@@ -37,7 +43,7 @@ Route::group(['prefix' => 'employees_api', 'controller' => Employee::class], fun
     Route::get('delete', 'delete')->name('employees.delete');
 });
 
-Route::group(['prefix' => 'employees', 'controller' => Employees::class], function () {
+Route::group(['prefix' => 'employees', 'controller' => EmployeesController::class], function () {
     Route::post('vacations/create', 'createPendindVacationDay')->name('employees.vacations.create');
     Route::get('vacations/cancell', 'cancellPendingVacationDay')->name('employees.vacations.cancell');
 });
@@ -101,9 +107,11 @@ Route::group(['prefix' => 'finance'], function(){
 });
 
 Route::group(['prefix' => 'investments', 'controller' => InvestmentsController::class], function(){
-    Route::get('total', 'total')->name('investments.total');
-    Route::get('/bitso/destroy', 'destroy')->name('bitso.destroy');
+    Route::get('total','total')->name('investments.total');
+    Route::get('bitso/destroy','destroy')->name('bitso.destroy');
 });
 
-Route::get('calendar/event/all', [CalendarController::class, 'all'])->name('calendar.all');
-Route::get('calendar/event/{id}', [CalendarController::class, 'getEvent'])->name('calendar.getEvent');
+Route::group(['prefix' => 'calendar', 'controller' => CalendarController::class], function(){
+    Route::get('event/all','all')->name('calendar.all');
+    Route::get('event','getEvent')->name('calendar.getEvent');
+});

@@ -3,24 +3,22 @@
 namespace App\Http\Controllers\Admin;
 
 use Carbon\Carbon;
-use App\Models\{Service, Calendar};
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Notifications\Telegram;
-use App\Http\Controllers\Notifications\Whatsapp;
+use App\Services\CalendarService;
 
 class CalendarController extends Controller
 {
-    public function index(Calendar $calendar)
+    public function __construct(
+        private $calendarService = new CalendarService
+    ){
+
+    }
+
+    public function index()
     {
-        $events = [];
-
-        $events = $calendar->whereBetween('event_date',[
-            Carbon::now()->startOfMonth(),
-            Carbon::now()->endOfMonth()
-        ])->get();
-
-        return view('admin.services.calendar', compact('calendar', 'events'));
+        $calendar = $this->calendarService->render();
+        return view('admin.services.calendar', compact('calendar'));
     }
 
     public function sendNotification()
@@ -43,22 +41,19 @@ class CalendarController extends Controller
         return response()->json([
             'success' => true,
             'data' => [
-                Calendar::all()
+                $this->calendarService->all()
             ]
         ]);
     }
 
     public function getEvent(Request $request)
     {
-        $calendar = Calendar::find($request->id);
+        $calendar = $this->calendarService->find($request->id);
 
         return response()->json([
             "success" => true,
             "data"    => [
                 'event'   => $calendar,
-                'service' => $calendar->service,
-                'client'  => $calendar->client,
-                'car'     => $calendar->car,
             ]
         ]);
     }

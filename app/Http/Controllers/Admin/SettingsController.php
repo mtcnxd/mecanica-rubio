@@ -4,13 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use DB;
 
-class Settings extends Controller
+class SettingsController extends Controller
 {   
     public function index()
     {
-        $configs = DB::table('settings')->get();
+        $configs = \DB::table('settings')->get();
 
         return view('admin.settings.index', compact('configs'));
     }
@@ -19,7 +18,7 @@ class Settings extends Controller
     {
         foreach ($request->all() as $key => $value) {
             if ($key != '_token' and $key != '_method'){
-                DB::table('settings')->where('name', $key)->update([
+                \DB::table('settings')->where('name', $key)->update([
                     "value" => $value
                 ]);
             }
@@ -32,7 +31,7 @@ class Settings extends Controller
 
     public function store(Request $request)
     {
-        DB::table('settings')->insert([
+        \DB::table('settings')->insert([
             "name"  => $request->name,
             "value" => $request->value
         ]);

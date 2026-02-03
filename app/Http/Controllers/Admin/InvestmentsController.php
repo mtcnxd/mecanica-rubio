@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use NumberFormatter;
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 use App\Services\InvestmentService;

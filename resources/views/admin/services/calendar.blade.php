@@ -6,19 +6,19 @@
     <div class="calendar-title-bar pt-2">
         <h4 class="text-center">
             <x-feathericon-calendar class="window-title-icon" style="margin-top: -3px;"/>
-            {{ $calendar->monthName() }}
+            {{ $calendar['month'] }}
         </h4>
     </div>
 
     <div class="calendar-title pb-0">
-        @foreach ($calendar->weekDays() as $name)
+        @foreach ($calendar['days'] as $name)
         <div class="day title">
             {{ $name }}	
         </div>
         @endforeach
     </div>
     <div class="calendar-body">
-        @for ($i = 0; $i < $calendar->startDay(); $i++)
+        @for ($i = 0; $i < $calendar['startDay']; $i++)
             <div class="day date empty">
                 <div style="display: grid;">
                     <span class="day-label" style="visibility: hidden">0</span>
@@ -26,12 +26,12 @@
             </div>
         @endfor
 
-        @foreach ($calendar->getEvents() as $key => $event)
-            <div class="day date {{ ($key + 1 == $calendar->currentDay()) ? 'active' : '' }}">
+        @foreach ($calendar['events'] as $key => $event)
+            <div class="day date {{ ($key + 1 == now()->day) ? 'active' : '' }}">
                 <div style="display: grid;">
                     <span class="day-label">{{ $key + 1 }}</span>
                     @if (isset($event))
-                        <a href="#" id="{{ $event->id }}" class='event' data-bs-toggle="modal" data-bs-target="#eventDetails">{{ $event->name }}</a>
+                        <a href="#" data-id="{{ $event->id }}" class='event' data-bs-toggle="modal" data-bs-target="#eventDetails">{{ $event->name }}</a>
                     @endif
                 </div>
             </div>
@@ -42,7 +42,7 @@
 
 @section('modal')
 <div class="modal fade" id="eventDetails" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5">Detalles</h1>
@@ -50,43 +50,40 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-md-3 pt-2 text-end">
-                        Evento
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="Service">Servicio</label>
+                                <input type="text" class="form-control" id="service" disabled>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-md-12">
+                                <label for="car">Auto</label>
+                                <input type="text" class="form-control" id="car" disabled>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-9">
-                        <input type="text" class="form-control" id="event" disabled>
+
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="client">Cliente</label>
+                                <input type="text" class="form-control" id="client" disabled>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-md-12">
+                                <label for="phone">Teléfono</label>
+                                <input type="text" class="form-control" id="phone" disabled>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="row mt-3">
-                    <div class="col-md-3 pt-2 text-end">
-                        Descripción
-                    </div>
-                    <div class="col-md-9">
-                        <textarea class="form-control" id="description" disabled></textarea>
-                    </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-md-3 pt-2 text-end">
-                        Cliente
-                    </div>
-                    <div class="col-md-9">
-                        <input type="text" class="form-control" id="client" disabled>
-                    </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-md-3 pt-2 text-end">
-                        Auto
-                    </div>
-                    <div class="col-md-9">
-                        <input type="text" class="form-control" id="car" disabled>
-                    </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-md-3 pt-2 text-end">
-                        Teléfono
-                    </div>
-                    <div class="col-md-9">
-                        <input type="text" class="form-control" id="phone" disabled>
+
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <textarea class="form-control" id="description" disabled rows="5"></textarea>
                     </div>
                 </div>
             </div>
@@ -107,21 +104,24 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-$(".event").on('click', function(){
+$(".event").on('click', function(e){
+    e.preventDefault();
+    var eventId = $(this).data('id');
+
     $.ajax({
         url: "{{ route('calendar.getEvent') }}",
-        method: 'POST',
+        method: 'GET',
         data: { 
-            id:this.id
+            id: eventId
         },
         success: function(response){
-            console.log(response);
+            console.log(response.data);
             
-            $("#event").val(response.data.event.event);
+            $("#service").val(response.data.event.name);
             $("#description").val(response.data.event.description);
-            $("#client").val(response.data.client.name);
-            $("#car").val(response.data.car.brand + ' ' + response.data.car.model);
-            $("#phone").val(response.data.client.phone);
+            $("#client").val(response.data.event.client.name);
+            $("#phone").val(response.data.event.client.phone);
+            $("#car").val(response.data.event.car.brand + ' ' + response.data.event.car.model);
         }
     });
 })

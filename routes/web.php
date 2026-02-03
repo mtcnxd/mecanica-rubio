@@ -12,15 +12,15 @@ use App\Http\Controllers\Admin\{
     CalendarController,
     ClientsController,
     Dashboard,
-    Employees,
+    EmployeesController,
     ExpensesController,
     FinanceController,
     InvestmentsController,
     PayrollController,
-    Profile,
+    ProfileController,
     QuotesController,
     ServicesController,
-    Settings,
+    SettingsController,
     UsersController
 };
 
@@ -88,7 +88,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'isAdmin'], function(){
     Route::resource('clients', ClientsController::class);
     Route::resource('cars', CarsController::class);
     Route::resource('services', ServicesController::class);    
-    Route::resource('employees', Employees::class);
+    Route::resource('employees', EmployeesController::class);
     Route::resource('quotes', QuotesController::class)->only('index','show');
     Route::resource('users', UsersController::class)->except('destroy'); 
     Route::resource('payroll', PayrollController::class)->except('edit', 'destroy');
@@ -103,8 +103,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'isAdmin'], function(){
 
     Route::group(['prefix' => 'reports'], function(){
         Route::get('overview', [Dashboard::class, 'index'])->name('reports.overview');
-        Route::get('employees/{userid}', [Employees::class, 'report'])->name('reports.employees');
-        Route::get('employees', [Employees::class, 'report'])->name('reports.employees');
+        Route::get('employees/{userid}', [EmployeesController::class, 'report'])->name('reports.employees');
+        Route::get('employees', [EmployeesController::class, 'report'])->name('reports.employees');
         Route::get('autos', [CarsController::class, 'report'])->name('reports.autos');
         Route::get('close-month', [ExpensesController::class, 'report'])->name('reports.balance');
 
@@ -119,14 +119,14 @@ Route::group(['prefix' => 'admin', 'middleware' => 'isAdmin'], function(){
         Route::get('instrument/{investment_id}', 'show')->name('investments.show');
     });
     
-    Route::group(['prefix' => 'profile'], function(){ 
-        Route::get('/', [Profile::class, 'index'])->name('profile.index');
+    Route::group(['prefix' => 'profile', 'controller' => ProfileController::class], function(){ 
+        Route::get('/', 'index')->name('profile.index');
         
         // Update profile it will be implemented through API routes
         // Route::post('update', [Profile::class, 'update'])->name('profile.update');
     });
 
-    Route::group(['prefix' => 'settings', 'controller' => Settings::class], function (){
+    Route::group(['prefix' => 'settings', 'controller' => SettingsController::class], function (){
         Route::get('/', 'index')->name('setting.index');
         Route::post('update', 'update')->name('setting.update');
         Route::post('create', 'store')->name('setting.store');

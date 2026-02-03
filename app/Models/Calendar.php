@@ -26,6 +26,17 @@ class Calendar extends Model
         'date'
     ];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at'
+    ];
+
+    /*
+    protected $with = [
+        'client'
+    ];
+    */
+
     public function client()
     {
         return $this->belongsTo(Client::class, 'client_id');
@@ -41,24 +52,19 @@ class Calendar extends Model
         return $this->belongsTo(Car::class, 'car_id');
     }
 
-    public function currentDay()
+    public static function getEvents() : array
     {
-        return Carbon::now()->day;
-    }
-
-    public function getEvents() : array
-    {
-        for($i = 0; $i<= date('t') -1; $i++) {
+        for($i = 1; $i<= date('t'); $i++) {
             $createdDate = Carbon::parse(date('Y-m-').$i);
-            $events[$i]  = Calendar::where('event_date', $createdDate)->first();
+            $events[$i]  = self::where('event_date', $createdDate)->first();
         }
         
         return $events;
     }
 
-    public function startDay()
+    public static function startDay()
     {
-        $month    = Carbon::now()->month;
+        $month    = now()->month;
         $firstDay = mktime(0, 0, 0, $month, 0, date("Y"));
 
         if ( date('N', $firstDay) == 7 ){
@@ -68,24 +74,13 @@ class Calendar extends Model
         return date('N', $firstDay);
     }
 
-    public function weekDays()
+    public static function daysOfWeek()
     {
-        return [
-            'Lunes',    'Martes',   'Miercoles', 
-            'Jueves',   'Viernes',  'Sabado', 
-            'Domingo'
-        ];
+        return ['Lunes','Martes','Miercoles','Jueves','Viernes','Sabado','Domingo'];
     }
 
-    public function monthName(){
-        $monthNames = [
-            'Enero',    'Febrero',      'Marzo',
-            'Abril',    'Mayo',         'Junio',
-            'Julio',    'Agosto',       'Septiembre',
-            'Octubre',  'Noviembre',    'Diciembre'
-        ];
-
-        $month = Carbon::now()->month -1;
-        return $monthNames[$month];
+    public static function monthName($index){
+        $months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+        return $months[$index];
     }
 }

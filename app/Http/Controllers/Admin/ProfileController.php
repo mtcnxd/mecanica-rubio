@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
-class Profile extends Controller
+class ProfileController extends Controller
 {
     public function index()
     {

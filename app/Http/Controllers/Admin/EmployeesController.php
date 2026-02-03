@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\VacationsController;
 
-class Employees extends Controller
+class EmployeesController extends Controller
 {
     public function index()
     {
