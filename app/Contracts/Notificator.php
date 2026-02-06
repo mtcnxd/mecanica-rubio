@@ -4,5 +4,5 @@ namespace App\Contracts;
 
 interface Notificator
 {
-    public function send ();
+    // Nothing here yet
 }

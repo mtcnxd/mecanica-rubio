@@ -5,11 +5,11 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Services\ClientService;
-use App\Traits\Notificator;
+use App\Traits\Messenger;
 
 class ClientsController extends Controller
 {
-    use Notificator;
+    use Messenger;
 
     public function __construct(ClientService $clientService)
     {

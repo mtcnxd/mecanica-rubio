@@ -8,11 +8,11 @@ use App\Models\{Client, Service, ServiceItems};
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Services\ServicesService;
-use App\Traits\Notificator;
+use App\Traits\Messenger;
 
 class ServicesController extends Controller
 {
-    use Notificator;
+    use Messenger;
 
     public function __construct(ServicesService $servicesService)
     {

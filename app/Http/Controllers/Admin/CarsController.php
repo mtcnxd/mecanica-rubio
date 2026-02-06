@@ -7,11 +7,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Services\CarService;
-use App\Traits\Notificator;
+use App\Traits\Messenger;
 
 class CarsController extends Controller
 {
-    use Notificator;
+    use Messenger;
 
     public function __construct(CarService $carService)
     {

@@ -5,6 +5,11 @@ namespace App\Http\Controllers\Admin;
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 use App\Services\InvestmentService;
+use App\Traits\Messenger;
+
+use App\Notifications\Telegram;
+use App\Notifications\PhoneCall;
+
 use Illuminate\Http\Request;
 use App\Models\Charts;
 use App\Models\{
@@ -13,8 +18,12 @@ use App\Models\{
     BitsoData
 };
 
+use App\Contracts\Notificator;
+
 class InvestmentsController extends Controller
 {
+    use Messenger;
+
     public function index(BitsoData $bitsoData, Investment $investment, Charts $charts)
     {
         $bitso = $bitsoData->where('active', true)->get();
@@ -71,6 +80,8 @@ class InvestmentsController extends Controller
         $investment = $investment->load(['investmentData' => function($query){
             $query->orderBy('date','desc')->take(13);
         }]);
+
+        // $this->notify(new Telegram, 'This is a test message');
 
         return view('admin.investments.show', compact('investment','investmentData'));
     }
