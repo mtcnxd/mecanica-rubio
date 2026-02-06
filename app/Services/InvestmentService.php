@@ -4,25 +4,32 @@ namespace App\Services;
 
 use App\Models\BitsoData as BitsoAPI;
 use App\Models\Investment;
+use App\Services\BitsoInvestmentService;
 
-class InvestmentService 
+class InvestmentService extends BitsoInvestmentService
 {
-    public function activeTrades()
-    {
-        return BitsoAPI::where('active', true)->get();
-    }
-
     public function activeInvestments()
     {
         return Investment::where('active', true)->orderBy('name')->get();
     }
 
-    public function create(array $data) : Investment
+    public function investmentCreate(array $data) : Investment
     {
         return Investment::create($data);
     }
 
-    public function getTotal()
+    public function investmentDetails(int $investmentId)
+    {
+        $investment = Investment::find($investmentId);
+
+        $investment = $investment->load(['investmentData' => function($query){
+            $query->orderBy('date','desc')->take(13);
+        }]);
+
+        return $investment;
+    }
+
+    public function getTotal() :  int
     {
         $total = 0;
         $actives = $this->activeInvestments();

@@ -4,11 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
-use App\Services\InvestmentService;
-use App\Traits\Messenger;
 
-use App\Notifications\Telegram;
-use App\Notifications\PhoneCall;
+use App\Services\InvestmentService;
+
+use App\Traits\Messenger;
 
 use Illuminate\Http\Request;
 use App\Models\Charts;
@@ -23,6 +22,11 @@ use App\Contracts\Notificator;
 class InvestmentsController extends Controller
 {
     use Messenger;
+
+    public function __construct()
+    {
+        $this->investmentService = new InvestmentService();
+    }
 
     public function index(BitsoData $bitsoData, Investment $investment, Charts $charts)
     {
@@ -48,7 +52,7 @@ class InvestmentsController extends Controller
 
     public function update(Request $request)
     {
-        $formatter = new NumberFormatter('en_US', NumberFormatter::DECIMAL);
+        $formatter = new \NumberFormatter('en_US', \NumberFormatter::DECIMAL);
         
         try {
             $request->merge([
@@ -73,19 +77,14 @@ class InvestmentsController extends Controller
         return to_route('investments.index');
     }
 
-    public function show(string $investment_id, Investment $investment, InvestmentData $investmentData)
+    public function show(int $investmentId, InvestmentData $investmentData)
     {
-        $investment = $investment->find($investment_id);
-
-        $investment = $investment->load(['investmentData' => function($query){
-            $query->orderBy('date','desc')->take(13);
-        }]);
-
-        // $this->notify(new Telegram, 'This is a test message');
+        $investment = $this->investmentService->investmentDetails($investmentId);
 
         return view('admin.investments.show', compact('investment','investmentData'));
     }
 
+    // TODO: Deprecar
     public function total()
     {
         return response()->json([
@@ -96,15 +95,12 @@ class InvestmentsController extends Controller
     public function destroy(Request $request)
     {
         try {
-            $result = BitsoData::find($request->id);
-            $result->update([
-                'active' => false
-            ]);
+            $this->investmentService->delete($request->id);
 
             return response()->json([
                 'success' => true,
                 'type'    => 'success',
-                'message' => 'Set as deleted successfully'
+                'message' => 'It was deleted successfully'
             ]);
         }
 
