@@ -28,7 +28,7 @@
             <div class="col-md-3">
                 <x-card_simple_overview_1
                     title="$ Incremento a 30 días" 
-                    message="{{ Number::currency(9); }}"
+                    message="{{ Number::currency($first->amount - $last->amount); }}"
                 />
             </div>
             <div class="col-md-3">
