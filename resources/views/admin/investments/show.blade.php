@@ -16,13 +16,13 @@
             <div class="col-md-3">
                 <x-card_simple_overview_1
                     title="{{ $first->date }}"
-                    message="{{ Number::currency($last->amount) }}"
+                    message="{{ Number::currency($first->amount) }}"
                 />
             </div>
             <div class="col-md-3">
                 <x-card_simple_overview_1
                     title="{{ $last->date }}" 
-                    message="{{ Number::currency($first->amount) }}"
+                    message="{{ Number::currency($last->amount) }}"
                 />
             </div>
             <div class="col-md-3">
