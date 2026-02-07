@@ -77,11 +77,11 @@ class InvestmentsController extends Controller
         return to_route('investments.index');
     }
 
-    public function show(int $investmentId, InvestmentData $investmentData)
+    public function show(int $investmentId)
     {
         $investment = $this->investmentService->investmentDetails($investmentId);
-
-        return view('admin.investments.show', compact('investment','investmentData'));
+        
+        return view('admin.investments.show', compact('investment'));
     }
 
     // TODO: Deprecar

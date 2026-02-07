@@ -1,10 +1,9 @@
-@php
-    $first = $investmentData->getAmountByDaysAgo(23, $investment->id);
-    $last  = $investmentData->getAmountByDaysAgo(1, $investment->id);
-    $diff  = $last - $first;
-@endphp
-
 @extends('includes.body')
+
+@php
+    $first = $investment->investmentData->first();
+    $last  = $investment->investmentData->last();
+@endphp
 
 @section('content')
 <div class="window-container">
@@ -16,26 +15,26 @@
         <div class="row p-4 pt-0">
             <div class="col-md-3">
                 <x-card_simple_overview_1
-                    title="{{ now()->subDays(30)->format('d M Y') }}"
-                    message="{{ Number::currency($first); }}"
+                    title="{{ $first->date }}"
+                    message="{{ Number::currency($last->amount) }}"
                 />
             </div>
             <div class="col-md-3">
                 <x-card_simple_overview_1
-                    title="{{ now()->subDays(1)->format('d M Y') }}" 
-                    message="{{ Number::currency($last); }}"
+                    title="{{ $last->date }}" 
+                    message="{{ Number::currency($first->amount) }}"
                 />
             </div>
             <div class="col-md-3">
                 <x-card_simple_overview_1
                     title="$ Incremento a 30 días" 
-                    message="{{ Number::currency($diff); }}"
+                    message="{{ Number::currency(9); }}"
                 />
             </div>
             <div class="col-md-3">
                 <x-card_simple_overview_1
                     title="% Incremento a 30 días" 
-                    message="{{ Number::percentage(App\Http\Controllers\Helpers::convertToPercentage($last, $first), 2); }}"
+                    message="{{ Number::percentage(App\Http\Controllers\Helpers::convertToPercentage($first->amount, $last->amount), 2); }}"
                 />
             </div>  
         </div>

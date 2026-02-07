@@ -19,6 +19,10 @@ class Investment extends Model
         'active',
     ];
 
+    protected $dates = [
+        'date'
+    ];
+
     public function investmentData()
     {
         return $this->hasMany(InvestmentData::class, 'investment_id');
