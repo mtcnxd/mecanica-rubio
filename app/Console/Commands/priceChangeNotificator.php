@@ -40,9 +40,13 @@ class priceChangeNotificator extends Command
 
         $percentage = Helpers::convertToPercentage($currentBtcPrice->last, $lastPurchased->price);
 
+        /*
+        Comment for debug only
+
         if ($percentage > -5){
             return;
         }
+        */
 
         $percentage = Number::percentage($percentage, 1);
         $lastBought = Number::currency($lastPurchased->price);
@@ -56,5 +60,10 @@ class priceChangeNotificator extends Command
     protected function lastPurchasedPrice(string $book)
     {
         return BitsoData::where('book', $book)->orderBy('created_at', 'desc')->first();
+    }
+
+    protected function placeOrder()
+    {
+        return;
     }
 }
