@@ -6,6 +6,9 @@ use App\Traits\Messenger;
 use Illuminate\Support\Number;
 use App\Notifications\Telegram;
 use Illuminate\Console\Command;
+use App\Services\ApiBitsoService;
+use App\Models\BitsoData;
+use App\Http\Controllers\Helpers;
 
 class priceChangeNotificator extends Command
 {
@@ -30,10 +33,28 @@ class priceChangeNotificator extends Command
      */
     public function handle()
     {
-        $price = Number::currency(1500123.00);
+        $api = new ApiBitsoService();
+        
+        $currentBtcPrice = $api->getBookPrice('btc_mxn');        
+        $lastPurchased = $this->lastPurchasedPrice('btc_mxn');
 
-        $message = sprintf("The Bitcoin price has already fall over 5%% since last bought.\n\rThe current BTC price is: <b>%s</b>", $price);
+        $percentage = Helpers::convertToPercentage($currentBtcPrice->last, $lastPurchased->price);
+
+        if ($percentage > -5){
+            return;
+        }
+
+        $percentage = Number::percentage($percentage, 1);
+        $lastBought = Number::currency($lastPurchased->price);
+        $currentPrice = Number::currency($currentBtcPrice->last);
+
+        $message = sprintf("The Bitcoin price has already fall over <b>%s</b> \n\rLast bought: <b>%s</b>\n\rCurrent price: <b>%s</b>", $percentage, $lastBought, $currentPrice);
 
         $this->notify(new Telegram, $message);
+    }
+
+    protected function lastPurchasedPrice(string $book)
+    {
+        return BitsoData::where('book', $book)->orderBy('created_at', 'desc')->first();
     }
 }
