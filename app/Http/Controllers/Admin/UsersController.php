@@ -52,11 +52,9 @@ class UsersController extends Controller
         return to_route('users.index');
     }
 
-    public function show()
+    public function show(User $user)
     {
-        $users = User::get();
-
-        return view('admin.users.index', compact('users'));
+        return view('admin.users.edit', compact('user'));
     }
 
     public function edit(User $user)

@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands;
 
-use Carbon\Carbon;
-use App\Models\Service;
 use App\Models\Calendar;
+use App\Models\Service;
+use App\Notifications\Telegram;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
-use App\Http\Controllers\Notifications\Telegram;
 
 class createCalendarEvent extends Command
 {
@@ -27,8 +27,10 @@ class createCalendarEvent extends Command
     /**
      * Execute the console command.
      */
-    public function handle(Telegram $telegram)
+    public function handle()
     {
+        $telegram = new Telegram();
+
         $services = Service::where('created_at','>', Carbon::now()->subDays(10))
             ->whereIn('service_type',['Mayor','Menor'])
             ->get();

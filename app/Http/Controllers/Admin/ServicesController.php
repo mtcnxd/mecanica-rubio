@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use DB;
-use Carbon\Carbon;
-use App\Models\{Client, Service, ServiceItems};
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\{Client, Service, ServiceItems};
+use App\Notifications\Telegram;
 use App\Services\ServicesService;
 use App\Traits\Messenger;
+use Carbon\Carbon;
+use DB;
+use Illuminate\Http\Request;
 
 class ServicesController extends Controller
 {
@@ -50,7 +51,7 @@ class ServicesController extends Controller
             try {
                 $latestServiceCreated = Service::latest()->first();
 
-                $this->notify(
+                $this->notify(new Telegram(),
                     sprintf("<b>New service created ID:</b> %s \n\r<b>Client name:</b> %s \n\r<b>Car model:</b> %s \n\r<b>Fault:</b> %s", 
                         $latestServiceCreated->id,
                         $latestServiceCreated->client->name,
@@ -105,7 +106,7 @@ class ServicesController extends Controller
 
         if ($request->status == 'Entregado'){
             try {
-                $this->notify(
+                $this->notify(new Telegram(),
                     sprintf("<b>Service completed:</b> #%s - %s \n\r<b>Client:</b> %s \n\r<b>Fault:</b> %s \n\r<b>Total:</b> $%s", 
                         $service->id,
                         $service->car->brand ." ". $service->car->model,

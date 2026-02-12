@@ -22,10 +22,30 @@ class Client extends Model
         'comments',
     ];
 
-    protected $hidden = [
-        'created_at',
-        'updated_at'
-    ];
+    public function setAddressAttribute($value)
+    {
+        $this->attributes['address'] = empty($value) ? null : $value;
+    }
+
+    public function getAddressAttribute($value)
+    {
+        return $value ?? "No establecido";
+    }
+
+    public function getPostcodeAttribute($value)
+    {
+        return $value ?? "No establecito";
+    }
+
+    public function getCityAttribute($value)
+    {
+        return $value ?? "No establecito";
+    }
+
+    public function getStateAttribute($value)
+    {
+        return $value ?? "No establecito";
+    }
 
     public function getEmailAttribute($value)
     {

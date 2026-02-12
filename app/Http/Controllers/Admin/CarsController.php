@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Car;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Car;
+use App\Notifications\Telegram;
 use App\Services\CarService;
 use App\Traits\Messenger;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CarsController extends Controller
 {
@@ -40,7 +41,7 @@ class CarsController extends Controller
         try {
             $this->carService->create($request->except('_method','_token'));
             
-            $this->notify(
+            $this->notify(new Telegram(),
                 sprintf("<b>New car created:</b> %s <b>Model:</b> %s", $request->brand, $request->model)
             );
 

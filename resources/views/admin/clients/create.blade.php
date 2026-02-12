@@ -37,7 +37,7 @@
                         <div class="col-md-12">
                             <label for="address">Colónia</label>
                             <select class="form-select" name="address" id="address">
-                                <option> - Selecciona una colonia - </option>
+                                <option value=""> - Selecciona una colonia - </option>
                             </select>
                         </div>
                     </div>

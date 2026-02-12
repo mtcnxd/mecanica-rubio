@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Notifications\Telegram;
 use App\Services\ClientService;
 use App\Traits\Messenger;
+use Illuminate\Http\Request;
 
 class ClientsController extends Controller
 {
@@ -33,8 +34,8 @@ class ClientsController extends Controller
         try {
             $client = $this->clientService->create($request->except('_method','_token'));
             
-            $this->notify(
-                sprintf("<b>New client created:</b> %s <b>Phone:</b> %s", $request->name, $request->phone)
+            $this->notify(new Telegram(),
+                sprintf("<b>New client created:</b> %s \n\r<b>Phone:</b> %s", $request->name, $request->phone)
             );
 
             session()->flash('success', sprintf('El cliente %s se guardó correctamente', $request->name));

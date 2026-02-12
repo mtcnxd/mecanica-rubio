@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Notifications\Telegram;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\User;
-use Carbon\Carbon;
+use App\Notifications\Telegram;
 use App\Models\Expense;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Carbon\Carbon;
 use DB;
 
 class ExpensesController extends Controller
@@ -64,10 +64,12 @@ class ExpensesController extends Controller
         ]);
 
         try {
-            Telegram::send(
+            $telegram = new Telegram();
+            $telegram->send(
                 sprintf("<b>New expense created:</b> %s <b>Total:</b> $%s", $request->name, $request->price)
             );
-        } catch (Exception $err){
+        }
+        catch (\Exception $err){
             session()->flash('warning', 'ERROR: '. $err->getMessage());
 		}
 

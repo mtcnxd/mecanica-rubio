@@ -44,26 +44,30 @@ class priceChangeNotificator extends Command
         $lastBought = Number::currency($lastPurchased->price);
         $currentPrice = Number::currency($currentBtcPrice->last);
 
-        if ($percentage > -5){
+        $telegram = new Telegram('trading');
+
+        if ($percentage < -5){
             $message = sprintf("The Bitcoin price has already fallen over <b>%s</b> \n\rLast bought: <b>%s</b>\n\rCurrent price: <b>%s</b>", $percentage, $lastBought, $currentPrice);
-            $this->placeOrder($currentBtcPrice);
+            $this->notify($telegram, $message);
         }
         
         if ($percentage > 10){
             $message = sprintf("The Bitcoin price has already risen over <b>%s</b> \n\rLast bought: <b>%s</b>\n\rCurrent price: <b>%s</b>", $percentage, $lastBought, $currentPrice);
+            $this->notify($telegram, $message);
         }
-
-        $this->notify(new Telegram, $message);
     }
 
     protected function lastPurchasedPrice(string $book)
     {
-        return BitsoData::where('book', $book)->orderBy('created_at', 'desc')->first();
+        return BitsoData::where('book', $book)
+            ->where('active', true)
+            ->orderBy('created_at', 'desc')
+            ->first();
     }
 
     protected function placeOrder(string $price)
     {
-        $this->notify(new Telegram, 
+        $this->notify(new Telegram('trading'), 
             sprintf("We have placed a bitcoin order with current price: %s", $price)
         );
     }

@@ -2,12 +2,12 @@
 
 namespace App\Console\Commands;
 
-use Carbon\Carbon;
 use App\Models\Investment;
-use Illuminate\Support\Number;
+use App\Notifications\Telegram;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Notifications\Telegram;
+use Illuminate\Support\Number;
 
 class updateInvestmentBalances extends Command
 {
@@ -28,9 +28,11 @@ class updateInvestmentBalances extends Command
     /**
      * Execute the console command.
      */
-    public function handle(Telegram $telegram)
+    public function handle()
     {
         try {
+            $telegram = new Telegram('Trading');
+
             Investment::all()->each(function ($investment) {
                 if ($investment->investmentData->last()){
                     DB::table('assets_increment')->insert([
