@@ -40,19 +40,19 @@ class priceChangeNotificator extends Command
 
         $percentage = Helpers::convertToPercentage($currentBtcPrice->last, $lastPurchased->price);
 
-        $percentage = Number::percentage($percentage, 1);
+        $calculated = Number::percentage($percentage, 1);
         $lastBought = Number::currency($lastPurchased->price);
         $currentPrice = Number::currency($currentBtcPrice->last);
 
         $telegram = new Telegram('trading');
 
         if ($percentage < -5){
-            $message = sprintf("The Bitcoin price has already fallen over <b>%s</b> \n\rLast bought: <b>%s</b>\n\rCurrent price: <b>%s</b>", $percentage, $lastBought, $currentPrice);
+            $message = sprintf("The Bitcoin price has already fallen over <b>%s</b> \n\rLast bought: <b>%s</b>\n\rCurrent price: <b>%s</b>", $calculated, $lastBought, $currentPrice);
             $this->notify($telegram, $message);
         }
         
         if ($percentage > 10){
-            $message = sprintf("The Bitcoin price has already risen over <b>%s</b> \n\rLast bought: <b>%s</b>\n\rCurrent price: <b>%s</b>", $percentage, $lastBought, $currentPrice);
+            $message = sprintf("The Bitcoin price has already risen over <b>%s</b> \n\rLast bought: <b>%s</b>\n\rCurrent price: <b>%s</b>", $calculated, $lastBought, $currentPrice);
             $this->notify($telegram, $message);
         }
     }
