@@ -51,10 +51,10 @@ class priceChangeNotificator extends Command
             $this->notify($telegram, $message);
         }
         
-        if ($percentage > 10){
+        // if ($percentage > 10){
             $message = sprintf("The Bitcoin price has already risen over <b>%s</b> \n\rLast bought: <b>%s</b>\n\rCurrent price: <b>%s</b>", $calculated, $lastBought, $currentPrice);
             $this->notify($telegram, $message);
-        }
+        // }
     }
 
     protected function lastPurchasedPrice(string $book)
