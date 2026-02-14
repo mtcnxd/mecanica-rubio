@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use App\Models\Investment;
 use App\Notifications\Telegram;
-use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Number;
@@ -48,11 +47,12 @@ class updateInvestmentBalances extends Command
             $all = Investment::all();
     
             $telegram->send(
-                sprintf("Process finished at: %s \n\rToday total amount: <b>%s</b>", Carbon::now(), Number::currency($all->sum('current_amount')))
+                sprintf("Process finished at: %s \n\rToday total amount: <b>%s</b>", now(), Number::currency($all->sum('current_amount')))
             );        
         }
 
         catch (\Exception $e){
+            Log::error('ERROR | MESSAGE: '. $e->getMessage())
             $telegram->send(
                 sprintf('Error while updating data | Error: %s', $e->getMessage())
             );
