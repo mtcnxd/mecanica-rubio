@@ -2,29 +2,26 @@
 
 namespace App\Http\Controllers\Admin;
 
-use DB;
-use Exception;
-use Carbon\Carbon;
-use App\Models\User;
 use App\Models\Payroll;
-use App\Models\Employee;
 use App\Models\PayrollItems;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Support\MailController;
+use App\Services\PayrollsService as PayrollService;
 
 class PayrollController extends Controller
 {
+    protected $payrollService;
+
+    public function __construct()
+    {
+        $this->payrollService = new PayrollService();
+    }
+
     public function index(Request $request)
     {
-        $startDate = Carbon::now()->subMonths(2)->startofMonth()->format('Y-m-d');
-        $endDate   = Carbon::now()->addDay()->format('Y-m-d');
-
-        $salaries = Payroll::whereBetween('created_at', [$startDate, $endDate])
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        return view('admin.payrolls.index', compact('startDate','endDate','salaries'));
+        $currentMonth = $this->payrollService->getCurrentMonth();
+        return view('admin.payrolls.index', compact('currentMonth'));
     }
 
     public function create()
@@ -39,18 +36,16 @@ class PayrollController extends Controller
 
     public function store(Request $request)
     {
-        $insert = Payroll::insert([
-            "user_id"    => $request->employee,
-            "type"       => $request->type,
-            "status"     => 'Pendiente',
-            "start_date" => $request->start_date,
-            "end_date"   => $request->end_date,
-            "total"      => $request->total,
-            "created_at" => Carbon::now(),
-            "updated_at" => Carbon::now(),
-        ]);
+        $request->merge(['user_id' => $request->employee]);
+
+        $this->payrollService->create($request->except('_token'));
 
         return to_route('payroll.index')->with('success', 'El registro se guardo correctamente');
+    }
+
+    public function update(Request $request)
+    {
+        dd($request);
     }
 
     public function show(string $id)
@@ -68,8 +63,7 @@ class PayrollController extends Controller
                 try {
                     $payroll->update([
                         "status"     => 'Pagado',
-                        "paid_date"  => Carbon::now(),
-                        "updated_at" => Carbon::now()
+                        "paid_date"  => now(),
                     ]);
     
                     MailController::sendPayrollEmail($payroll);
@@ -85,8 +79,7 @@ class PayrollController extends Controller
 
             case 'cancell':
                 $payroll->update([
-                    'status' => 'Cancelado',
-                    "updated_at" => Carbon::now()
+                    'status' => 'Cancelado'
                 ]);
                 
                 $message = "El movimiento se cancelo correctamente";
@@ -105,26 +98,34 @@ class PayrollController extends Controller
     }
     
     public function addItem(Request $request)
-    {   
-        $id = Payroll::max('id') +1;
-        
-        PayrollItems::insert([
-            'salary_id' => $id,
-            'concept'   => $request->concept,
-            'amount'    => $request->amount,
-            'number'    => ""
-        ]);
+    {
+        try {
+            $id = Payroll::max('id') +1;
+            
+            PayrollItems::create([
+                'salary_id' => $id,
+                'concept'   => $request->concept,
+                'amount'    => $request->amount,
+            ]);
+    
+            return response()->json([
+                'status'  => true,
+                'message' => "Los datos se almacenaron correctamente"
+            ]);
+        }
 
-        return response()->json([
-            'status'  => true,
-            'message' => $request->all()
-        ]);
+        catch (\Exception $e){
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => $request->all()
+            ]);
+        }
     }
 
     public function removeItem(Request $request)
     {       
-        $item = PayrollItems::find($request->input('itemId'));
-        $item->delete();
+        PayrollItems::where('id', $request->input('itemId'))->delete();
 
         return response()->json([
             "success" => true,

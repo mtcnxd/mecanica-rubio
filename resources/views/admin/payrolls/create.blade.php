@@ -87,7 +87,7 @@
                         <tr>
                             <td>{{ $count +1 }}</td>
                             <td>{{ $item->concept }}</td>
-                            <td class="text-end">{{ "$".number_format($item->amount, 2) }}</td>
+                            <td class="text-end">{{ Number::currency($item->amount) }}</td>
                             <td>
                                 <a href="#" class="removeButton" id="{{ $item->id }}">
                                     <x-feathericon-trash-2 class="table-icon"/>
@@ -217,7 +217,7 @@ $('#acceptButton').click(function() {
         }
     })
     .then(() => {
-        history.go();
+        // history.go();
     });
 
     closePopup();

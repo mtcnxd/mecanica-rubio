@@ -44,7 +44,7 @@ class priceChangeNotificator extends Command
         $lastBought = Number::currency($lastPurchased->price);
         $currentPrice = Number::currency($currentBtcPrice->last);
 
-        $telegram = new Telegram('trading');
+        $telegram = new Telegram();
 
         if ($percentage < -5){
             $message = sprintf("The Bitcoin price has already fallen over <b>%s</b> \n\rLast bought: <b>%s</b>\n\rCurrent price: <b>%s</b>", $calculated, $lastBought, $currentPrice);
@@ -67,7 +67,7 @@ class priceChangeNotificator extends Command
 
     protected function placeOrder(string $price)
     {
-        $this->notify(new Telegram('trading'), 
+        $this->notify(new Telegram(), 
             sprintf("We have placed a bitcoin order with current price: %s", $price)
         );
     }

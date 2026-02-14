@@ -12,12 +12,12 @@
             <div class="row m-1 mb-3 pb-3">
                 <div class="col-md-2">
                     <label class="fw-bold">Inicio</label>
-                    <input type="date" class="form-control" name="startDate" id="startDate" value="{{ $startDate }}">
+                    <input type="date" class="form-control" name="startDate" id="startDate" value="{{ $currentMonth['startDate'] }}">
                 </div>
 
                 <div class="col-md-2">
                     <label class="fw-bold">Final</label>
-                    <input type="date" class="form-control" name="endDate" id="endDate" value="{{ $endDate }}">
+                    <input type="date" class="form-control" name="endDate" id="endDate" value="{{ $currentMonth['endDate'] }}">
                 </div>
 
                 <div class="col-md-2">
@@ -53,7 +53,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($salaries as $salary)
+                @foreach ($currentMonth['data'] as $salary)
                 <tr>
                     <td>{{ $salary->id }}</td>
                     <td>

@@ -11,9 +11,17 @@ class PayrollItems extends Model
 
     protected $table = 'salaries_details';
 
+    protected $fillable = [
+        'salary_id',
+        'concept',
+        'amount',
+    ];
+
     protected $hidden = [
         'number',
     ];
+
+    public $timestamps = false;
 
     public function salary()
     {
