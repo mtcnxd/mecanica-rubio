@@ -29,9 +29,9 @@ class updateInvestmentBalances extends Command
      */
     public function handle()
     {
+        $telegram = new Telegram();
+        
         try {
-            $telegram = new Telegram('Trading');
-
             Investment::all()->each(function ($investment) {
                 if ($investment->investmentData->last()){
                     DB::table('assets_increment')->insert([
