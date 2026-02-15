@@ -7,6 +7,7 @@ use App\Models\Investment;
 use App\Notifications\Telegram;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Number;
 
 class updateInvestmentBalances extends Command
@@ -37,12 +38,10 @@ class updateInvestmentBalances extends Command
         try {
             Investment::all()->each(function ($investment) {
                 if ($investment->investmentData->last()){
-                    DB::table('assets_increment')->insert([
+                    DB::table('assets_increment')->create([
                         'investment_id' => $investment->id,
                         'amount'     => $investment->investmentData->last()->amount,
-                        'date'       => Carbon::now(),
-                        'created_at' => Carbon::now(),
-                        'updated_at' => Carbon::now(),
+                        'date'       => now()
                     ]);
                 }
             });
