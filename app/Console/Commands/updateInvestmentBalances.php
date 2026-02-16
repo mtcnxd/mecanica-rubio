@@ -38,10 +38,12 @@ class updateInvestmentBalances extends Command
         try {
             Investment::all()->each(function ($investment) {
                 if ($investment->investmentData->last()){
-                    DB::table('assets_increment')->create([
+                    DB::table('assets_increment')->insert([
                         'investment_id' => $investment->id,
                         'amount'     => $investment->investmentData->last()->amount,
-                        'date'       => now()
+                        'date'       => now(),
+                        'created_at' => now(),
+                        'updated_at' => now(),
                     ]);
                 }
             });
