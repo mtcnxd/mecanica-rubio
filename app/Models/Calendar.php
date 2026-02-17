@@ -14,9 +14,11 @@ class Calendar extends Model
     protected $table = 'calendar';
 
     protected $fillable = [
-        'event',
         'name',
         'description',
+        'client_id',
+        'car_id',
+        'event_date',
         'service_id',
         'date',
         'status',
