@@ -27,11 +27,6 @@ class Calendar extends Model
         'date'
     ];
 
-    protected $hidden = [
-        'created_at',
-        'updated_at'
-    ];
-
     /*
     protected $with = [
         'client'
