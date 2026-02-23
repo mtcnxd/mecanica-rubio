@@ -46,7 +46,7 @@ class priceChangeNotificator extends Command
         
         $telegram = new Telegram();
         
-        if ($percentage < -4 || $percentage > 4){
+        if ($percentage < -5 || $percentage > 5){
             $message = sprintf("The Bitcoin price has already change over <b>%s</b> since last bought\n\r".
             				   "Last bought: <b>%s</b>\n\rCurrent price: <b>%s</b>", $calculated, $lastBought, $currentPrice);
                                 
