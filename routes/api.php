@@ -118,6 +118,9 @@ Route::group(['prefix' => 'calendar', 'controller' => CalendarController::class]
 
 Route::group(['prefix' => 'sensors'], function(){
     Route::get('time', function () {
-        return now()->format('Y-m-d H:i:s');
+        return response()->json([
+            'date' => now()->format('Y-m-d'),
+            'time' => now()->format('H:i:s'),
+        ]);
     });
 });
