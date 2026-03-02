@@ -23,18 +23,20 @@ class InvestmentsController extends Controller
 {
     use Messenger;
 
-    public function __construct()
-    {
-        $this->investmentService = new InvestmentService();
+    public function __construct(
+        public InvestmentService $investmentService
+    ){
+
     }
 
-    public function index(BitsoData $bitsoData, Investment $investment, Charts $charts)
+    public function index(Charts $charts)
     {
-        $bitso = $bitsoData->where('active', true)->get();
+        $results = [
+            'investments' => $this->investmentService->getActiveInvestments(),
+            'bitso' => $this->investmentService->getActiveTrades(),
+        ];
 
-        $investments = $investment->where('active', true)->orderBy('name')->get();
-
-        return view('admin.investments.index', compact('bitso', 'investments', 'charts'));
+        return view('admin.investments.index', compact('results', 'charts'));
     }
 
     public function store(Request $request)
@@ -52,26 +54,14 @@ class InvestmentsController extends Controller
 
     public function update(Request $request)
     {
-        $formatter = new \NumberFormatter('en_US', \NumberFormatter::DECIMAL);
-        
         try {
-            $request->merge([
-                'date'   => Carbon::now()->format('Y-m-d'),
-                'amount' => $formatter->parse($request->amount),
-            ]);
+            $this->investmentService->updateInvestmentBalance($request->except('_token'));
 
-            InvestmentData::create($request->except('_token'));
-
-            Investment::where('id', $request->investment_id)->update([
-                'last_amount'    => Investment::raw('current_amount'),
-                'current_amount' => $request->amount
-            ]);
-            
             session()->flash('success', sprintf('El registro almacenado con exito'));
         }
 
         catch (\Exception $er){
-            session()->flash('warning', sprintf('we got an error: %s', $er->getMessage()));
+            session()->flash('warning', sprintf("FAILED UPDATE DATA | MESSAGE: %s", $er->getMessage()));
         }
 
         return to_route('investments.index');

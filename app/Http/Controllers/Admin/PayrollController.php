@@ -102,15 +102,16 @@ class PayrollController extends Controller
         try {
             $id = Payroll::max('id') +1;
             
-            PayrollItems::create([
+            $item = PayrollItems::create([
                 'salary_id' => $id,
                 'concept'   => $request->concept,
                 'amount'    => $request->amount,
             ]);
     
             return response()->json([
-                'status'  => true,
-                'message' => "Los datos se almacenaron correctamente"
+                'status' => true,
+                'message' => "Los datos se almacenaron correctamente",
+                'data' => PayrollItems::where('salary_id', $id)->get(),
             ]);
         }
 

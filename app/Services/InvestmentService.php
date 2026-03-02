@@ -2,15 +2,46 @@
 
 namespace App\Services;
 
-use App\Models\BitsoData as BitsoAPI;
+use App\Contracts\InvestmentInterface;
+use App\Services\Bitso\BitsoService;
 use App\Models\Investment;
-use App\Services\BitsoInvestmentService;
+use App\Models\InvestmentData;
 
-class InvestmentService extends BitsoInvestmentService
+class InvestmentService
 {
-    public function activeInvestments()
+    public $bitsoService;
+
+    public function __construct(
+        BitsoService $bitsoService
+    ){
+        $this->bitsoService = $bitsoService;
+    }
+
+    public function getActiveTrades()
+    {
+        return $this->bitsoService->getActiveTrades();
+    }
+
+    public function getActiveInvestments()
     {
         return Investment::where('active', true)->orderBy('name')->get();
+    }
+
+    public function updateInvestmentBalance(array $data) : InvestmentData
+    {
+        $formatter = new \NumberFormatter('es_MX', \NumberFormatter::DECIMAL);
+
+        $data['date'] = now()->format('Y-m-d');
+        $data['amount'] = $formatter->parse(str_replace(' ','', $data['amount']));
+
+        Investment::where('id', $data['investment_id'])->update([
+            'last_amount'    => Investment::raw('current_amount'),
+            'current_amount' => $data['amount']
+        ]);
+
+        
+
+        return InvestmentData::create($data);
     }
 
     public function investmentCreate(array $data) : Investment

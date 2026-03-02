@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Services\Bitso;
 
 use Illuminate\Http\Request;
 
-class BitsoController extends Controller
+class BitsoClient
 {
 	protected $bitsoKey;
 	protected $bitsoSecret;
@@ -90,6 +90,11 @@ class BitsoController extends Controller
     {
 		try {
 			$response = $this->getBitsoRequest('/v3/orders/', $data);
+            
+            return response()->json([
+                "data"	   => $data->all(),
+                "response" => $response
+            ]);
 		}
 		
 		catch(\Exception $err){
@@ -98,10 +103,5 @@ class BitsoController extends Controller
 				"message" => $err->getMessage()
 			]);
 		}
-        
-        return response()->json([
-			"data"	   => $data->all(),
-			"response" => $response
-		]);
     }
 }

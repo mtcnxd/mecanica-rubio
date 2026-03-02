@@ -82,7 +82,7 @@
                             <th width="30px"></th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="table-body">
                         @foreach ($items as $count => $item)
                         <tr>
                             <td>{{ $count +1 }}</td>
@@ -112,7 +112,6 @@
                     </tfoot>
                 </table>
             </div>
-
             
             <div class="row mt-3">
                 <div class="col-md-12 text-end">
@@ -214,6 +213,18 @@ $('#acceptButton').click(function() {
         },
         success: function(response){
             console.log(response);
+            /*
+            $("#table-body").empty();
+            $.each (response.data, function(i, item){
+                $("#table-body").append(
+                    '<tr>'+
+                        '<td></td>'+
+                        '<td>'+ item.concept +'</td>'+
+                        '<td>'+ item.amount +'</td>'+
+                    '</tr>'
+                );
+            });
+            */
         }
     })
     .then(() => {

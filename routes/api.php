@@ -115,3 +115,9 @@ Route::group(['prefix' => 'calendar', 'controller' => CalendarController::class]
     Route::get('event/all','all')->name('calendar.all');
     Route::get('event','getEvent')->name('calendar.getEvent');
 });
+
+Route::group(['prefix' => 'sensors'], function(){
+    Route::get('time', function () {
+        return now()->format('Y-m-d H:i:s');
+    });
+});

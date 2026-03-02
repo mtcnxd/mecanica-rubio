@@ -23,7 +23,7 @@
                 @php
                     $sumCurrentValue = 0;
                 @endphp
-                @foreach ($bitso as $item)
+                @foreach ($results['bitso'] as $item)
                     @php
                         $sumCurrentValue += $item->currentPurchaseValue($item->book);
                     @endphp
@@ -54,7 +54,7 @@
             <tfoot>
                 <tr>
                     <td></td>
-                    <td class="text-end fw-bold">{{ $bitso->sum('amount') }}</td>
+                    <td class="text-end fw-bold"></td>
                     <td colspan="2"></td>
                     <td class="text-end fw-bold">{{ Number::currency($sumCurrentValue) }}</td>
                     <td colspan="3"></td>
@@ -64,7 +64,7 @@
         
         <div style="display: flex; justify-content:space-between;">
             <a href="#" class="ms-3 ps-3 pe-3 btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addShopping">Nueva Compra</a>
-            <span class="pe-3">{{ $bitso->count() }} Registros encontrados</span>
+            <span class="pe-3">{{ $results['bitso']->count() }} Registros encontrados</span>
         </div>
     </x-window_main>
 
@@ -108,7 +108,7 @@
                     @csrf
                     <label for="investment_id" class="mb-1">Instrumento de inversion</label>
                     <select name="investment_id" class="form-select">
-                        @foreach ($investments as $investment)
+                        @foreach ($results['investments'] as $investment)
                             <option value="{{ $investment->id }}">{{ $investment->name }}</option>
                         @endforeach
                     </select>
@@ -136,7 +136,7 @@
                             $sumDifference = 0;
                         @endphp
 
-                        @foreach ($investments as $investment)
+                        @foreach ($results['investments'] as $investment)
                             @if ($investment->investmentData->last())
                                 @php
                                     $sumDifference += $investment->differenceBetweenDeposits();
@@ -155,7 +155,7 @@
                     <tfoot>
                         <tr>
                             <td></td>
-                            <td class="text-end fw-bold">{{ Number::currency($investments->sum('current_amount')) }}</td>
+                            <td class="text-end fw-bold">{{ Number::currency($results['investments']->sum('current_amount')) }}</td>
                             <td class="text-end fw-bold">{{ Number::currency($sumDifference) }}</td>
                             <td colspan="2"></td>
                         </tr>

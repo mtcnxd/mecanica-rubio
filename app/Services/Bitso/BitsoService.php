@@ -1,23 +1,23 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Bitso;
 
-use App\Traits\Messenger;
-use App\Services\ApiBitsoService;
+use App\Services\Bitso\BitsoClient;
 use App\Models\BitsoData;
+use App\Traits\Messenger;
 
-class BitsoInvestmentService
+class BitsoService
 {
     use Messenger;
 
     public function __construct()
     {
-        $this->apiBitsoService = new ApiBitsoService();
+        $this->bitsoClient = new BitsoClient();
     }
 
-    public function activeTrades()
+    public function getActiveTrades()
     {
-        return BitsoAPI::where('active', true)->get();
+        return BitsoData::where('active', true)->get();
     }
 
     public function bitsoDataCreate(array $data) : BitsoData
@@ -34,6 +34,14 @@ class BitsoInvestmentService
 
     public function placeOrder(array $data) : bool
     {
+        $data = [
+            'book' => "btc_mxn",
+            'side' => "buy",
+            'type' => "limit",
+            'amount' => $data['amount'],
+            'price' => $data['price']
+        ];
+
         return $this->apiBitsoService->placeOrder($data);
     }
 }

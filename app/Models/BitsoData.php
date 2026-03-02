@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Http\Controllers\BitsoController;
+use App\Services\Bitso\BitsoClient;
 
 class BitsoData extends Model
 {
@@ -25,7 +25,7 @@ class BitsoData extends Model
 
     public function __construct()
     {
-        $this->bitso = new BitsoController();
+        $this->bitso = new BitsoClient();
     }
 
     public function currentGainOrLost(string $book)
