@@ -1,2 +1,0 @@
-docker exec -i docker_mysql_1 mysql -u root -ppassword mecani21_mecanica < mecani21_mecanica.sql
-

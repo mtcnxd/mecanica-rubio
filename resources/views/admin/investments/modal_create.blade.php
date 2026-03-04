@@ -13,9 +13,11 @@
                             <label class="mb-2">Book</label>
                             <select id="parity" class="form-select" name="book">
                                 <option>btc_mxn</option>
+                                <option>eth_mxn</option>
+                                <option>xrp_mxn</option>
                                 <option>btc_usdt</option>
-                                <option>bat_usdt</option>
                                 <option>eth_usdt</option>
+                                <option>xrp_usdt</option>
                             </select>
                         </div>
                         <div class="col-md-6">

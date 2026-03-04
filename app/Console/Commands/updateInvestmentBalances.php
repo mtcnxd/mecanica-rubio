@@ -51,7 +51,7 @@ class updateInvestmentBalances extends Command
             $all = Investment::all();
     
             $this->notify($telegram,
-                sprintf("Process finished at: %s \n\rToday total amount: <b>%s</b>", now(), Number::currency($all->sum('current_amount')))
+                sprintf("Process finished at: <b>%s</b> \n\rToday total amount: <b>%s</b>", now(), Number::currency($all->sum('current_amount')))
             );
         }
 
