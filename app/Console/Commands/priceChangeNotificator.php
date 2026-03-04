@@ -6,7 +6,7 @@ use App\Traits\Messenger;
 use Illuminate\Support\Number;
 use App\Notifications\Telegram;
 use Illuminate\Console\Command;
-use App\Services\ApiBitsoService;
+use App\Services\Bitso\BitsoClient;
 use App\Models\BitsoData;
 use App\Http\Helpers;
 
@@ -33,7 +33,7 @@ class priceChangeNotificator extends Command
      */
     public function handle()
     {
-        $api = new ApiBitsoService();
+        $api = new BitsoClient();
         
         $currentBtcPrice = $api->getBookPrice('btc_mxn');        
         $lastPurchased = $this->lastPurchasedPrice('btc_mxn');
