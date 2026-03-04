@@ -7,12 +7,22 @@ use Illuminate\Support\Number;
 use App\Notifications\Telegram;
 use Illuminate\Console\Command;
 use App\Services\Bitso\BitsoClient;
+use App\Services\Bitso\BitsoService;
 use App\Models\BitsoData;
 use App\Http\Helpers;
 
 class priceChangeNotificator extends Command
 {
     use Messenger;
+
+    public const MIN_PRICE_CHANGE = -5;
+    public const MAX_PRICE_CHANGE = 10;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->bitsoService = new BitsoService();
+    }
 
     /**
      * The name and signature of the console command.
@@ -33,10 +43,8 @@ class priceChangeNotificator extends Command
      */
     public function handle()
     {
-        $api = new BitsoClient();
-        
-        $currentBtcPrice = $api->getBookPrice('btc_mxn');        
-        $lastPurchased = $this->lastPurchasedPrice('btc_mxn');
+        $currentBtcPrice = $this->bitsoService->getBookPrice('btc_mxn');
+        $lastPurchased = $this->bitsoService->lastPurchasedPrice('btc_mxn');
 
         $percentage = Helpers::convertToPercentage($currentBtcPrice->last, $lastPurchased->price);
 
@@ -44,28 +52,31 @@ class priceChangeNotificator extends Command
         $lastBought = Number::currency($lastPurchased->price);
         $calculated = Number::percentage($percentage, 1);
         
-        $telegram = new Telegram();
-        
-        if ($percentage < -5 || $percentage > 10){
-            $message = sprintf("The Bitcoin price has already change over <b>%s</b> since last bought\n\r".
+        if ($percentage < -5){
+            $message = sprintf("The Bitcoin price has already falls over <b>%s</b> since last bought\n\r".
             				   "Last bought: <b>%s</b>\n\rCurrent price: <b>%s</b>", $calculated, $lastBought, $currentPrice);
-                                
-        	$this->notify($telegram, $message);
+
+            $this->telegram($message);
+            $this->placeOrder();
         }
     }
 
-    protected function lastPurchasedPrice(string $book)
+    protected function placeOrder()
     {
-        return BitsoData::where('book', $book)
-            ->where('active', true)
-            ->orderBy('created_at', 'desc')
-            ->first();
-    }
+        try {
+            $response = $this->bitsoService->placeOrder([
+                'book' => "btc_mxn",
+                'side' => "buy",
+                'type' => "limit",
+                'major' => "0.0005",
+                'price' => "1000000",
+            ]);
 
-    protected function placeOrder(string $price)
-    {
-        $this->notify(new Telegram(), 
-            sprintf("We have placed a bitcoin order with current price: %s", $price)
-        );
+            $this->telegram("Order placed successfully");
+        }
+
+        catch(\Exception $err){
+            $this->telegram("Error while placing order | <b>{$err->getMessage()}</b>");
+        }
     }
 }

@@ -40,7 +40,7 @@ class BitsoClient
 		$json = json_decode($response);
 
 		if(isset($json->error)){
-			throw new \Exception("Error Processing Request: ". $json->error->message);
+			throw new \RuntimeException ($json->error->message);
 		}
 
 		return $json;
@@ -86,22 +86,36 @@ class BitsoClient
 		return null;
 	}
 
-    public function placeOrder(Request $data)
-    {
+	public function getOrders()
+	{
 		try {
-			$response = $this->getBitsoRequest('/v3/orders/', $data);
-            
-            return response()->json([
-                "data"	   => $data->all(),
-                "response" => $response
-            ]);
+			$response = $this->getBitsoRequest('/v3/trades/', ['book' => 'btc_mxn']);
+
+			dd($response);
 		}
 		
 		catch(\Exception $err){
+			dd("ERROR: ". $err->getMessage());
+
 			return response()->json([
 				"success" => false,
 				"message" => $err->getMessage()
 			]);
+		}		
+	}
+
+    public function placeOrder(array $data)
+    {
+		try {
+			$response = $this->getBitsoRequest('/v3/orders/', json_encode($data), 'POST');
+            
+			dd($response);
+		}
+		
+		catch(\LogicException $err){
+			throw new \LogicException(
+				sprintf("ERROR: %s | BitsoKey: %s", $err->getMessage(), $this->bitsoKey)
+			);
 		}
     }
 }

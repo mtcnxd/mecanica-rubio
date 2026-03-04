@@ -32,9 +32,7 @@ class updateInvestmentBalances extends Command
      * Execute the console command.
      */
     public function handle()
-    {
-        $telegram = new Telegram();
-        
+    {        
         try {
             Investment::all()->each(function ($investment) {
                 if ($investment->investmentData->last()){
@@ -49,18 +47,15 @@ class updateInvestmentBalances extends Command
             });
 
             $all = Investment::all();
+            $currentBalance = Number::currency($all->sum('current_amount'));
     
-            $this->notify($telegram,
-                sprintf("Process finished at: <b>%s</b> \n\rToday total amount: <b>%s</b>", now(), Number::currency($all->sum('current_amount')))
+            $this->telegram(
+                sprintf("Process finished at: <b>%s</b> \n\rTotal amount today: <b>%s</b>", now()->format('g:i a'), $currentBalance)
             );
         }
 
         catch (\Exception $e){
-            Log::error('ERROR | MESSAGE: '. $e->getMessage());
-            
-            $this->notify($telegram, 
-                sprintf('Error while updating data | Error: %s', $e->getMessage())
-            );
+            $this->telegram("Error while updating balances | Error: {$e->getMessage()}");
         }
     }
 }
