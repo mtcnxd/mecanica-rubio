@@ -83,12 +83,12 @@
         </tr>
     </table>
 
-    <p style="margin-top: 50px;">
+    <p style="margin-top: 20px;">
         Este presupuesto es una estimación basada en la revision inicial. El costo final puede variar debido a fluctuaciones en el precio de los componentes
         o el descubrimiento de daños ocultos tras el desarmado. Cualquier excedente será notificado y consultado previamente.
     </p>
 
-    <p style="margin-top: 50px;">
+    <p style="margin-top: 20px;">
         Para cualquier duda o aclaración quedamos a su entera disposicion, 
         puede comunicarse con nosotros o enviarnos whatsapp al numero: <b>(9994) 48 44 63</b>
     </p>
