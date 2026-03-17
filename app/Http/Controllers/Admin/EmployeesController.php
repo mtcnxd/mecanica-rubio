@@ -19,6 +19,10 @@ class EmployeesController extends Controller
     public function index()
     {
         $employees = Employee::all();
+
+        $employee = Employee::find(3);
+        dd($employee->start_date, $employee->salary, $employee->created_at, $employee->periodicity);
+
         return view('admin.employees.index', compact('employees'));
     }
 

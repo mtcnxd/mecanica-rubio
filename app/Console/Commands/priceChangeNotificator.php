@@ -57,7 +57,10 @@ class priceChangeNotificator extends Command
             				   "Last bought: <b>%s</b>\n\rCurrent price: <b>%s</b>", $calculated, $lastBought, $currentPrice);
 
             $this->telegram($message);
-            $this->placeOrder();
+
+            if (now()->diffInDays($lastPurchased->created_at) < 15){
+                $this->placeOrder();
+            }
         }
     }
 

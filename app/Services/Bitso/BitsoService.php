@@ -34,13 +34,6 @@ class BitsoService
             ->first();
     }
 
-    public function delete(int $id) : void
-    {
-        $this->bitsoModel->where('id', $id)->update([
-            'active' => false 
-        ]);
-    }
-
     public function getBookPrice(string $book)
     {
         return $this->bitsoClient->getBookPrice($book);

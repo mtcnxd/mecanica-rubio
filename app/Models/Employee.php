@@ -22,11 +22,11 @@ class Employee extends Model
         'comments'
     ];
 
-    protected $dates = [
-        'start_date',
-        'end_date',
-        'created_at',
-        'updated_at',
+    protected $casts = [
+        'start_date' => 'datetime', 
+        'end_date' => 'datetime',
+        'salary' => 'decimal:2',
+        'periodicity' => 'collection',
     ];
 
     public function user()
@@ -37,6 +37,16 @@ class Employee extends Model
     public function salaries()
     {
         return $this->hasMany(Salary::class, 'user_id');
+    }
+
+    public function getExtraAttribute($value)
+    {
+        return $value ?? 'No tiene';
+    }
+
+    public function test($value)
+    {
+        return $this->depto . ' ' . $value;
     }
 
     public function vacations()

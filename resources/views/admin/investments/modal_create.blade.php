@@ -1,7 +1,7 @@
 <div class="modal fade" id="addShopping" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <form action="{{ route('investments.store') }}" method="POST">
+            <form action="{{ route('bitso.store') }}" method="POST">
                 @csrf
                 <div class="modal-header">
                     <h5 class="modal-title">Nueva compra</h5>

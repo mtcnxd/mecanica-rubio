@@ -90,7 +90,7 @@ class InvestmentsController extends Controller
             return response()->json([
                 'success' => true,
                 'type'    => 'success',
-                'message' => 'It was deleted successfully'
+                'message' => sprintf('The element with id: %s was deleted successfully', $request->id)
             ]);
         }
 

@@ -237,12 +237,11 @@
         event.preventDefault();
         
         $.ajax({
-            url: "{{ route('bitso.destroy') }}",
-            method:'GET',
-            data:{
-                id:this.dataset.id
-            },
+            url: `/api/investments/bitso/${this.dataset.id}`,
+            method:'DELETE',
             success:function(response){
+                console.log(response);
+
                 Swal.fire({
                     text: response.message,
                     icon: response.type,

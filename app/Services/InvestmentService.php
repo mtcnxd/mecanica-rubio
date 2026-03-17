@@ -6,6 +6,7 @@ use App\Contracts\InvestmentInterface;
 use App\Services\Bitso\BitsoService;
 use App\Models\Investment;
 use App\Models\InvestmentData;
+use App\Models\BitsoData;
 
 class InvestmentService
 {
@@ -39,8 +40,6 @@ class InvestmentService
             'current_amount' => $data['amount']
         ]);
 
-        
-
         return InvestmentData::create($data);
     }
 
@@ -58,6 +57,14 @@ class InvestmentService
         }]);
 
         return $investment;
+    }
+
+    public function delete(int $id)
+    {
+        $bitsoData = BitsoData::find($id);
+        $bitsoData->update([
+            'active' => false
+        ]);
     }
 
     public function getTotal() :  int

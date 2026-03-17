@@ -113,9 +113,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'isAdmin'], function(){
 
     Route::group(['prefix' => 'investments', 'controller' => InvestmentsController::class], function(){
         Route::get('/', 'index')->name('investments.index');
-        Route::post('store', 'store')->name('investments.store');
         Route::post('update', 'update')->name('investments.update');
-
         Route::get('instrument/{investment_id}', 'show')->name('investments.show');
     });
     

@@ -107,8 +107,9 @@ Route::group(['prefix' => 'finance'], function(){
 });
 
 Route::group(['prefix' => 'investments', 'controller' => InvestmentsController::class], function(){
+    Route::delete('bitso/{id}','destroy')->name('bitso.destroy');
+    Route::post('bitso','store')->name('bitso.store');
     Route::get('total','total')->name('investments.total');
-    Route::get('bitso/destroy','destroy')->name('bitso.destroy');
 });
 
 Route::group(['prefix' => 'calendar', 'controller' => CalendarController::class], function(){
