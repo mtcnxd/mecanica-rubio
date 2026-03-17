@@ -8,8 +8,8 @@ use App\Notifications\Telegram;
 use App\Services\ServicesService;
 use App\Traits\Messenger;
 use Carbon\Carbon;
-use DB;
 use Illuminate\Http\Request;
+use DB;
 
 class ServicesController extends Controller
 {
@@ -238,6 +238,10 @@ class ServicesController extends Controller
 
         if ($request->status != 'Todos') {
             $servicesQuery->where('status', $request->status);
+        }
+
+        if ($request->folio) {
+            $servicesQuery->where('service_id', $request->folio);
         }
 
         $servicesQuery->orderBy('status', 'desc')->get();

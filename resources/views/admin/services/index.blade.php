@@ -15,7 +15,7 @@
                     @endforeach
                 </select>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <label for="endDate" class="fw-bold">Estatus</label>
                 <select class="form-select" id="status">
                     <option>Todos</option>
@@ -27,10 +27,14 @@
                     <option>Entregado</option>
                 </select>
             </div>
+            <div class="col-md-1">
+                <label for="folio" class="fw-bold">Folio</label>
+                <input type="text" class="form-control" id="folio">
+            </div>
             <div class="col-md-4 mt-4">
                 <button class="btn btn-success" id="applyFilter">
                     <x-feathericon-search class="table-icon" style="margin: -2px 5px 2px"/>
-                    Filtrar
+                    Buscar
                 </button>
             </div>
             <div class="col-md-2">
@@ -123,6 +127,7 @@ $('#client').select2();
 
 const client      = document.querySelector("#client");
 const status      = document.querySelector("#status");
+const folio       = document.querySelector("#folio");
 const applyFilter = document.querySelector('#applyFilter');
 
 const table = new DataTable('#services', 
@@ -138,6 +143,7 @@ const table = new DataTable('#services',
         data: function(data) {
             data.client = client.value;
             data.status = status.value;
+            data.folio = folio.value;
         }
     },
     columns:[

@@ -18,9 +18,7 @@ class Car extends Model
         'year',
         'plate',
         'client_id',
-        'comments',
-        'created_at',
-        'updated_at',
+        'comments'
     ];    
 
     public function findByCriteria(string $criteria)

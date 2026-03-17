@@ -27,9 +27,10 @@ class Service extends Model
         'total',
     ];
 
-    protected $dates = [
-        'entry_date',
-        'finished_date',
+    protected $casts = [
+        'quote' => 'boolean',
+        'entry_date' => 'date',
+        'finished_date' => 'date',
     ];
 
     protected $with = [
@@ -62,10 +63,10 @@ class Service extends Model
         if ($this->entry_date)
         {
             if ($this->status == 'Entregado'){
-                return Carbon::parse($this->entry_date)->diffInDays(Carbon::parse($this->finished_date));
+                return $this->entry_date->diffInDays($this->finished_date);
             }
 
-            return Carbon::parse($this->entry_date)->diffInDays(Carbon::now());
+            return $this->entry_date->diffInDays(now());
         }
         
         return;
