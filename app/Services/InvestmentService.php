@@ -20,7 +20,13 @@ class InvestmentService
 
     public function getActiveTrades()
     {
-        return $this->bitsoService->getActiveTrades();
+        $trades = $this->bitsoService->getActiveTrades();
+
+        return [
+            'current_total' => $trades->sum('current_value'),
+            'purchased_total' => $trades->sum('purchase_value'),
+            'data' => $trades
+        ];
     }
 
     public function getActiveInvestments()

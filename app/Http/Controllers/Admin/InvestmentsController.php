@@ -36,6 +36,8 @@ class InvestmentsController extends Controller
             'bitso' => $this->investmentService->getActiveTrades(),
         ];
 
+        // dd($results);
+
         return view('admin.investments.index', compact('results', 'charts'));
     }
 

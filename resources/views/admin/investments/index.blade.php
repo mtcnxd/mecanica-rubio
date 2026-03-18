@@ -20,13 +20,7 @@
                 </tr>
             </thead>
             <tbody>
-                @php
-                    $sumCurrentValue = 0;
-                @endphp
-                @foreach ($results['bitso'] as $item)
-                    @php
-                        $sumCurrentValue += $item->currentPurchaseValue($item->book);
-                    @endphp
+                @foreach ($results['bitso']['data'] as $item)
                     <tr>
                         <td scope="row">{{ $item->book }}</td>
                         <td class="text-end">{{ $item->amount }}</td>
@@ -41,7 +35,7 @@
                             @endif
                         </td>
                         <td class="text-end">
-                            <span title="{{ Carbon\Carbon::parse($item->created_at)->diffForHumans() }}">{{ Carbon\Carbon::parse($item->created_at)->format('j M Y') }}</span>
+                            <span title="{{ $item->created_at->diffForHumans() }}">{{ $item->created_at->format('j M Y') }}</span>
                         </td>
                         <td class="text-end">
                             <a href="#" class="cancell-trade" data-id="{{ $item->id }}">
@@ -54,9 +48,9 @@
             <tfoot>
                 <tr>
                     <td></td>
-                    <td class="text-end fw-bold"></td>
                     <td colspan="2"></td>
-                    <td class="text-end fw-bold">{{ Number::currency($sumCurrentValue) }}</td>
+                    <td class="text-end fw-bold">{{ Number::currency($results['bitso']['purchased_total']) }}</td>
+                    <td class="text-end fw-bold">{{ Number::currency($results['bitso']['current_total']) }}</td>
                     <td colspan="3"></td>
                 </tr>
             </tfoot>
@@ -64,7 +58,7 @@
         
         <div style="display: flex; justify-content:space-between;">
             <a href="#" class="ms-3 ps-3 pe-3 btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addShopping">Nueva Compra</a>
-            <span class="pe-3">{{ $results['bitso']->count() }} Registros encontrados</span>
+            <span class="pe-3">{{ $results['bitso']['data']->count() }} Registros encontrados</span>
         </div>
     </x-window_main>
 
@@ -147,7 +141,7 @@
                                     <td class="text-end">{{ Number::currency($investment->investmentData->last()->amount) }}</td>
                                     <td class="text-end">{{ Number::currency($investment->differenceBetweenDeposits()) }}</td>
                                     <td class="text-end">{{ Number::percentage($investment->investmentPercentage(), 1) }}</td>
-                                    <td class="text-end">{{ Carbon\Carbon::parse($investment->investmentData->last()->created_at)->format('d M Y') }}</td>
+                                    <td class="text-end">{{ $investment->investmentData->last()->created_at->format('d M Y') }}</td>
                                 </tr>                            
                             @endif
                         @endforeach
