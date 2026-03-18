@@ -253,7 +253,7 @@ $("#labour").on('change', function(){
 $("#item").on('keyup', function(){
     if (this.value.length >= 3){
         $.ajax({
-            url: "{{ route('services.getServiceItems') }}",
+            url: "{{ route('services.itemByCriteria') }}",
             method: "GET",
             data: {
                 text:this.value
@@ -283,7 +283,7 @@ $("#addItemInvoice").on('click', function(event){
     }
 
     $.ajax({
-        url:"{{ route('createItemInvoice') }}",
+        url:"{{ route('services.itemCreate') }}",
         method:'POST',
         data: {
             service:service,
@@ -305,13 +305,11 @@ $("#addItemInvoice").on('click', function(event){
 $(".removeItem").on('click', function (event){
     event.preventDefault();
     $.ajax({
-        url:"{{ route('removeItemInvoice') }}",
-        method:'POST',
-        data: {
-            item:this.id
-        },
+        url:"{{ route('services.itemDestroy', ':id') }}".replace(':id', this.id),
+        method:'DELETE',
         success:function(response){
-            showMessageAlert(response);
+            //console.log(response);
+            showMessageAlert(response.message);
         }
     });
 });

@@ -67,7 +67,7 @@ class InvestmentService
         ]);
     }
 
-    public function getTotal() :  int
+    public function getTotal() :  float
     {
         $total = 0;
         $actives = $this->activeInvestments();

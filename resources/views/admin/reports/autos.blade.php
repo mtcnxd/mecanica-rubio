@@ -59,8 +59,8 @@
     function getItemInformation(element){
         element.preventDefault;
         $.ajax({
-            type: "POST",
-            url: "{{ route('services.getItemInformation') }}",
+            url: "{{ route('services.itemGetInfo') }}",
+            method: "GET",
             data: { item:element.text },
             success: function (response) {
                 $("#results").empty();

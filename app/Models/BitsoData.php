@@ -23,9 +23,31 @@ class BitsoData extends Model
         'purchase_value'
     ];
 
+    protected $casts = [
+        'updated_at' => "datetime:Y-m-d",
+        'created_at' => "datetime:Y-m-d"
+    ];
+
+    protected $hidden = [
+        'active'
+    ];
+
+    protected $appends = ['current_value'];
+
     public function __construct()
     {
         $this->bitso = new BitsoClient();
+    }
+
+    public function getPurchaseValueAttribute()
+    {
+        return round($this->attributes['purchase_value'], 2);
+    }
+
+    public function getCurrentValueAttribute()
+    {
+        $currentPrice = $this->getTickerByBook($this->book)->last;
+        return round($currentPrice * $this->amount, 2);
     }
 
     public function currentGainOrLost(string $book)

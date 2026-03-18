@@ -84,14 +84,14 @@ Route::group(['prefix' => 'services', 'controller' => ServicesController::class]
     Route::get('search', 'search')->name('services.search');
 
     Route::post('createServicePDF', 'createServicePDF')->name('services.createServicePDF');
-    Route::post('getItemInformation', 'getItemInformation')->name('services.getItemInformation');
-    
     Route::get('fromQuoteToService', 'fromQuoteToService')->name('services.change.quote');
-    Route::get('getServiceItems', 'getServiceItems')->name('services.getServiceItems');
+    
+    Route::get('item', 'itemGetInfo')->name('services.itemGetInfo');
+    Route::delete('item/{id}', 'itemDestroy')->name('services.itemDestroy');
+    Route::post('item', 'itemCreate')->name('services.itemCreate');
+    Route::get('item/all', 'itemByCriteria')->name('services.itemByCriteria');
+    
     Route::get('getDataTableServices', 'getDataTableServices')->name('getDataTableServices');
-
-    Route::post('createItemInvoice', 'createItemInvoice')->name('createItemInvoice');
-    Route::post('removeItemInvoice', 'removeItemInvoice')->name('removeItemInvoice');
 });
 
 Route::group(['prefix' => 'finance'], function(){
@@ -118,6 +118,8 @@ Route::group(['prefix' => 'calendar', 'controller' => CalendarController::class]
 });
 
 Route::group(['prefix' => 'sensors'], function(){
+    Route::get('trades', [InvestmentsController::class, 'getActiveTrades'])->name('sensors.trades');
+
     Route::get('time', function () {
         return response()->json([
             'date' => now()->format('Y-m-d'),

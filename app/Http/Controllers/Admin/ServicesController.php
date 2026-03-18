@@ -112,7 +112,7 @@ class ServicesController extends Controller
                         $service->car->brand ." ". $service->car->model,
                         $service->client->name,
                         $service->fault, 
-                        number_format($request->total,2)
+                        Number::currency($request->total)
                     )
                 );
 
@@ -142,15 +142,7 @@ class ServicesController extends Controller
         return $this->servicesService->createPDF($request->serviceid);
     }
 
-    public function getServiceItems(Request $request)
-    {
-        return Response()->json([
-            "success" => true,
-            "data"    => ServiceItems::findByCriteria($request->input('text'))
-        ]);
-    }
-
-    public function getItemInformation(Request $request)
+    public function itemGetInfo(Request $request)
     {
         $data = DB::table('services_items')
             ->select('brand','model','supplier','services_items.price')
@@ -186,7 +178,15 @@ class ServicesController extends Controller
         }
     }
 
-    public function createItemInvoice(Request $request)
+    public function itemByCriteria(Request $request)
+    {
+        return Response()->json([
+            "success" => true,
+            "data"    => ServiceItems::findByCriteria($request->input('text'))
+        ]);
+    }
+
+    public function itemCreate(Request $request)
     {
         $labour = false;
         $item   = $request->item;
@@ -219,13 +219,17 @@ class ServicesController extends Controller
         ]);
     }
 
-    public function removeItemInvoice(Request $request)
+    public function itemDestroy(Request $request)
     {
         DB::table('services_items')
-            ->where('id', $request->item)
+            ->where('id', $request->id)
             ->delete();
 
-        return 'Eliminado correctamente';
+        return response()->json([
+            'success' => true,
+            'data' => $request->all(),
+            'message' => "Eliminado correctamente",
+        ]);
     }
 
     public function getDataTableServices(Request $request)

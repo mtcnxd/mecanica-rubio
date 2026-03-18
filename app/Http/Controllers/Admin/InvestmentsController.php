@@ -74,14 +74,6 @@ class InvestmentsController extends Controller
         return view('admin.investments.show', compact('investment'));
     }
 
-    // TODO: Deprecar
-    public function total()
-    {
-        return response()->json([
-            'total' => number_format((new InvestmentService)->getTotal(), 0)
-        ]);
-    }
-
     public function destroy(Request $request)
     {
         try {
@@ -101,5 +93,18 @@ class InvestmentsController extends Controller
                 'message' => $er->getMessage()
             ]);
         }
+    }
+
+    // TODO: Deprecar
+    public function total()
+    {
+        return response()->json([
+            'total' => number_format((new InvestmentService)->getTotal(), 0)
+        ]);
+    }
+
+    public function getActiveTrades()
+    {
+        return $this->investmentService->getActiveTrades();
     }
 }
