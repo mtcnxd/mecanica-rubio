@@ -26,8 +26,6 @@ class BitsoData extends Model
     protected $casts = [
         'updated_at' => "datetime:Y-m-d",
         'created_at' => "datetime:Y-m-d",
-        'purchase_value' => 'decimal:2',
-        'current_value' => 'decimal:2',
     ];
 
     protected $hidden = [
@@ -43,13 +41,13 @@ class BitsoData extends Model
 
     public function getPurchaseValueAttribute()
     {
-        return round($this->attributes['purchase_value'], 2);
+        return number_format($this->attributes['purchase_value'], 2);
     }
 
     public function getCurrentValueAttribute()
     {
         $currentPrice = $this->getTickerByBook($this->book)->last;
-        return round($currentPrice * $this->amount, 2);
+        return number_format($currentPrice * $this->amount, 2);
     }
 
     public function currentGainOrLost(string $book)
