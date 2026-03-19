@@ -25,7 +25,9 @@ class BitsoData extends Model
 
     protected $casts = [
         'updated_at' => "datetime:Y-m-d",
-        'created_at' => "datetime:Y-m-d"
+        'created_at' => "datetime:Y-m-d",
+        'purchase_value' => 'decimal:2',
+        'current_value' => 'decimal:2',
     ];
 
     protected $hidden = [
