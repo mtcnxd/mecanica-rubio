@@ -13,22 +13,21 @@ class BitsoService
     public function __construct()
     {
         $this->bitsoClient = new BitsoClient();
-        $this->bitsoModel = new BitsoData();
     }
 
     public function getActiveTrades()
     {
-        return $this->bitsoModel->where('active', true)->get();
+        return BitsoData::where('active', true)->get();
     }
 
     public function bitsoDataCreate(array $data) : BitsoData
     {
-        return $this->bitsoModel->create($data);
+        return BitsoData::create($data);
     }
 
     public function lastPurchasedPrice(string $book)
     {
-        return $this->bitsoModel->where('book', $book)
+        return BitsoData::where('book', $book)
             ->where('active', true)
             ->orderBy('created_at', 'desc')
             ->first();
