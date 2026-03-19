@@ -23,8 +23,8 @@ class InvestmentService
         $trades = $this->bitsoService->getActiveTrades();
 
         return [
-            'current_total' => $trades->sum('current_value'),
-            'purchased_total' => $trades->sum('purchase_value'),
+            'current_total' => number_format($trades->sum('current_value'), 2),
+            'purchased_total' => number_format($trades->sum('purchase_value'), 2),
             'data' => $trades
         ];
     }
