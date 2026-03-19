@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Contracts\InvestmentInterface;
 use App\Services\Bitso\BitsoService;
 use App\Models\Investment;
 use App\Models\InvestmentData;
@@ -23,8 +22,8 @@ class InvestmentService
         $trades = $this->bitsoService->getActiveTrades();
 
         return [
-            'current_total' => number_format($trades->sum('current_value'), 2),
-            'purchased_total' => number_format($trades->sum('purchase_value'), 2),
+            'current_total' => round($trades->sum('current_value'), 2),
+            'purchased_total' => round($trades->sum('purchase_value'), 2),
             'data' => $trades
         ];
     }
