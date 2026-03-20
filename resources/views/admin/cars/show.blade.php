@@ -140,8 +140,8 @@
                                 <a href="{{ route('services.show', $service->id) }}">{{ Str::limit($service->fault, 80) }}</a>
                             </td>
                             <td>{{ $service->service_type }}</td>
-                            <td>{{ $service->entry_date->format('d-m-Y') }}</td>
-                            <td>{{ $service->finished_date->format('d-m-Y') ?? '' }}</td>
+                            <td>{{ isset($service->entry_date) ? $service->entry_date->format('d-m-Y') : '' }}</td>
+                            <td>{{ isset($service->finished_date) ? $service->finished_date->format('d-m-Y') : '' }}</td>
                             <td>
                                 @if ($service->status == 'Finalizado')
                                     <span class="badge text-bg-success">{{ $service->status }}</span>    
