@@ -18,10 +18,8 @@ class InvestmentData extends Model
         'amount',
     ];
 
-    protected $dates = [
-        'date',
-        'updated_at',
-        'created_at'
+    protected $casts = [
+        'date' => 'date',
     ];
 
     public function getAmountByDaysAgo($daysAgo, $id)

@@ -49,8 +49,8 @@
             <tbody>
                 @foreach ($investment->investmentData->sortByDesc('created_at') as $item)
                     <tr>
-                        <td title="{{ Carbon\Carbon::parse($item->date)->diffForHumans() }}">
-                            {{ Carbon\Carbon::parse($item->date)->format('d M Y') }}
+                        <td title="{{ $item->date->diffForHumans() }}">
+                            {{ $item->date->format('d M Y') }}
                         </td>
                         <td class="text-end">{{ Number::currency($item->amount) }}</td>
                     </tr>
