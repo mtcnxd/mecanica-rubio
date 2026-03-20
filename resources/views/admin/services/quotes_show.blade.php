@@ -216,7 +216,7 @@ $("#labour").on('change', function(){
 $("#item").on('keyup', function(){
     if (this.value.length >= 3){
         $.ajax({
-            url: "{{ route('services.getServiceItems') }}",
+            url: "{{ route('services.itemByCriteria') }}",
             method: "GET",
             data: {
                 text:this.value
