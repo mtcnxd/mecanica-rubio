@@ -268,17 +268,14 @@ $("#addItemInvoice").on('click', function(event){
 $(".removeItem").on('click', function (event){
     event.preventDefault();
     $.ajax({
-        url:"{{ route('removeItemInvoice') }}",
-        method:'POST',
-        data: {
-            item:this.id
-        },
+        url:"{{ route('services.itemDestroy', ':id') }}".replace(':id', this.id),
+        method:'DELETE',
         success:function(response){
-            showMessageAlert(response);
+            //console.log(response);
+            showMessageAlert(response.message);
         }
     });
 });
-
 function selectItem(element){
     let input = document.getElementById('item');
     input.value = element.textContent;
