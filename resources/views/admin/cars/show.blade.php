@@ -140,8 +140,8 @@
                                 <a href="{{ route('services.show', $service->id) }}">{{ Str::limit($service->fault, 80) }}</a>
                             </td>
                             <td>{{ $service->service_type }}</td>
-                            <td>{{ Carbon\Carbon::parse($service->entry_date)->format('d-m-Y') }}</td>
-                            <td>{{ isset($service->finished_date) ? Carbon\Carbon::parse($service->finished_date)->format('d-m-Y') : '' }}</td>
+                            <td>{{ $service->entry_date->format('d-m-Y') }}</td>
+                            <td>{{ $service->finished_date->format('d-m-Y') ?? '' }}</td>
                             <td>
                                 @if ($service->status == 'Finalizado')
                                     <span class="badge text-bg-success">{{ $service->status }}</span>    
@@ -149,7 +149,7 @@
                                     <span class="badge text-bg-warning">{{ $service->status }}</span>
                                 @endif
                             </td>
-                            <td class="text-end">{{  '$'.number_format($service->total, 2) }}</td>
+                            <td class="text-end">{{ Number::currency($service->total, 2) }}</td>
                         </tr>
                     @endforeach
                 </tbody>

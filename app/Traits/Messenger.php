@@ -28,9 +28,4 @@ trait Messenger
             Log::error("ERROR: ". $e->getMessage());
         }
     }
-
-    public function write(string $line)
-    {
-        // Write log message
-    }
 }

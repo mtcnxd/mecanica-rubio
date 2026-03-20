@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Notifications\Telegram;
 use App\Services\ClientService;
 use App\Traits\Messenger;
 use Illuminate\Http\Request;
@@ -33,16 +32,11 @@ class ClientsController extends Controller
     {
         try {
             $client = $this->clientService->create($request->except('_method','_token'));
-            
-            $this->notify(new Telegram(),
-                sprintf("<b>New client created:</b> %s \n\r<b>Phone:</b> %s", $request->name, $request->phone)
-            );
-
-            session()->flash('success', sprintf('El cliente %s se guardó correctamente', $request->name));
+            session()->flash('success', sprintf('El cliente %s se guardó correctamente', $client->name));
         }
         
-        catch (\Exception $err){
-            session()->flash('warning', sprintf('Ocurrio un error | %s ', $err->getMessage()));
+        catch (\Exception $e){
+            session()->flash('warning', sprintf('Ocurrio un error | %s ', $e->getMessage()));
 		}
 
         return to_route('clients.index');

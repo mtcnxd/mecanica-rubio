@@ -40,16 +40,11 @@ class CarsController extends Controller
         
         try {
             $this->carService->create($request->except('_method','_token'));
-            
-            $this->notify(new Telegram(),
-                sprintf("<b>New car created:</b> %s <b>Model:</b> %s", $request->brand, $request->model)
-            );
-
             session()->flash('success', 'Los datos se guardaron correctamente');
         }
         
-        catch (\Exception $err){
-            session()->flash('warning', sprintf('Ocurrio un error | %s ', $err->getMessage()));
+        catch (\Exception $e){
+            session()->flash('warning', sprintf('Ocurrio un error | %s ', $e->getMessage()));
 		}
 
         return to_route('cars.index');
@@ -58,12 +53,7 @@ class CarsController extends Controller
     public function show(string $id)
     {
         $car = $this->carService->find($id);
-
-        $services = DB::table('autos')
-            ->join('services', 'services.car_id', 'autos.id')
-            ->where('autos.id', $id)
-            ->get();
-
+        
         return view('admin.cars.show', compact('car'));
     }
 

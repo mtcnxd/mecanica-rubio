@@ -3,9 +3,12 @@
 namespace App\Services;
 
 use App\Models\Client;
+use App\Traits\Messenger;
 
 class ClientService
 {
+    use Messenger;
+
     public function all()
     {
         return Client::where('status', 'Activo')->orderBy('name')->get();
@@ -18,13 +21,19 @@ class ClientService
 
     public function create(array $data) : Client
     {
-        $exists = Client::where('phone', $data['phone'])->first();
+        $client = Client::where('phone', $data['phone'])->first();
 
-        if ($exists){
+        if ($client){
             throw new \Exception('El número de teléfono ya esta registrado');
         }
 
-        return Client::create($data);
+        $client = Client::create($data);
+
+        $this->telegram(
+            sprintf("<b>New client created:</b> %s \n\r<b>Phone:</b> %s", $data['name'], $data['phone'])
+        );
+
+        return $client;
     }
 
     public function update(string $id, array $data) : Client
