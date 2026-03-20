@@ -15,19 +15,19 @@
         <div class="row p-4 pt-0">
             <div class="col-md-3">
                 <x-card_simple_overview_1
-                    title="{{ $first->date }}"
+                    title="{{ $first->date->format('d M Y') }}"
                     message="{{ Number::currency($first->amount) }}"
                 />
             </div>
             <div class="col-md-3">
                 <x-card_simple_overview_1
-                    title="{{ $last->date }}" 
+                    title="{{ $last->date->format('d M Y') }}" 
                     message="{{ Number::currency($last->amount) }}"
                 />
             </div>
             <div class="col-md-3">
                 <x-card_simple_overview_1
-                    title="$ Incremento a 30 días" 
+                    title="$ Incremento a {{ $first->date->diffInDays($last->date) }} días" 
                     message="{{ Number::currency($first->amount - $last->amount); }}"
                 />
             </div>
