@@ -4,11 +4,8 @@ namespace App\Console\Commands;
 
 use App\Traits\Messenger;
 use Illuminate\Support\Number;
-use App\Notifications\Telegram;
 use Illuminate\Console\Command;
-use App\Services\Bitso\BitsoClient;
 use App\Services\Bitso\BitsoService;
-use App\Models\BitsoData;
 use App\Http\Helpers;
 
 class priceChangeNotificator extends Command
