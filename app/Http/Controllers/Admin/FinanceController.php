@@ -40,7 +40,7 @@ class FinanceController extends Controller
             ]);
         }
         
-        catch (Exception $err){
+        catch (\Exception $err){
             return Response()->json([
                 "success"  => false,
                 "messsage" => sprintf('Error: %s', $err->getMessage()) ,

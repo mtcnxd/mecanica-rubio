@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request;
-use Carbon\Carbon;
-use App\Models\{Charts,Expense,Payroll,Service};
+use App\Models\Charts;
+use App\Models\Expense;
+use App\Models\Payroll;
+use App\Models\Service;
 
 class Dashboard extends Controller
 {
@@ -21,7 +21,7 @@ class Dashboard extends Controller
         });
 
         $data['avg'] = $service->select(Service::raw('AVG(DATEDIFF(finished_date, entry_date)) as avg'))
-            ->where('created_at', '>', Carbon::now()->subMonths(6))
+            ->where('created_at', '>', now()->subMonths(6))
             ->where('status', 'Entregado')
             ->first()->avg;
 

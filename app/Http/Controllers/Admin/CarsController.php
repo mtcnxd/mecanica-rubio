@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Car;
-use App\Notifications\Telegram;
 use App\Services\CarService;
 use App\Traits\Messenger;
 use Illuminate\Http\Request;
@@ -53,7 +52,7 @@ class CarsController extends Controller
     public function show(string $id)
     {
         $car = $this->carService->find($id);
-        
+
         return view('admin.cars.show', compact('car'));
     }
 
@@ -110,7 +109,7 @@ class CarsController extends Controller
                 'data'    => $brands
             ]);            
 
-        } catch (Exception $e){
+        } catch (\Exception $e){
             return $e->getMessage();
         }
     }    
@@ -166,7 +165,7 @@ class CarsController extends Controller
                 'data'    => $models
             ]);
 
-        } catch (Exception $e){
+        } catch (\Exception $e){
             return $e->getMessage();
         }
     }
