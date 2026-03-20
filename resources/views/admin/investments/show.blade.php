@@ -33,7 +33,7 @@
             </div>
             <div class="col-md-3">
                 <x-card_simple_overview_1
-                    title="% Incremento a 30 días" 
+                    title="% Incremento a {{ $first->date->diffInDays($last->date) }} días" 
                     message="{{ Number::percentage(App\Http\Helpers::convertToPercentage($first->amount, $last->amount), 2); }}"
                 />
             </div>  
