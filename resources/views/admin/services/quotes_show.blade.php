@@ -246,7 +246,7 @@ $("#addItemInvoice").on('click', function(event){
     }
 
     $.ajax({
-        url:"{{ route('createItemInvoice') }}",
+        url:"{{ route('services.itemCreate') }}",
         method:'POST',
         data: {
             service:service,
