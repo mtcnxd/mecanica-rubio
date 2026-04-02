@@ -24,7 +24,7 @@ class CarService
         $car = Car::create($data);
 
         $this->telegram(
-            sprintf("<b>New car created:</b> %s \n\r<b>Model:</b> %s", $request->brand, $request->model)
+            sprintf("<b>New car created:</b> %s \n\r<b>Model:</b> %s", $data['brand'], $data['model'])
         );
 
         return $car;

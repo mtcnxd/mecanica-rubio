@@ -75,7 +75,7 @@ class InvestmentService
     public function getTotal() :  float
     {
         $total = 0;
-        $actives = $this->activeInvestments();
+        $actives = $this->getActiveInvestments();
 
         foreach($actives as $active){
             if (!is_null($active->investmentData->last())) {

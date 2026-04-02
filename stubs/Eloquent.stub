@@ -1,0 +1,73 @@
+<?php
+
+namespace Illuminate\Database\Eloquent;
+
+/**
+ * @method static static find(mixed $id, array $columns = ['*'])
+ * @method static static findOrFail(mixed $id, array $columns = ['*'])
+ * @method static static create(array $attributes = [])
+ * @method static \Illuminate\Database\Eloquent\Builder where(mixed $column, mixed $operator = null, mixed $value = null)
+ * @method static \Illuminate\Database\Eloquent\Builder whereIn(string $column, array $values)
+ * @method static \Illuminate\Database\Eloquent\Builder orderBy(string $column, string $direction = 'asc')
+ * @method static \Illuminate\Database\Eloquent\Builder select(mixed ...$columns)
+ * @method static \Illuminate\Database\Eloquent\Builder with(mixed ...$relations)
+ * @method static \Illuminate\Database\Eloquent\Collection get(array $columns = ['*'])
+ * @method static static first(array $columns = ['*'])
+ * @method static static firstOrFail(array $columns = ['*'])
+ * @method static int count(string $columns = '*')
+ * @method static bool exists()
+ * @method static static updateOrCreate(array $attributes, array $values = [])
+ * @method static static firstOrCreate(array $attributes, array $values = [])
+ * @method static bool insert(array $values)
+ * @method static int insertGetId(array $values, ?string $sequence = null)
+ * @method static bool updateOrInsert(array $attributes, array $values = [])
+ */
+class Model
+{
+    protected $table;
+    protected $primaryKey = 'id';
+    protected $fillable = [];
+    protected $guarded = ['*'];
+    protected $casts = [];
+    protected $dates = [];
+    protected $appends = [];
+
+    public function save(array $options = []): bool { return true; }
+    public function delete(): ?bool { return true; }
+    public function update(array $attributes = [], array $options = []): bool { return true; }
+    public function getAttribute(string $key): mixed { return null; }
+    public function setAttribute(string $key, mixed $value): static { return $this; }
+    public function hasMany(string $related, ?string $foreignKey = null, ?string $localKey = null): HasMany { return new HasMany(); }
+    public function belongsTo(string $related, ?string $foreignKey = null, ?string $ownerKey = null): BelongsTo { return new BelongsTo(); }
+    public function hasOne(string $related, ?string $foreignKey = null, ?string $localKey = null): HasOne { return new HasOne(); }
+
+    public function __get(string $key): mixed { return null; }
+    public function __set(string $key, mixed $value): void {}
+}
+
+class Builder
+{
+    /** @return static */
+    public function where(mixed $column, mixed $operator = null, mixed $value = null): static { return $this; }
+    /** @return static */
+    public function whereIn(string $column, array $values): static { return $this; }
+    /** @return static */
+    public function orderBy(string $column, string $direction = 'asc'): static { return $this; }
+    /** @return static */
+    public function select(mixed ...$columns): static { return $this; }
+    /** @return static */
+    public function with(mixed ...$relations): static { return $this; }
+    public function get(array $columns = ['*']): Collection { return new Collection(); }
+    public function first(array $columns = ['*']): ?Model { return null; }
+    public function all(): Collection { return new Collection(); }
+    public function count(string $columns = '*'): int { return 0; }
+    public function exists(): bool { return false; }
+    public function update(array $values): int { return 0; }
+    public function delete(): int { return 0; }
+    public function pluck(string $column, ?string $key = null): Collection { return new Collection(); }
+}
+
+class Collection extends \ArrayObject {}
+class HasMany {}
+class BelongsTo {}
+class HasOne {}

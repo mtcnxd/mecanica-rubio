@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use PDF;
 use App\Models\Service;
 
 class ServicesService
@@ -46,7 +47,7 @@ class ServicesService
         $image = file_get_contents($path);
         $base64 = 'data:image/' . $type . ';base64,' . base64_encode($image);
 
-        $pdf = \PDF::loadView('admin.templates.pdf_invoice', [
+        $pdf = PDF::loadView('admin.templates.pdf_invoice', [
             "title"   => 'COTIZACION',
             "service" => $service,
             "image"   => $base64,

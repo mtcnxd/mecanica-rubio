@@ -24,10 +24,13 @@
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
+        "friendsofphp/php-cs-fixer": "^3.94",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.18",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^7.0",
+        "php-cs-fixer/shim": "^3.94",
+        "phpstan/phpstan": "^2.1",
         "phpunit/phpunit": "^10.1"
     },
     "autoload": {

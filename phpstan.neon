@@ -1,0 +1,12 @@
+parameters:
+    level: 1
+    paths:
+        - app
+    excludePaths:
+        analyse:
+            - bootstrap
+    scanFiles:
+        - stubs/Eloquent.stub
+    ignoreErrors:
+        - identifier: include.fileNotFound
+    phpVersion: 80100

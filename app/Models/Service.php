@@ -6,6 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 
+/**
+ * @property int $id
+ * @property string $entry_date
+ * @property string $status
+ * @property string $finished_date
+ */
 class Service extends Model
 {
     use HasFactory;

@@ -10,6 +10,8 @@ class BitsoService
 {
     use Messenger;
 
+    protected $bitsoClient;
+
     public function __construct()
     {
         $this->bitsoClient = new BitsoClient();
