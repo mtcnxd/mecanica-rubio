@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Services\Bitso\BitsoClient;
 
+/**
+ * @property string $book
+ * @property string $amount
+ * @property string $price
+ */
 class BitsoData extends Model
 {
     use HasFactory;

@@ -12,6 +12,8 @@ class priceChangeNotificator extends Command
 {
     use Messenger;
 
+    protected $bitsoService;
+
     public const MIN_PRICE_CHANGE = -5;
     public const MAX_PRICE_CHANGE = 10;
 

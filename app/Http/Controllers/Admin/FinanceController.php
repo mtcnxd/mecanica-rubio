@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Service;
-use \Carbon\Carbon;
-use \DB;
+use Carbon\Carbon;
 use PDF;
 
 class FinanceController extends Controller
