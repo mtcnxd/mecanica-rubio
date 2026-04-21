@@ -7,6 +7,7 @@ use App\Models\Investment;
 use App\Models\InvestmentData;
 use App\Services\Bitso\BitsoService;
 use Illuminate\Support\Number;
+use NumberFormatter;
 
 class InvestmentService
 {
@@ -21,20 +22,24 @@ class InvestmentService
         $trades = $this->bitsoService->getActiveTrades();
 
         return [
-            'current_total' => (double) number_format($trades->sum('current_value'), 2, '.',''),
-            'purchased_total' => (double) number_format($trades->sum('purchase_value'), 2, '.',''),
-            'data' => $trades
+            'current_total' => $trades->sum('current_value'),
+            'purchased_total' => $trades->sum('purchase_value'),
+            'data' => $trades->map(function($item){
+                return [
+                    'id' => $item->id,
+                    'book' => $item->book,
+                    'amount' => $item->amount,
+                    'price' => $item->price,
+                    'current_value' => $item->current_value,
+                    'purchase_value' => $item->purchase_value
+                ];
+            })
         ];
-    }
-
-    public function getActiveInvestments()
-    {
-        return Investment::where('active', true)->orderBy('name')->get();
     }
 
     public function updateInvestmentBalance(array $data) : InvestmentData
     {
-        $formatter = new \NumberFormatter('es_MX', \NumberFormatter::DECIMAL);
+        $formatter = new NumberFormatter('es_MX', NumberFormatter::DECIMAL);
 
         $data['date'] = now()->format('Y-m-d');
         $data['amount'] = $formatter->parse(str_replace(' ','', $data['amount']));
@@ -66,15 +71,18 @@ class InvestmentService
     public function delete(int $id)
     {
         $bitsoData = BitsoData::find($id);
-        $bitsoData->update([
-            'active' => false
-        ]);
+        $bitsoData->active = false;
+    }
+
+    public function getActiveInvestments()
+    {
+        return Investment::where('active', true)->orderBy('name')->get();
     }
 
     public function getTotal() : array
     {
         $actives = $this->getActiveInvestments();
-        
+
         return [
             'total' => $actives->sum('current_amount'),
             'items' => $actives->map(function($item){
