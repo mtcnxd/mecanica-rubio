@@ -37,22 +37,24 @@ class BitsoData extends Model
         'active'
     ];
 
-    protected $appends = ['current_value'];
+    protected $appends = [
+        'current_value'
+    ];
 
     public function __construct()
     {
         $this->bitso = new BitsoClient();
     }
 
-    public function getPurchaseValueAttribute()
-    {
-        return (double) number_format($this->attributes['purchase_value'], 2, '.','');
-    }
-
     public function getCurrentValueAttribute()
     {
-        $currentPrice = $this->getTickerByBook($this->book)->last;
-        return (double) number_format($currentPrice * $this->amount, 2, '.','');
+        $currenBookPrice = $this->getTickerByBook($this->book);
+
+        if (is_null($currenBookPrice)){
+            throw new Exception("Error Processing Request");
+        }
+
+        return $currenBookPrice->last * $this->amount;
     }
 
     public function currentGainOrLost(string $book)
