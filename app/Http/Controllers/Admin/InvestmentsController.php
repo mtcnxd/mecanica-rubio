@@ -2,22 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Carbon\Carbon;
+use App\Contracts\Notificator;
 use App\Http\Controllers\Controller;
-
+use App\Models\BitsoData;
+use App\Models\Charts;
+use App\Models\Investment;
+use App\Models\InvestmentData;
 use App\Services\InvestmentService;
-
 use App\Traits\Messenger;
+use Carbon\Carbon;
 
 use Illuminate\Http\Request;
-use App\Models\Charts;
-use App\Models\{
-    InvestmentData,
-    Investment,
-    BitsoData
-};
-
-use App\Contracts\Notificator;
+use Illuminate\Support\Number;
 
 class InvestmentsController extends Controller
 {
@@ -97,11 +93,13 @@ class InvestmentsController extends Controller
         }
     }
 
-    // TODO: Deprecar
     public function total()
     {
+        $balances = $this->investmentService->getTotal();
+
         return response()->json([
-            'total' => number_format((new InvestmentService)->getTotal(), 0)
+            'total' => Number::currency($balances['total']),
+            'items' => $balances['items']
         ]);
     }
 

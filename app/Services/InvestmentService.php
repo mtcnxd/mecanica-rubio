@@ -2,19 +2,18 @@
 
 namespace App\Services;
 
-use App\Services\Bitso\BitsoService;
+use App\Models\BitsoData;
 use App\Models\Investment;
 use App\Models\InvestmentData;
-use App\Models\BitsoData;
+use App\Services\Bitso\BitsoService;
+use Illuminate\Support\Number;
 
 class InvestmentService
 {
     public $bitsoService;
 
-    public function __construct(
-        BitsoService $bitsoService
-    ){
-        $this->bitsoService = $bitsoService;
+    public function __construct(){
+        $this->bitsoService = new BitsoService();
     }
 
     public function getActiveTrades()
@@ -72,17 +71,20 @@ class InvestmentService
         ]);
     }
 
-    public function getTotal() :  float
+    public function getTotal() : array
     {
-        $total = 0;
         $actives = $this->getActiveInvestments();
-
-        foreach($actives as $active){
-            if (!is_null($active->investmentData->last())) {
-                $total += $active->investmentData->last()->amount;
-            }
-        }
-
-        return $total;
+        
+        return [
+            'total' => $actives->sum('current_amount'),
+            'items' => $actives->map(function($item){
+                return [
+                    'id' => $item->id,
+                    'name' => $item->name,
+                    'last_amount' => $item->last_amount,
+                    'current_amount' => $item->current_amount
+                ];
+            })
+        ];
     }
 }
