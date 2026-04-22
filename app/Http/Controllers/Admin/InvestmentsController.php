@@ -18,11 +18,11 @@ use Illuminate\Support\Number;
 class InvestmentsController extends Controller
 {
     use Messenger;
+    protected $investmentService;
 
-    public function __construct(
-        public InvestmentService $investmentService
-    ){
-
+    public function __construct()
+    {
+        $this->investmentService = new InvestmentService();
     }
 
     public function index(Charts $charts)
@@ -32,8 +32,6 @@ class InvestmentsController extends Controller
                 'investments' => $this->investmentService->getActiveInvestments(),
                 'bitso' => $this->investmentService->getActiveTrades(),
             ];
-
-            // dd($results);
 
             return view('admin.investments.index', compact('results', 'charts'));
         }
