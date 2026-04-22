@@ -27,14 +27,22 @@ class InvestmentsController extends Controller
 
     public function index(Charts $charts)
     {
-        $results = [
-            'investments' => $this->investmentService->getActiveInvestments(),
-            'bitso' => $this->investmentService->getActiveTrades(),
-        ];
+        try {
+            $results = [
+                'investments' => $this->investmentService->getActiveInvestments(),
+                'bitso' => $this->investmentService->getActiveTrades(),
+            ];
 
-        // dd($results);
+            // dd($results);
 
-        return view('admin.investments.index', compact('results', 'charts'));
+            return view('admin.investments.index', compact('results', 'charts'));
+        }
+
+        catch (\Exception $er){
+            session()->flash('warning', $er->getMessage());
+
+            return view('error-page');
+        }
     }
 
     public function store(Request $request)

@@ -17,6 +17,11 @@ class InvestmentService
         $this->bitsoService = new BitsoService();
     }
 
+    public function getActiveInvestments()
+    {
+        return Investment::where('active', true)->orderBy('name')->get();
+    }
+
     public function getActiveTrades()
     {
         $trades = $this->bitsoService->getActiveTrades();
@@ -24,16 +29,7 @@ class InvestmentService
         return [
             'current_total' => $trades->sum('current_value'),
             'purchased_total' => $trades->sum('purchase_value'),
-            'data' => $trades->map(function($item){
-                return [
-                    'id' => $item->id,
-                    'book' => $item->book,
-                    'amount' => $item->amount,
-                    'price' => $item->price,
-                    'current_value' => $item->current_value,
-                    'purchase_value' => $item->purchase_value
-                ];
-            })
+            'data' => $trades
         ];
     }
 
@@ -72,11 +68,6 @@ class InvestmentService
     {
         $bitsoData = BitsoData::find($id);
         $bitsoData->active = false;
-    }
-
-    public function getActiveInvestments()
-    {
-        return Investment::where('active', true)->orderBy('name')->get();
     }
 
     public function getTotal() : array

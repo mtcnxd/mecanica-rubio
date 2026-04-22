@@ -37,6 +37,12 @@ class BitsoClient
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: '. $authHeader,'Content-Type: application/json'));
 		$response = curl_exec($ch);
 
+		if (curl_errno($ch)) {
+			throw new \RuntimeException(
+				sprintf("AN ERROR OCURRED | MESSAGE: %s", curl_error($ch))
+			);
+		}
+
 		$json = json_decode($response);
 
 		if(isset($json->error)){
