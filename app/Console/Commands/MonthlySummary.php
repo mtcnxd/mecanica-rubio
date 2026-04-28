@@ -31,11 +31,11 @@ class MonthlySummary extends Command
     public function handle()
     {
         $startOfmonth = DB::table('assets_increment')
-            ->where('date', now()->startOfMonth())
+            ->where('date', now()->subDay()->startOfMonth())
             ->get();
 
         $endOfmonth = DB::table('assets_increment')
-            ->where('date', now()->endOfMonth())
+            ->where('date', now()->subDay()->endOfMonth())
             ->get();
 
         if ($startOfmonth && $endOfmonth){
