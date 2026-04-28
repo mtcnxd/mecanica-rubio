@@ -122,7 +122,7 @@ class BitsoClient
 			return false;
 		
 		} catch (Exception $err){
-			throw new Exception("Error message: {$err->getMessage()}");
+			throw new Exception($err->getMessage());
 		}
     }
 }
