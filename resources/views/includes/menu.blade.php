@@ -41,7 +41,16 @@
 						<li><a class="a-item" href="{{ route('services.index') }}">Servicios</a></li>
 					</ul>
 				</li>
-				<li><a class="a-item" href="{{ route('calendar.index') }}">Calendario</a></li>
+				<li>
+					<a class="a-item" href="{{ route('calendar.index') }}">
+						Calendario
+						<!--
+						<span class="top-0 badge rounded-pill bg-danger">
+							2
+						</span>
+						-->
+					</a>
+				</li>
 			</ul>
 		</li>
 		<li>

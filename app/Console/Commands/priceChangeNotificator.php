@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Exception;
 use App\Traits\Messenger;
 use Illuminate\Support\Number;
 use Illuminate\Console\Command;
@@ -16,6 +17,8 @@ class priceChangeNotificator extends Command
 
     public const MIN_PRICE_CHANGE = -5;
     public const MAX_PRICE_CHANGE = 10;
+    public const DAYS = 15;
+    public const BOOK = "btc_mxn";
 
     public function __construct()
     {
@@ -42,42 +45,39 @@ class priceChangeNotificator extends Command
      */
     public function handle()
     {
-        $currentBtcPrice = $this->bitsoService->getBookPrice('btc_mxn');
-        $lastPurchased = $this->bitsoService->lastPurchasedPrice('btc_mxn');
+        $book = self::BOOK;
+        $lastPurchased = $this->bitsoService->lastPurchasedPrice($book);
 
-        $percentage = Helpers::convertToPercentage($currentBtcPrice->last, $lastPurchased->price);
-
-        $currentPrice = Number::currency($currentBtcPrice->last);
-        $lastBought = Number::currency($lastPurchased->price);
-        $calculated = Number::percentage($percentage, 1);
-        
-        if ($percentage < -5){
-            $message = sprintf("The Bitcoin price has already falls over <b>%s</b> since last bought\n\r".
-            				   "Last bought: <b>%s</b>\n\rCurrent price: <b>%s</b>", $calculated, $lastBought, $currentPrice);
-
-            $this->telegram($message);
-
-            if (now()->diffInDays($lastPurchased->created_at) < 15){
-                $this->placeOrder();
-            }
+        if (is_null($lastPurchased) || empty($lastPurchased)){
+            return;
         }
-    }
 
-    protected function placeOrder()
-    {
         try {
-            $response = $this->bitsoService->placeOrder([
-                'book' => "btc_mxn",
-                'side' => "buy",
-                'type' => "limit",
-                'major' => "0.0005",
-                'price' => "1000000",
-            ]);
+            $currentPrice = $this->bitsoService->getBookPrice($book);
+            $percentage = Helpers::convertToPercentage($currentPrice, $lastPurchased->price);
 
-            $this->telegram("Order placed successfully");
-        }
+            $priceFormated = Number::currency($currentPrice);
+            $lastBoughtFormated = Number::currency($lastPurchased->price);
+            $percentageFormated = Number::percentage($percentage, 1);
 
-        catch(\Exception $err){
+            if ($percentage < self::MIN_PRICE_CHANGE){
+                $message = sprintf("The Bitcoin price has already falls over <b>%s</b> since last bought\n\r".
+                                   "Last bought: <b>%s</b>\n\rCurrent price: <b>%s</b>", $percentageFormated, $lastBoughtFormated, $priceFormated);
+
+                $this->telegram($message);
+
+                $diffDays = now()->diffInDays($lastPurchased->created_at);
+
+                if ($diffDays < self::DAYS){
+                    if ($this->bitsoService->placeOrder($book, $currentPrice)){
+                        $this->telegram("Order placed successfully");
+                    }
+                } else {
+                    $this->telegram("<b>Order not placed.</b> Days limit reached. {$diffDays} days passed since last purchase");
+                }
+            }
+
+        } catch (Exception $err){
             $this->telegram("Error while placing order | <b>{$err->getMessage()}</b>");
         }
     }

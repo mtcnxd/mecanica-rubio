@@ -11,6 +11,7 @@ class BitsoService
     use Messenger;
 
     protected $bitsoClient;
+    protected $amountToBuy = 20;
 
     public function __construct()
     {
@@ -35,13 +36,29 @@ class BitsoService
             ->first();
     }
 
-    public function getBookPrice(string $book)
+    public function calculateAmount($currentPrice)
     {
-        return $this->bitsoClient->getBookPrice($book);
+        $priceFloat = (float) $currentPrice;
+        return ($this->amountToBuy / $priceFloat);
     }
 
-    public function placeOrder(array $data)
+    public function getBookPrice(string $book)
     {
-        return $this->bitsoClient->placeOrder($data);
+        return $this->bitsoClient->getBookPrice($book)->last;
+    }
+
+    public function placeOrder(string $book, string $currentPrice)
+    {
+        $amount = $this->calculateAmount($currentPrice);
+
+        $orderData = [
+            'book' => $book,
+            'side' => "buy",
+            'type' => "limit",
+            'major' => $amount,
+            'price' => $currentPrice,
+        ];
+
+        return $this->bitsoClient->placeOrder($orderData);
     }
 }

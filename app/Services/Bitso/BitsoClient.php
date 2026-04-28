@@ -2,6 +2,7 @@
 
 namespace App\Services\Bitso;
 
+use Exception;
 use Illuminate\Http\Request;
 
 class BitsoClient
@@ -89,7 +90,7 @@ class BitsoClient
 			}
 		}
 
-		return null;
+		throw new Exception("Error Processing Request: No book {$book} found");
 	}
 
 	public function getOrders()
@@ -98,9 +99,8 @@ class BitsoClient
 			$response = $this->getBitsoRequest('/v3/trades/', ['book' => 'btc_mxn']);
 
 			dd($response);
-		}
 		
-		catch(\Exception $err){
+		} catch(Exception $err){
 			dd("ERROR: ". $err->getMessage());
 
 			return response()->json([
@@ -114,14 +114,15 @@ class BitsoClient
     {
 		try {
 			$response = $this->getBitsoRequest('/v3/orders/', json_encode($data), 'POST');
-            
-			dd($response);
-		}
+
+			if ($response && $response->success){
+				return true;
+			}
+
+			return false;
 		
-		catch(\LogicException $err){
-			throw new \LogicException(
-				sprintf("ERROR: %s | BitsoKey: %s", $err->getMessage(), $this->bitsoKey)
-			);
+		} catch (Exception $err){
+			throw new Exception("Error message: {$err->getMessage()}");
 		}
     }
 }
