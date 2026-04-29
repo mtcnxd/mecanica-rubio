@@ -61,19 +61,19 @@ class priceChangeNotificator extends Command
             $percentageFormated = Number::percentage($percentage, 1);
 
             if ($percentage < self::MIN_PRICE_CHANGE){
-                $message = sprintf("The Bitcoin price has already falls over <b>%s</b> since last bought\n\r".
-                                   "Last bought: <b>%s</b>\n\rCurrent price: <b>%s</b>", $percentageFormated, $lastBoughtFormated, $priceFormated);
+                $diffDays = now()->diffInDays($lastPurchased->created_at);
+
+                $message = "The Bitcoin price has already changed <b>{$percentageFormated}</b>\n\r".
+                            "Last bought: <b>{$lastBoughtFormated}</b>\n\r".
+                            "Current price: <b>{$priceFormated}</b>\n\r".
+                            "Days before last bought: <b>{$diffDays}</b>";
 
                 $this->telegram($message);
-
-                $diffDays = now()->diffInDays($lastPurchased->created_at);
 
                 if ($diffDays < self::DAYS){
                     if ($this->bitsoService->placeOrder($book, $currentPrice)){
                         $this->telegram("Order placed successfully");
                     }
-                } else {
-                    $this->telegram("<b>Order not placed.</b> Days limit reached. {$diffDays} days passed since last purchase");
                 }
             }
 
