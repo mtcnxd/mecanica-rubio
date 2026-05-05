@@ -34,13 +34,13 @@ class Car extends Model
         return $this->belongsTo(Client::class, 'client_id');
     }
 
-    public function carName()
-    {
-        return $this->brand .' '.$this->model;
-    }
-
     public function services()
     {
         return $this->hasMany(Service::class, 'car_id');
+    }
+
+    public function carName()
+    {
+        return $this->brand .' '.$this->model;
     }
 }

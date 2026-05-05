@@ -92,6 +92,8 @@ Route::group(['prefix' => 'services', 'controller' => ServicesController::class]
     Route::get('item/all', 'itemByCriteria')->name('services.itemByCriteria');
     
     Route::get('getDataTableServices', 'getDataTableServices')->name('getDataTableServices');
+
+    Route::get('all', 'servicesThisMonth')->name('services.all');
 });
 
 Route::group(['prefix' => 'finance'], function(){

@@ -38,6 +38,19 @@ class ServicesService
             })->get();
     }
 
+    public function servicesThisMonth()
+    {
+        return Service::select('id','client_id','car_id','service_type','fault','status','entry_date','finished_date','total')
+        ->whereBetween(
+            'created_at', [now()->startOfMonth(), now()->endOfMonth()], 
+        )
+        ->with('client:id,name,email,phone')
+        ->with('car:id,brand,model,year')
+        ->with('serviceItems:id,service_id,item,price,amount')
+        ->where('quote', false)
+        ->get();
+    }
+
     public function createPDF(string $id)
     {
         $service = Service::find($id);

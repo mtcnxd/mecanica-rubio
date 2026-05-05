@@ -39,10 +39,6 @@ class Service extends Model
         'finished_date' => 'date',
     ];
 
-    protected $with = [
-        'serviceItems'
-    ];
-
     public function client()
     {
         return $this->belongsTo(Client::class, 'client_id');
@@ -55,7 +51,7 @@ class Service extends Model
 
     public function serviceItems()
     {
-        return $this->hasMany(ServiceItems::class,'service_id');
+        return $this->hasMany(ServiceItems::class, 'service_id');
     }
 
     public function serviceItemsTotal()

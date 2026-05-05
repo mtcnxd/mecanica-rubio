@@ -11,6 +11,18 @@ class ServiceItems extends Model
 
     protected $table = 'services_items';
 
+    protected $fillable = [
+        'service_id',
+        'item',
+        'quantity',
+        'price',
+    ];
+
+    public function service()
+    {
+        return $this->belongsTo(Service::class, 'service_id');
+    }
+
     public static function findByCriteria(string $criteria)
     {
         return self::where('item','like','%'.$criteria.'%')

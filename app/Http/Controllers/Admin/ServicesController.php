@@ -15,8 +15,9 @@ class ServicesController extends Controller
 {
     use Messenger;
 
-    public function __construct(ServicesService $servicesService)
-    {
+    public function __construct(
+        ServicesService $servicesService
+    ){
         $this->servicesService = $servicesService;
     }
 
@@ -229,6 +230,14 @@ class ServicesController extends Controller
             'success' => true,
             'data' => $request->all(),
             'message' => "Eliminado correctamente",
+        ]);
+    }
+
+    public function servicesThisMonth(Request $request)
+    {
+        return response()->json([
+            'success' => true,
+            'data' => $this->servicesService->servicesThisMonth(),
         ]);
     }
 
