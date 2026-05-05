@@ -34,7 +34,6 @@ class Service extends Model
     ];
 
     protected $casts = [
-        'quote' => 'boolean',
         'entry_date' => 'date',
         'finished_date' => 'date',
     ];
@@ -52,6 +51,16 @@ class Service extends Model
     public function serviceItems()
     {
         return $this->hasMany(ServiceItems::class, 'service_id');
+    }
+
+    public function getNotesAttribute()
+    {
+        return $this->attributes['notes'] ?? '';
+    }
+
+    public function getTotalAttribute()
+    {
+        return $this->attributes['total'] ?? 0;
     }
 
     public function serviceItemsTotal()

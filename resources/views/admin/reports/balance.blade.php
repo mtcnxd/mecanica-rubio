@@ -13,9 +13,9 @@
                     <th class="text-end">Egresos</th>
                 </thead>
                 <tbody>
-                    @foreach ($rows as $key => $row)
+                    @foreach ($rows as $row)
                         <tr>
-                            <td>{{ $key = $key +1 }}</td>
+                            <td>{{ $row->id }}</td>
                             <td><strong>{{ $row->type }}</strong> {{ $row->concept }}</td>
                             <td>{{ Carbon\Carbon::parse($row->date)->format('d-m-Y') }}</td>
                             <td class="text-end">{{ "$".number_format($row->cash_in, 2) }}</td>    
@@ -25,10 +25,10 @@
                     <tfoot>
                         <tr>
                             <td colspan="3"></td>
-                            <td class="text-end fw-bold">{{ "$".number_format($rows->sum('cash_in'), 2) }}</td>
-                            <td class="text-end fw-bold">{{ "$".number_format($rows->sum('cash_out'), 2) }}</td>
-                            <input type="hidden" id="income" value="{{ $rows->sum('cash_in') }}">
-                            <input type="hidden" id="expenses" value="{{ $rows->sum('cash_out') }}">
+                            <td class="text-end fw-bold">{{ count($rows) > 0 ? "$".number_format($rows->sum('cash_in'), 2) : 0 }}</td>
+                            <td class="text-end fw-bold">{{ count($rows) > 0 ? "$".number_format($rows->sum('cash_out'), 2) : 0 }}</td>
+                            <input type="hidden" id="income" value="{{ count($rows) > 0 ? $rows->sum('cash_in') : 0 }}">
+                            <input type="hidden" id="expenses" value="{{ count($rows) > 0 ? $rows->sum('cash_out') : 0 }}">
                         </tr>
                     </tfoot>
                 </tbody>
@@ -56,7 +56,7 @@
                 <div class="card-body">
                     @php
                         $currentBalance = 0;
-                        $currentBalance = $rows->sum('cash_in') - $rows->sum('cash_out');
+                        $currentBalance = count($rows) > 0 ? $rows->sum('cash_in') - $rows->sum('cash_out') : 0;
                     @endphp
                     {{ "$".number_format($currentBalance, 2) }}
                 </div>

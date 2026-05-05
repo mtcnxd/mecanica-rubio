@@ -126,22 +126,32 @@ class ExpensesController extends Controller
 
     public function report()
     {
-        $latest = DB::table('montly_balances')
-            ->orderBy('close_date', 'desc')
-            ->limit(2)
-            ->get();
+        $rows = [];
+        $latest = [];
+        $latestBalance = 0;
 
-        $rows = DB::table('montly_balance_view')
-            ->whereBetween('date', [Carbon::parse($latest[0]->close_date), Carbon::now()])
-            ->orderBy('date')
-            ->get();
+        try {
+            $latest = DB::table('montly_balances')
+                ->orderBy('close_date', 'desc')
+                ->limit(2)
+                ->get();
 
-        if ($latest[0]){
-            $latestBalance = $latest[0]->balance;
-        } else {
-            $latestBalance = $latest->sum('income') - $latest[1]->expenses;
+            $rows = DB::table('montly_balance_view')
+                ->whereBetween('date', [Carbon::parse($latest[0]->close_date), Carbon::now()])
+                ->orderBy('date')
+                ->get();
+
+            if ($latest && isset($latest[0])){
+                $latestBalance = $latest[0]->balance;
+            } else {
+                $latestBalance = $latest->sum('income') - $latest[1]->expenses;
+            }
+
+            return view('admin.reports.balance', compact('rows','latest', 'latestBalance'));   
+
+        } catch (\Exception $err) {
+            session()->flash('error', 'ERROR: '. $err->getMessage());
+            return view('admin.reports.balance', compact('rows','latest', 'latestBalance'));   
         }
-
-        return view('admin.reports.balance', compact('rows','latest', 'latestBalance'));
     }
 }
