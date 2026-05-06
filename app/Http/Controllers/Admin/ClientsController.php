@@ -99,20 +99,23 @@ class ClientsController extends Controller
         }
     }
 
-    public function getAll()
+    public function getAll(Request $request)
     {
         try {
-            $clients = $this->clientService->all();
+            if ($request->name || $request->id){
+                $clients = $this->clientService->findByCriteria($request->all());
+            } else {
+                $clients = $this->clientService->all();
+            }
     
             return Response()->json([
                 'success' => true,
                 'data'    => $clients->map(function ($client){
                     return [
-                        'id' => $client->id,
-                        'name' => $client->name,
+                        'id'    => $client->id,
+                        'name'  => $client->name,
                         'email' => $client->email,
                         'phone' => $client->phone,
-                        // 'created_at' => $client->created_at,
                     ];
                 })
             ]);
@@ -123,14 +126,6 @@ class ClientsController extends Controller
                 'message' => $e->getMessage()
             ]);
         }
-    }
-
-    public function clientSearch(Request $request)
-    {
-        return Response()->json([
-            "success" => true,
-            "data"    => $this->clientService->findByCriteria($request->all())
-        ]);
     }
 
     // Deprecates this method by search when search admites the search by postcode

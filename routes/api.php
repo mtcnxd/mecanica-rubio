@@ -60,7 +60,6 @@ Route::group(['prefix' => 'clients', 'controller' => ClientsController::class], 
 
     // new methods
     Route::get('/', 'getAll')->name('client.all');
-    Route::get('/{name}', 'clientSearch')->name('client.search');
     Route::get('/{id}', 'clientDetails')->name('client.details');
 });
 
