@@ -125,7 +125,7 @@ class ClientsController extends Controller
         }
     }
 
-    public function search(Request $request)
+    public function clientSearch(Request $request)
     {
         return Response()->json([
             "success" => true,

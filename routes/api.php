@@ -56,11 +56,11 @@ Route::group(['controller' => PayrollController::class], function() {
 // Clients
 Route::group(['prefix' => 'clients', 'controller' => ClientsController::class], function(){
     Route::get('delete', 'destroy')->name('client.delete');
-    Route::get('search', 'search')->name('client.search');
     Route::get('searchPostalCode', 'searchPostalCode')->name('client.searchPostalCode');
 
     // new methods
     Route::get('/', 'getAll')->name('client.all');
+    Route::get('/{name}', 'clientSearch')->name('client.search');
     Route::get('/{id}', 'clientDetails')->name('client.details');
 });
 
