@@ -1,8 +1,5 @@
-/docker/data
+docker/data
 /.phpunit.cache
-/node_modules
-/public/build
-/public/hot
 /public/storage
 /storage/*.key
 vendor/
@@ -11,6 +8,7 @@ vendor/
 .env.production
 .phpunit.result.cache
 .editorconfig
+composer.lock
 Homestead.json
 Homestead.yaml
 auth.json

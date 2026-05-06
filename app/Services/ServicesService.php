@@ -14,7 +14,7 @@ class ServicesService
 
     public function find(string $id) : Service
     {
-        return Service::find($id);
+        return Service::findOrFail($id);
     }
 
     public function create(array $data) : Service
@@ -31,11 +31,33 @@ class ServicesService
                 if (isset($criteria['status'])){
                     $query->where('status', $criteria['status']);
                 }
-
                 if(isset($criteria['id'])){
                     $query->where('id', $criteria['id']);
                 }
             })->get();
+    }
+
+    public function servicesThisMonth()
+    {
+        return Service::select('id','client_id','car_id','service_type','fault','status','entry_date','finished_date','total')
+        ->whereBetween(
+            'created_at', [now()->startOfMonth(), now()->endOfMonth()], 
+        )
+            ->with('client:id,name,email,phone')
+            ->with('car:id,brand,model,year')
+            ->with('serviceItems:id,service_id,item,price,amount')
+            ->where('quote', false)
+            ->get();
+    }
+
+    public function servicesSummary()
+    {
+        return Service::select('id','service_type','fault','status','entry_date','finished_date','total')
+            ->whereBetween(
+                'entry_date', [now()->startOfMonth(), now()->endOfMonth()], 
+            )
+            ->where('quote', false)
+            ->get();
     }
 
     public function createPDF(string $id)

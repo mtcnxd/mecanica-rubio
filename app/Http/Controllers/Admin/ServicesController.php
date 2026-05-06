@@ -9,14 +9,16 @@ use App\Services\ServicesService;
 use App\Traits\Messenger;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Number;
 use DB;
 
 class ServicesController extends Controller
 {
     use Messenger;
 
-    public function __construct(ServicesService $servicesService)
-    {
+    public function __construct(
+        ServicesService $servicesService
+    ){
         $this->servicesService = $servicesService;
     }
 
@@ -40,7 +42,8 @@ class ServicesController extends Controller
         $isQuote = isset($request->quote) ? true :false;
         
         $request->merge([
-            'quote' => $isQuote,
+            'quote'      => $isQuote,
+            'entry_date' => now(),
         ]);
         
         Service::create($request->except('_token'));
@@ -230,6 +233,49 @@ class ServicesController extends Controller
             'data' => $request->all(),
             'message' => "Eliminado correctamente",
         ]);
+    }
+
+    public function servicesThisMonth(Request $request)
+    {
+        return response()->json([
+            'success' => true,
+            'data' => $this->servicesService->servicesThisMonth(),
+        ]);
+    }
+
+    public function servicesSummary()
+    {
+        return response()->json([
+            'success' => true,
+            'data' => $this->servicesService->servicesSummary(),
+        ]);
+    }
+
+    public function serviceDetails(Request $request)
+    {
+        try {
+            $service = $this->servicesService->find($request->id);
+            $service->with('car');
+            $service->with('client');
+
+            return response()->json([
+                'success' => true,
+                'data'    => [
+                    'client'     => $service->client->name,
+                    'car'        => $service->car->brand ." ".$service->car->model ." ".$service->car->year,
+                    'entry_date' => $service->entry_date,
+                    'fault'      => $service->fault,
+                    'status'     => $service->status,
+                    'total'      => $service->total,
+                ],
+            ]);
+
+        } catch (\Exception $e){
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ]);
+        }
     }
 
     public function getDataTableServices(Request $request)
