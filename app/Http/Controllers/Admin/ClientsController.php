@@ -11,8 +11,9 @@ class ClientsController extends Controller
 {
     use Messenger;
 
-    public function __construct(ClientService $clientService)
-    {
+    public function __construct(
+        ClientService $clientService
+    ){
         $this->clientService = $clientService;
     }
 
@@ -78,6 +79,50 @@ class ClientsController extends Controller
             'success' => true,
             'message' => 'El cliente se elimino correctamente'
         ]);
+    }
+
+    public function clientDetails(Request $request)
+    {
+        try {
+            $client = $this->clientService->find($request->id);
+
+            return Response()->json([
+                'success' => true,
+                'data' => $client
+            ]);
+
+        } catch (\Exception $e) {
+            return Response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function getAll()
+    {
+        try {
+            $clients = $this->clientService->all();
+    
+            return Response()->json([
+                'success' => true,
+                'data'    => $clients->map(function ($client){
+                    return [
+                        'id' => $client->id,
+                        'name' => $client->name,
+                        'email' => $client->email,
+                        'phone' => $client->phone,
+                        'created_at' => $client->created_at,
+                    ];
+                })
+            ]);
+
+        } catch (\Exception $e) {
+            return Response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 
     public function search(Request $request)

@@ -16,10 +16,6 @@ use App\Http\Controllers\Admin\{
     InvestmentsController
 };
 
-use App\Http\Controllers\Api\{
-    Employee
-};
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -36,12 +32,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 */
-
-// Employees
-Route::group(['prefix' => 'employees_api', 'controller' => Employee::class], function(){
-    Route::get('all', 'loadAll')->name('employees.load.all'); 
-    Route::get('delete', 'delete')->name('employees.delete');
-});
 
 Route::group(['prefix' => 'employees', 'controller' => EmployeesController::class], function () {
     Route::post('vacations/create', 'createPendindVacationDay')->name('employees.vacations.create');
@@ -64,20 +54,14 @@ Route::group(['controller' => PayrollController::class], function() {
 });
 
 // Clients
-Route::group(['prefix' => 'clients'], function(){
-    Route::controller(ClientsController::class, )->group(function () {
-        Route::get('delete', 'destroy')->name('client.delete');
-        Route::get('search', 'search')->name('client.search');
-        Route::get('searchPostalCode', 'searchPostalCode')->name('client.searchPostalCode');        
-    });
+Route::group(['prefix' => 'clients', 'controller' => ClientsController::class], function(){
+    Route::get('delete', 'destroy')->name('client.delete');
+    Route::get('search', 'search')->name('client.search');
+    Route::get('searchPostalCode', 'searchPostalCode')->name('client.searchPostalCode');
 
-    // TODO: change the name of this controller to ClientsController
-    Route::controller(App\Http\Controllers\Api\ClientController::class)->group(function () {
-        Route::get('all', 'getAll')->name('clients.getAll');
-        Route::get('info/{clientId}','getInfo')->name('clients.getInfo');
-        Route::get('services/{clientId}', 'getServices')->name('clients.getServices');
-        Route::get('services/{clientId}/info/{serviceId}', 'getServiceInfo')->name('clients.getServiceInfo');
-    });
+    // new methods
+    Route::get('/', 'getAll')->name('client.all');
+    Route::get('/{id}', 'clientDetails')->name('client.details');
 });
 
 Route::group(['prefix' => 'services', 'controller' => ServicesController::class], function(){
@@ -93,9 +77,10 @@ Route::group(['prefix' => 'services', 'controller' => ServicesController::class]
     
     Route::get('getDataTableServices', 'getDataTableServices')->name('getDataTableServices');
 
-    Route::get('all', 'servicesThisMonth')->name('services.all');
+    // new methods
+    Route::get('/', 'servicesThisMonth')->name('services.all');
     Route::get('summary', 'servicesSummary')->name('services.summary');
-    Route::get('{id}', 'serviceDetails')->name('services.details');
+    Route::get('/{id}', 'serviceDetails')->name('services.details');
 });
 
 Route::group(['prefix' => 'finance'], function(){

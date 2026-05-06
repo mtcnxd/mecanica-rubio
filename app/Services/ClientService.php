@@ -14,9 +14,9 @@ class ClientService
         return Client::where('status', 'Activo')->orderBy('name')->get();
     }
 
-    public function find(string $id)
+    public function find(string $id) : Client
     {
-        return Client::find($id);
+        return Client::findOrFail($id);
     }
 
     public function create(array $data) : Client

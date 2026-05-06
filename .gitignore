@@ -1,6 +1,6 @@
-docker/data
 /.phpunit.cache
-/public/storage
+config/database.php
+public/storage
 /storage/*.key
 vendor/
 .env
@@ -9,8 +9,6 @@ vendor/
 .phpunit.result.cache
 .editorconfig
 composer.lock
-Homestead.json
-Homestead.yaml
 auth.json
 npm-debug.log
 yarn-error.log
