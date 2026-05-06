@@ -99,14 +99,40 @@ class InvestmentsController extends Controller
         }
     }
 
-    public function total()
+    public function investmentDetails(Request $request)
     {
-        $balances = $this->investmentService->getTotal();
+        try {
+            $investment = $this->investmentService->investmentDetails($request->id);
 
-        return response()->json([
-            'total' => Number::currency($balances['total']),
-            'items' => $balances['items']
-        ]);
+            return response()->json([
+                'success' => true,
+                'data' => $investment
+            ]);
+
+        } catch (\Exception $e){
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function allInvestments()
+    {
+        try {
+            $balances = $this->investmentService->getTotal();
+    
+            return response()->json([
+                'total' => Number::currency($balances['total']),
+                'items' => $balances['items']
+            ]);
+        
+        } catch (\Exception $e){
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 
     public function getActiveTrades()
