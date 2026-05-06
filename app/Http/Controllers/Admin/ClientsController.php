@@ -112,7 +112,7 @@ class ClientsController extends Controller
                         'name' => $client->name,
                         'email' => $client->email,
                         'phone' => $client->phone,
-                        'created_at' => $client->created_at,
+                        // 'created_at' => $client->created_at,
                     ];
                 })
             ]);
