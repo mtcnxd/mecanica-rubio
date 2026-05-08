@@ -3,76 +3,49 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\{Client, Service, ServiceItems};
-use App\Notifications\Telegram;
-use App\Services\ServicesService;
-use App\Traits\Messenger;
 use Carbon\Carbon;
+use App\Models\Service;
+use App\Models\ServiceItems;
+use App\Notifications\Telegram;
+use App\Services\OrderService;
+use App\Services\ClientService;
+use App\Traits\Messenger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Number;
-use DB;
 
 class ServicesController extends Controller
 {
     use Messenger;
 
     public function __construct(
-        ServicesService $servicesService
+        private OrderService $orderService
     ){
-        $this->servicesService = $servicesService;
+        $this->orderService = $orderService;
     }
 
     public function index()
     {
-        /**
-         * Server side processing
-         */
-        
-        $service = $this->servicesService->all();
-        return view('admin.services.index', compact('service'));
+        $services = [];
+        $services = $this->orderService->all();
+        return view('admin.services.index', compact('services'));
     }
 
-    public function create(Client $clients)
+    public function create(ClientService $clientService)
     {
+        $clients = $clientService->all();
+
         return view('admin.services.create', compact('clients'));
     }
 
     public function store(Request $request)
     {
-        $isQuote = isset($request->quote) ? true :false;
-        
-        $request->merge([
-            'quote'      => $isQuote,
-            'entry_date' => now(),
-        ]);
-        
-        Service::create($request->except('_token'));
+        try {
+            $service = $this->orderService->createOrder($request->all());
 
-        // $this->servicesService->create($request->except('_token'));
+            session()->flash('success', "CREADO CON EXITO | FOLIO: #{$service->id}");
 
-        if (!$isQuote){
-            try {
-                $latestServiceCreated = Service::latest()->first();
-
-                $this->notify(new Telegram(),
-                    sprintf("<b>New service created ID:</b> %s \n\r<b>Client name:</b> %s \n\r<b>Car model:</b> %s \n\r<b>Fault:</b> %s", 
-                        $latestServiceCreated->id,
-                        $latestServiceCreated->client->name,
-                        $latestServiceCreated->car->carName(),
-                        $latestServiceCreated->fault
-                    )
-                );
-
-                session()->flash('success', 
-                    sprintf("Servicio creado con folio: #%s", $latestServiceCreated->id)
-                );
-            }
-            
-            catch (\Exception $err){
-                session()->flash('warning', 
-                    sprintf("Ocurrio un error | Mensaje: %s", $err->getMessage())
-                );
-            }
+        } catch(\Exception $err){
+            session()->flash('warning', "ERROR | MESSAGE: {$err->getMessage()}");
         }
 
         return to_route('services.index');
@@ -80,14 +53,14 @@ class ServicesController extends Controller
 
     public function show(string $id)
     {
-        $service = $this->servicesService->find($id);
+        $service = $this->orderService->find($id);
         return view('admin.services.show', compact('service'));
     }
 
     public function update(Request $request, string $id)
     {
         $finishedDate = now();
-        $service = $this->servicesService->find($id);
+        $service = $this->orderService->find($id);
 
         if ($request->status == 'Entregado'){
             $finishedDate = $request->finished_date ? $request->finished_date : now();
@@ -132,7 +105,7 @@ class ServicesController extends Controller
 
     public function search(Request $request)
     {
-        $services = $this->servicesService->findByCriteria($request->all());
+        $services = $this->orderService->findByCriteria($request->all());
 
         return response()->json([
             "success" => true,
@@ -142,13 +115,12 @@ class ServicesController extends Controller
 
     public function createServicePDF(Request $request)
     {
-        return $this->servicesService->createPDF($request->serviceid);
+        return $this->orderService->createPDF($request->serviceid);
     }
 
     public function itemGetInfo(Request $request)
     {
-        $data = DB::table('services_items')
-            ->select('brand','model','supplier','services_items.price')
+        $data = ServiceItems::select('brand','model','supplier','services_items.price')
             ->join('services','services_items.service_id','services.id')
             ->join('autos','services.car_id', 'autos.id')
             ->where('item', $request->item)
@@ -171,9 +143,8 @@ class ServicesController extends Controller
                 'success' => true,
                 'message' => 'La cotizacion es ahora un servicio',
             ]);
-        }
-
-        catch (\Exception $err) {
+        
+        } catch (\Exception $err) {
             return response()->json([
                 'success' => false,
                 'message' => $err->getMessage(),
@@ -183,78 +154,109 @@ class ServicesController extends Controller
 
     public function itemByCriteria(Request $request)
     {
-        return Response()->json([
-            "success" => true,
-            "data"    => ServiceItems::findByCriteria($request->input('text'))
-        ]);
-    }
+        try {
+            return Response()->json([
+                "success" => true,
+                "data"    => ServiceItems::findByCriteria($request->input('text'))
+            ]);
 
-    public function itemCreate(Request $request)
-    {
-        $labour = false;
-        $item   = $request->item;
-        $amount = $request->amount;
-
-        if ($request->labour == 'true'){
-            if ( empty($request->item) ){
-                $item   = "Servicio (mano de obra)";
-            }
-
-            $labour = true;
-            $amount = 1;
+        } catch (\Exception $err){
+            return response()->json([
+                'success' => false,
+                'message' => $err->getMessage(),
+            ]);
         }
-
-        DB::table('services_items')->insert([
-            'service_id' => $request->service,
-            'amount'     => $amount,
-            'item'       => $item,
-            'supplier'   => $request->supplier,
-            'price'      => $request->price,
-            'labour'     => $labour,
-        ]);
-
-        $data = DB::table('services_items')->where('service_id', $request->service)->get();
-
-        return response()->json([
-            "success" => true,
-            "message" => "Agregado correctamente",
-            "data"    => $data
-        ]);
     }
 
-    public function itemDestroy(Request $request)
+    public function createOrderItem(Request $request)
     {
-        DB::table('services_items')
-            ->where('id', $request->id)
-            ->delete();
+        try {
+            $orderItem = $this->orderService->createOrderItem($request->all());
 
-        return response()->json([
-            'success' => true,
-            'data' => $request->all(),
-            'message' => "Eliminado correctamente",
-        ]);
+            return response()->json([
+                "success"    => true,
+                "message"    => "Elemento agregado correctamente",
+                "saved_item" => $orderItem
+            ]);
+
+        } catch (\Exception $err){
+            return response()->json([
+                'success' => false,
+                'message' => $err->getMessage(),
+            ]);
+        }
     }
 
+    public function deleteOrderItem(Request $request)
+    {
+        try {
+            $this->orderService->deleteOrderItem($request->id);
+            
+            return response()->json([
+                'success' => true,
+                'message' => "Eliminado correctamente",
+            ]);
+
+        } catch (\Exception $err){
+            return response()->json([
+                'success' => false,
+                'message' => $err->getMessage(),
+                'data' => $request->all(),
+            ]);
+        }
+    }
+
+    /**
+     * Summary by status of services (API REST)
+     * 
+     * @return 
+     */
     public function servicesThisMonth(Request $request)
     {
-        return response()->json([
-            'success' => true,
-            'data' => $this->servicesService->servicesThisMonth(),
-        ]);
+        try {
+            return response()->json([
+                'success' => true,
+                'data' => $this->orderService->servicesThisMonth(),
+            ]);
+
+        } catch (\Exception $err){
+            return response()->json([
+                'success' => false,
+                'message' => $err->getMessage(),
+            ]);
+        }
     }
 
+    /**
+     * Summary by status of services (API REST)
+     * 
+     * @return 
+     */
     public function servicesSummary()
     {
-        return response()->json([
-            'success' => true,
-            'data' => $this->servicesService->servicesSummary(),
-        ]);
+        try {
+            return response()->json([
+                'success' => true,
+                'data' => $this->orderService->servicesSummary(),
+            ]);
+
+        } catch (\Exception $err){
+            return response()->json([
+                'success' => false,
+                'message' => $err->getMessage(),
+            ]);
+        }
     }
 
+    /**
+     * Summary by status of services (API REST)
+     * 
+     * @return 
+     */
     public function serviceDetails(Request $request)
     {
         try {
-            $service = $this->servicesService->find($request->id);
+            $service = $this->orderService->find($request->id);
             $service->with('car');
             $service->with('client');
 
@@ -270,64 +272,11 @@ class ServicesController extends Controller
                 ],
             ]);
 
-        } catch (\Exception $e){
+        } catch (\Exception $err){
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage(),
+                'message' => $err->getMessage(),
             ]);
         }
-    }
-
-    public function getDataTableServices(Request $request)
-    {
-        $servicesQuery = DB::table('services_view');
-
-        if ($request->client != 'Todos') {
-            $servicesQuery->where('client_id', [$request->client]);
-        }
-
-        if ($request->status != 'Todos') {
-            $servicesQuery->where('status', $request->status);
-        }
-
-        if ($request->folio) {
-            $servicesQuery->where('service_id', $request->folio);
-        }
-
-        $servicesQuery->orderBy('status', 'desc')->get();
-
-        return \DataTables::of($servicesQuery)
-            ->addColumn('service_id', function($service){
-                return $service->service_id;
-            })
-            ->addColumn('fault', function($service){
-                return '<a href="'. route("services.show", $service->service_id) .'">'. \Str::limit($service->fault, 32) ."</a>";
-            })
-            ->addColumn('entry_date', function($service){
-                return Carbon::parse($service->entry_date)->format('j M Y');
-            })
-            ->addColumn('finished_date', function($service){
-                if ($service->finished_date == null){
-                    return null;
-                }
-
-                return Carbon::parse($service->finished_date)->format('j M Y');
-            })
-            ->addColumn('status', function($service){
-                if ($service->status == 'Entregado'){
-                    return '<span class="badge text-bg-success">'. $service->status .'</span>';
-                }
-                else if ($service->status == 'Cancelado' || $service->status == 'Esperando refaccion') {
-                    return '<span class="badge text-bg-secondary">'. $service->status .'</span>';
-                }
-                else {
-                    return '<span class="badge text-bg-warning">'. $service->status .'</span>';
-                }
-            })
-            ->addColumn('total', function($service){
-                return '$'.number_format($service->total, 2);
-            })
-            ->rawColumns(['fault','status'])
-            ->make(true);
     }
 }

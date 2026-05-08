@@ -3,47 +3,45 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Car;
-use App\Services\CarService;
-use App\Traits\Messenger;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Services\CarService;
+use App\Services\ClientService;
+use App\Traits\Messenger;
 
 class CarsController extends Controller
 {
     use Messenger;
 
-    public function __construct(CarService $carService)
-    {
-        $this->carService = $carService;
+    public function __construct(
+        private CarService $carService,
+        private ClientService $clientService
+    ){
+        
     }
 
     public function index()
     {
         $cars = $this->carService->all();
 
-        return view ('admin.cars.index', compact('cars'));
+        return view('admin.cars.index', compact('cars'));
     }
 
     public function create()
     {
-        $brands  = DB::table('brands')->orderBy('brand')->get();
-        $clients = DB::table('clients')->where('status', 'Activo')->orderBy('name')->get();
+        $brands  = $this->carService->getAllBrands();
+        $clients = $this->clientService->all();
 
         return view('admin.cars.create', compact('brands','clients'));
     }
 
     public function store(Request $request)
-    {
-        $request->merge(['client_id' => $request->client]);
-        
+    {        
         try {
-            $this->carService->create($request->except('_method','_token'));
+            $this->carService->createClientCar($request->all());
             session()->flash('success', 'Los datos se guardaron correctamente');
-        }
-        
-        catch (\Exception $e){
-            session()->flash('warning', sprintf('Ocurrio un error | %s ', $e->getMessage()));
+
+        } catch (\Exception $e){
+            session()->flash('warning', "ERROR | MESSAGE: {$e->getMessage()}");
 		}
 
         return to_route('cars.index');
@@ -84,36 +82,6 @@ class CarsController extends Controller
         return to_route('cars.index')->with('message', 'Los datos se guardaron correctamente');
     }
 
-    public function createBrand(Request $request)
-    {
-        $brandExists = DB::table('brands')->where('brand', $request->brand)->first();
-
-        if ($brandExists){
-            return response()->json([
-                'success' => false,
-                'message' => 'La marca que intentas crear ya existe'
-            ]);
-        }
-
-        try {
-            DB::table('brands')->insert([
-                'brand'   => $request->brand,
-                'premium' => ($request->premium == 'true') ? 1 : 0
-            ]);
-
-            $brands = DB::table('brands')->get();
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Los datos se guardaron con exito',
-                'data'    => $brands
-            ]);            
-
-        } catch (\Exception $e){
-            return $e->getMessage();
-        }
-    }    
-
     public function loadModels(Request $request)
     {
         $models = DB::table('models')->where('brand', $request->brand)->get();
@@ -136,51 +104,90 @@ class CarsController extends Controller
             "data"    => $cars->get()
         ]);
     }
-    
-    public function createModel(Request $request)
+
+    /**
+     * Crea una nueva marca de coche.
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function createCarBrand(Request $request)
     {
-        $exists = DB::table('models')->where('model', $request->model)->first();
-
-        if ($exists){
-            return response()->json([
-                'success' => false,
-                'message' => 'El modelo que intentas crear ya existe'
-            ]);
-        }
-
         try {
-            DB::table('models')->insert([
-                'brand' => $request->brand,
-                'model' => $request->model
-            ]);
-
-            $models = DB::table('models')
-                ->where('brand', $request->brand)
-                ->orderBy('model')
-                ->get();
+            $this->carService->createCarBrand($request->all());
 
             return response()->json([
                 'success' => true,
                 'message' => 'Los datos se guardaron con exito',
-                'data'    => $models
-            ]);
+            ]);            
 
         } catch (\Exception $e){
-            return $e->getMessage();
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+    
+    /**
+     * Crea un nuevo modelo de coche.
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function createCarModel(Request $request)
+    {
+        try {
+            $this->carService->createCarModel($request->all());
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Los datos se guardaron con exito',
+                'request' => $request->all()
+            ]);            
+        
+        } catch (\Exception $e){
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
         }
     }
 
-    public function searchByClient(Request $request)
+    public function getCarsByClient(String $id)
     {
-        $cars = DB::table('autos')
-            ->where('client_id', $request->client)
-            ->orderBy('brand')
-            ->get();
-        
-        return response()->json([
-            "success" => true,
-            "data"    => $cars
-        ]);
+        try {
+            $cars = $this->carService->getCarsByClient($id);
+
+            return response()->json([
+                "success" => true,
+                "data"    => $cars
+            ]);
+
+        } catch (\Exception $e){
+            return response()->json([
+                "success" => false,
+                "message" => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function getAllModels(String $brand)
+    {
+        try {
+            $models = $this->carService->getAllModels($brand);
+
+            return response()->json([
+                "success" => true,
+                "data"    => $models
+            ]);
+
+        } catch (\Exception $e){
+            return response()->json([
+                "success" => false,
+                "message" => $e->getMessage()
+            ]);
+        }
     }
 
     public function report()

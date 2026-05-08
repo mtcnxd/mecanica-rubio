@@ -39,11 +39,14 @@ Route::group(['prefix' => 'employees', 'controller' => EmployeesController::clas
 });
 
 Route::group(['prefix' => 'cars', 'controller' => CarsController::class], function () {
-    Route::post('createBrand', 'createBrand')->name('createBrand');
-    Route::post('createModel', 'createModel')->name('createModel');
-    Route::post('loadModels', 'loadModels')->name('loadModels');
-    Route::post('searchByClient', 'searchByClient')->name('cars.searchByClient'); 
     Route::get('SearchCar', 'SearchCar')->name('cars.SearchCar');
+
+    // New methods
+    Route::get('client/{id}', 'getCarsByClient')->name('cars.getCarsByClient'); 
+    Route::get('models/{brand}', 'getAllModels')->name('cars.getAllModels');
+    
+    Route::post('brand', 'createCarBrand')->name('cars.createCarBrand');
+    Route::post('model', 'createCarModel')->name('cars.createCarModel');
 });
 
 // Payrolls
@@ -54,7 +57,7 @@ Route::group(['controller' => PayrollController::class], function() {
 });
 
 // Clients
-Route::group(['prefix' => 'clients', 'controller' => ClientsController::class], function(){
+Route::group(['prefix' => 'client', 'controller' => ClientsController::class], function(){
     Route::get('delete', 'destroy')->name('client.delete');
     Route::get('searchPostalCode', 'searchPostalCode')->name('client.searchPostalCode');
 
@@ -63,18 +66,19 @@ Route::group(['prefix' => 'clients', 'controller' => ClientsController::class], 
     Route::get('/{id}', 'clientDetails')->name('client.details');
 });
 
-Route::group(['prefix' => 'services', 'controller' => ServicesController::class], function(){
+// Services
+Route::group(['prefix' => 'service', 'controller' => ServicesController::class], function(){
     Route::get('search', 'search')->name('services.search');
 
     Route::post('createServicePDF', 'createServicePDF')->name('services.createServicePDF');
     Route::get('fromQuoteToService', 'fromQuoteToService')->name('services.change.quote');
     
     Route::get('item', 'itemGetInfo')->name('services.itemGetInfo');
-    Route::delete('item/{id}', 'itemDestroy')->name('services.itemDestroy');
-    Route::post('item', 'itemCreate')->name('services.itemCreate');
     Route::get('item/all', 'itemByCriteria')->name('services.itemByCriteria');
-    
-    Route::get('getDataTableServices', 'getDataTableServices')->name('getDataTableServices');
+
+    // Add new element to service order
+    Route::post('item', 'createOrderItem')->name('service.createItem');
+    Route::delete('item/{id}', 'deleteOrderItem')->name('service.deleteItem');
 
     // new methods
     Route::get('/', 'servicesThisMonth')->name('services.all');
