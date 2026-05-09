@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use Carbon\Carbon;
-use App\Models\Service;
-use App\Models\ServiceItems;
-use App\Notifications\Telegram;
+use Illuminate\Http\Request;
+use Illuminate\Support\Number;
+
+use App\Http\Controllers\Controller;
 use App\Services\OrderService;
 use App\Services\ClientService;
 use App\Traits\Messenger;
-use Illuminate\Http\Request;
-use Illuminate\Support\Number;
+use App\Models\Service;
+use App\Models\ServiceItems;
+use App\Events\ServiceCompleted;
 
 class ServicesController extends Controller
 {
@@ -27,6 +28,7 @@ class ServicesController extends Controller
     {
         $services = [];
         $services = $this->orderService->all();
+
         return view('admin.services.index', compact('services'));
     }
 
@@ -42,10 +44,10 @@ class ServicesController extends Controller
         try {
             $service = $this->orderService->createOrder($request->all());
 
-            session()->flash('success', "CREADO CON EXITO | FOLIO: #{$service->id}");
+            session()->flash('success', "Servicio creado correctamente | Folio: #{$service->id}");
 
         } catch(\Exception $err){
-            session()->flash('warning', "ERROR | MESSAGE: {$err->getMessage()}");
+            session()->flash('warning', "Error al crear servicio | Message: {$err->getMessage()}");
         }
 
         return to_route('services.index');
@@ -54,6 +56,9 @@ class ServicesController extends Controller
     public function show(string $id)
     {
         $service = $this->orderService->find($id);
+
+        event(new ServiceCompleted($service));
+
         return view('admin.services.show', compact('service'));
     }
 
@@ -82,7 +87,7 @@ class ServicesController extends Controller
 
         if ($request->status == 'Entregado'){
             try {
-                $this->notify(new Telegram(),
+                $this->telegram(
                     sprintf("<b>Service completed:</b> #%s - %s \n\r<b>Client:</b> %s \n\r<b>Fault:</b> %s \n\r<b>Total:</b> $%s", 
                         $service->id,
                         $service->car->brand ." ". $service->car->model,
