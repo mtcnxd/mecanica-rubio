@@ -71,9 +71,10 @@ Route::group(['prefix' => 'service', 'controller' => ServicesController::class],
     Route::get('summary', 'servicesSummary')->name('services.summary');
     Route::get('/{id}', 'serviceDetails')->name('services.details');
     
-    // Add new element to service order
-    Route::post('item', 'createOrderItem')->name('service.createItem');
-    Route::delete('item/{id}', 'deleteOrderItem')->name('service.deleteItem');
+    Route::group(['prefix' => 'item'], function(){
+        Route::post('/', 'createOrderItem')->name('service.createItem');
+        Route::delete('/{id}', 'deleteOrderItem')->name('service.deleteItem');
+    });
 });
 
 // Expenses
