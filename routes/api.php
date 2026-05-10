@@ -34,16 +34,17 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 */
 
 
-Route::group(['prefix' => 'employees', 'controller' => EmployeesController::class], function () {
-    Route::post('vacations/create', 'createPendindVacationDay')->name('employees.vacations.create');
-    Route::get('vacations/cancell', 'cancellPendingVacationDay')->name('employees.vacations.cancell');
-    Route::delete('delete/{id}', 'destroy')->name('employees.delete');
+// Clients
+Route::group(['prefix' => 'client', 'controller' => ClientsController::class], function(){
+    Route::get('delete', 'destroy')->name('client.delete');
+    Route::get('searchPostalCode', 'searchPostalCode')->name('client.searchPostalCode');
 
     // new methods
-    Route::get('/', 'getAll')->name('employees.all'); 
-    Route::get('/{id}', 'getEmployeeById')->name('employees.getEmployeeById'); 
+    Route::get('/', 'getAll')->name('client.all');
+    Route::get('/{id}', 'clientDetails')->name('client.details');
 });
 
+// Cars
 Route::group(['prefix' => 'cars', 'controller' => CarsController::class], function () {
     Route::get('SearchCar', 'SearchCar')->name('cars.SearchCar');
 
@@ -53,23 +54,6 @@ Route::group(['prefix' => 'cars', 'controller' => CarsController::class], functi
     
     Route::post('brand', 'createCarBrand')->name('cars.createCarBrand');
     Route::post('model', 'createCarModel')->name('cars.createCarModel');
-});
-
-// Payrolls
-Route::group(['controller' => PayrollController::class], function() {
-    Route::post('manageSalaries', 'manageSalaries')->name('manageSalaries');
-    Route::post('addItem', 'addItem')->name('payroll.addItem');
-    Route::post('removeItem', 'removeItem')->name('payroll.removeItem');
-});
-
-// Clients
-Route::group(['prefix' => 'client', 'controller' => ClientsController::class], function(){
-    Route::get('delete', 'destroy')->name('client.delete');
-    Route::get('searchPostalCode', 'searchPostalCode')->name('client.searchPostalCode');
-
-    // new methods
-    Route::get('/', 'getAll')->name('client.all');
-    Route::get('/{id}', 'clientDetails')->name('client.details');
 });
 
 // Services
@@ -92,6 +76,7 @@ Route::group(['prefix' => 'service', 'controller' => ServicesController::class],
     Route::get('/{id}', 'serviceDetails')->name('services.details');
 });
 
+// Expenses
 Route::group(['prefix' => 'finance'], function(){
     Route::controller(FinanceController::class)->group(function() {
         Route::post('close', 'close')->name('finance.close');
@@ -102,6 +87,24 @@ Route::group(['prefix' => 'finance'], function(){
         Route::post('deleteItem', 'deleteItem')->name('expenses.deleteItem');
         Route::post('getImageAttached', 'getImageAttached')->name('getImageAttached');
     });
+});
+
+// Payrolls
+Route::group(['controller' => PayrollController::class], function() {
+    Route::post('manageSalaries', 'manageSalaries')->name('manageSalaries');
+    Route::post('addItem', 'addItem')->name('payroll.addItem');
+    Route::post('removeItem', 'removeItem')->name('payroll.removeItem');
+});
+
+// Employees
+Route::group(['prefix' => 'employees', 'controller' => EmployeesController::class], function () {
+    Route::post('vacations/create', 'createPendindVacationDay')->name('employees.vacations.create');
+    Route::get('vacations/cancell', 'cancellPendingVacationDay')->name('employees.vacations.cancell');
+    Route::delete('delete/{id}', 'destroy')->name('employees.delete');
+
+    // new methods
+    Route::get('/', 'getAll')->name('employees.all'); 
+    Route::get('/{id}', 'getEmployeeById')->name('employees.getEmployeeById'); 
 });
 
 Route::group(['prefix' => 'investments', 'controller' => InvestmentsController::class], function(){
