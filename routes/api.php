@@ -111,7 +111,7 @@ Route::group(['prefix' => 'investments', 'controller' => InvestmentsController::
     Route::get('/','allInvestments')->name('investments.all');
     Route::get('/{id}','investmentDetails')->name('investments.details');
     
-    Route::group(['prefix'] => 'bitso', function(){
+    Route::group(['prefix' => 'bitso'], function(){
         Route::get('trades', 'getActiveTrades')->name('investments.bitso.trades');
         Route::post('/','store')->name('bitso.store');
         Route::delete('/{id}','destroy')->name('bitso.destroy');
