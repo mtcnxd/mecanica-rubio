@@ -33,9 +33,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 */
 
+
 Route::group(['prefix' => 'employees', 'controller' => EmployeesController::class], function () {
     Route::post('vacations/create', 'createPendindVacationDay')->name('employees.vacations.create');
     Route::get('vacations/cancell', 'cancellPendingVacationDay')->name('employees.vacations.cancell');
+    Route::delete('delete/{id}', 'destroy')->name('employees.delete');
+
+    // new methods
+    Route::get('/', 'getAll')->name('employees.all'); 
+    Route::get('/{id}', 'getEmployeeById')->name('employees.getEmployeeById'); 
 });
 
 Route::group(['prefix' => 'cars', 'controller' => CarsController::class], function () {

@@ -1,8 +1,8 @@
 @extends('includes.body')
 
 @section('content')
-@include('includes.alert')
 <div class="window-container">
+    @include('includes.alert')
     <x-window_main title="Nominas" class="p-4">
         <form action="{{ route('payroll.store') }}" method="POST">
             <div class="form-container border mb-0">
@@ -15,7 +15,7 @@
                                 <div class="input-group mb-3">
                                     <select class="form-select" name="employee" id="employee" required>
                                         <option value="0"> - Seleccione empleado - </option>
-                                        @foreach (App\Models\Employee::all() as $employee)
+                                        @foreach ($employees as $employee)
                                             <option value="{{ $employee->id }}">{{ $employee->user->name }}</option>
                                         @endforeach
                                     </select>
@@ -168,11 +168,8 @@
 <script>
 $("#employee").on('change', function(){
     $.ajax({
-        url: "{{ route('employees.load.all') }}",
+        url: "{{ route('employees.getEmployeeById', ':id') }}".replace(':id', $(this).val()),
         method: 'GET',
-        data: {
-            employee: $(this).val()
-        },
         success: function(response){
             console.log(response);
             $("#salary").val(response.data.salary);

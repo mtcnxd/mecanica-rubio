@@ -12,10 +12,17 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
+use App\Services\EmployeeService;
 use App\Http\Controllers\VacationsController;
 
 class EmployeesController extends Controller
 {
+    public function __construct(
+        private EmployeeService $employeeService
+    ){
+
+    }
+
     public function index()
     {
         $employees = Employee::all();
@@ -100,6 +107,27 @@ class EmployeesController extends Controller
 
         return to_route('employees.index')
             ->with('message', 'Los datos se actualizaron correctamente');
+    }
+
+    public function getEmployeeById(Request $request, $id)
+    {
+        try {
+            $employee = $this->employeeService->getEmployeeById($id);
+    
+            return response()->json([
+                'success' => true,
+                'type'    => 'success',
+                'message' => 'El empleado se encontro correctamente',
+                'data'    => $employee,
+            ]);
+
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'type'    => 'error',
+                'message' => 'Ocurrio un error: ' . $e->getMessage(),
+            ]);
+        }
     }
 
     public function report(Request $request, Payroll $payroll)
