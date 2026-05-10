@@ -77,7 +77,7 @@ Route::group(['prefix' => 'service', 'controller' => ServicesController::class],
     });
 });
 
-// Expenses
+// Finance
 Route::group(['prefix' => 'finance'], function(){
     Route::controller(FinanceController::class)->group(function() {
         Route::post('close', 'close')->name('finance.close');
@@ -88,13 +88,12 @@ Route::group(['prefix' => 'finance'], function(){
         Route::post('deleteItem', 'deleteItem')->name('expenses.deleteItem');
         Route::post('getImageAttached', 'getImageAttached')->name('getImageAttached');
     });
-});
-
-// Payrolls
-Route::group(['controller' => PayrollController::class], function() {
-    Route::post('manageSalaries', 'manageSalaries')->name('manageSalaries');
-    Route::post('addItem', 'addItem')->name('payroll.addItem');
-    Route::post('removeItem', 'removeItem')->name('payroll.removeItem');
+    
+    Route::controller(PayrollController::class)->group(function(){
+        Route::post('manageSalaries', 'manageSalaries')->name('manageSalaries');
+        Route::post('addItem', 'addItem')->name('payroll.addItem');
+        Route::post('removeItem', 'removeItem')->name('payroll.removeItem');
+    });
 });
 
 // Employees
