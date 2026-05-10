@@ -112,15 +112,15 @@ Route::group(['prefix' => 'investments', 'controller' => InvestmentsController::
     Route::get('/{id}','investmentDetails')->name('investments.details');
     
     Route::group(['prefix'] => 'bitso', function(){
-        Route::get('trades', 'getActiveTrades')->name('sensors.trades');
+        Route::get('trades', 'getActiveTrades')->name('investments.bitso.trades');
         Route::post('/','store')->name('bitso.store');
         Route::delete('/{id}','destroy')->name('bitso.destroy');
     });
 });
 
 Route::group(['prefix' => 'calendar', 'controller' => CalendarController::class], function(){
-    Route::get('event/all','all')->name('calendar.all');
-    Route::get('event','getEvent')->name('calendar.getEvent');
+    Route::get('getAll','all')->name('calendar.all');
+    Route::get('/','getEvent')->name('calendar.getEvent');
 });
 
 Route::group(['prefix' => 'sensors'], function(){
