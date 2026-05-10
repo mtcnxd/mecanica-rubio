@@ -20,9 +20,10 @@ class EmployeeService
         return $employees;
     }
 
-    public function getEmployeeById($id)
+    public function find($id)
     {
         $employee = Employee::find($id);
+        $employee->with('user');
 
         if (!$employee){
             throw new \Exception("No se encontro el empleado");

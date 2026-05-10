@@ -19,12 +19,14 @@ class Employee extends Model
         'rfc',
         'curp',
         'nss',
+        'email',
+        'phone',
         'comments'
     ];
 
     protected $casts = [
-        'start_date' => 'datetime', 
-        'end_date' => 'datetime',
+        'start_date' => 'date', 
+        'end_date' => 'date',
         'salary' => 'decimal:2',
         'periodicity' => 'collection',
     ];

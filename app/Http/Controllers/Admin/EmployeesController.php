@@ -112,7 +112,7 @@ class EmployeesController extends Controller
     public function getEmployeeById(Request $request, $id)
     {
         try {
-            $employee = $this->employeeService->getEmployeeById($id);
+            $employee = $this->employeeService->find($id);
     
             return response()->json([
                 'success' => true,

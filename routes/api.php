@@ -91,8 +91,9 @@ Route::group(['prefix' => 'finance'], function(){
     
     Route::controller(PayrollController::class)->group(function(){
         Route::post('manageSalaries', 'manageSalaries')->name('manageSalaries');
-        Route::post('addItem', 'addItem')->name('payroll.addItem');
-        Route::post('removeItem', 'removeItem')->name('payroll.removeItem');
+
+        Route::post('item', 'createItem')->name('finance.payroll.item.create');
+        Route::delete('item/{id}', 'destroyItem')->name('finance.payroll.item.destroy');
     });
 });
 

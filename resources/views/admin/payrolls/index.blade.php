@@ -59,7 +59,7 @@
                     <td>
                         <span class="material-symbols-outlined" style="position:relative; top:5px; margin-right:6px;">badge</span>
                         <a href="{{ route('payroll.show', $salary->id) }}">
-                            {{ $salary->employee->name }}
+                            {{ $salary->employee }}
                         </a>
                     </td>
                     <td>

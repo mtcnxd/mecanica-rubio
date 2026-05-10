@@ -91,7 +91,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'isAdmin'], function(){
     Route::resource('employees', EmployeesController::class);
     Route::resource('quotes', QuotesController::class)->only('index','show');
     Route::resource('users', UsersController::class)->except('destroy'); 
-    Route::resource('payroll', PayrollController::class)->except('edit', 'destroy');
+    Route::resource('payroll', PayrollController::class)->except('edit','destroy');
     Route::resource('expenses', ExpensesController::class);
     
     Route::get('calendar', [CalendarController::class, 'index'])->name('calendar.index');

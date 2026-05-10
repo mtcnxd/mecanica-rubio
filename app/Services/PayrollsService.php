@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Payroll;
+use App\Models\PayrollItems;
 
 class PayrollsService 
 {
@@ -22,17 +23,36 @@ class PayrollsService
         ];
     }
 
-    public function create(array $data) : Payroll
+    public function createPayroll(array $data)
     {
+        $data['employee_id'] = $data['employee'];
         return Payroll::create($data);
     }
 
-    public function find (string $id)
+    public function createItem(array $data)
     {
+        $id = Payroll::max('id') +1;
+
+        PayrollItems::updateOrCreate([
+            'salary_id' => $id,
+            'concept'   => $data['concept'],
+        ],[
+            'salary_id' => $id,
+            'concept'   => $data['concept'],
+            'amount'    => $data['amount'],
+        ]);
+
+        return true;
     }
-    
-    public function update (string $id, array $data)
+
+    public function destroyItem(string $id)
     {
-        
+        return PayrollItems::find($id)->delete();
     }
+
+    public function getPayrollItems(Int $id)
+    {
+        return PayrollItems::where('salary_id', $id)->get();
+    }
+
 }

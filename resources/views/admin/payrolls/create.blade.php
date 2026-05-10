@@ -105,7 +105,7 @@
                                 </a>
                             </td>
                             <td class="text-end fw-bold">
-                                {{ '$'.number_format($items->sum('amount'), 2) }}
+                                {{ Number::currency($items->sum('amount')) }}
                                 <input type="hidden" name="total" value="{{ $items->sum('amount') }}" id="total">
                             </td>
                         </tr>
@@ -184,25 +184,20 @@ $("#openModal").on('click', function(btn){
     $('#overlay').fadeIn();
 });
 
-$(".removeButton").on('click', function() {
+$(".removeButton").on('click', function(event) {
+
     $.ajax({
-        url: "{{ route('payroll.removeItem') }}",
-        data: {
-            itemId:this.id
-        },
-        method:'POST',
+        url: "{{ route('finance.payroll.item.destroy', ':id') }}".replace(':id', this.id),
+        method:'DELETE',
         success: function (response) {
             console.log(response)
         }
     })
-    .then(() => {
-        history.go();
-    });
 });
 
 $('#acceptButton').click(function() {
     $.ajax({
-        url: "{{ route('payroll.addItem') }}",
+        url: "{{ route('finance.payroll.item.create') }}",
         method: 'POST',
         data: {
             concept: $("#concept").val(),
@@ -210,18 +205,19 @@ $('#acceptButton').click(function() {
         },
         success: function(response){
             console.log(response);
-            /*
+            
             $("#table-body").empty();
             $.each (response.data, function(i, item){
                 $("#table-body").append(
                     '<tr>'+
-                        '<td></td>'+
+                        '<td>'+ (i + 1) +'</td>'+
                         '<td>'+ item.concept +'</td>'+
-                        '<td>'+ item.amount +'</td>'+
+                        '<td class="text-end">'+ numeral(item.amount).format('$0,000.00') +'</td>'+
+                        '<td><a href="#" class="removeButton" id="{{ $item->id }}"><x-feathericon-trash-2 class="table-icon"/></a></td>'+
                     '</tr>'
                 );
             });
-            */
+            
         }
     })
     .then(() => {

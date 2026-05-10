@@ -57,7 +57,7 @@ class ServicesController extends Controller
     {
         $service = $this->orderService->find($id);
 
-        event(new ServiceCompleted($service));
+        // event(new ServiceCompleted($service));
 
         return view('admin.services.show', compact('service'));
     }

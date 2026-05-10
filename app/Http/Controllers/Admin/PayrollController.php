@@ -46,11 +46,11 @@ class PayrollController extends Controller
     public function store(Request $request)
     {
         try {
-            $this->payrollService->create($request->all());
+            $this->payrollService->createPayroll($request->all());
             return to_route('payroll.index')->with('success', 'El registro se guardo correctamente');
 
         } catch (\Exception $e) {
-            return to_route('payroll.index')->with('error', 'Error | Message: '. $e->getMessage());
+            return to_route('payroll.index')->with('warning', 'Error | Message: '. $e->getMessage());
         }
     }
 
@@ -108,21 +108,17 @@ class PayrollController extends Controller
         ]);
     }
     
-    public function addItem(Request $request)
+    public function createItem(Request $request)
     {
         try {
-            $id = Payroll::max('id') +1;
-            
-            $item = PayrollItems::create([
-                'salary_id' => $id,
-                'concept'   => $request->concept,
-                'amount'    => $request->amount,
-            ]);
+            $this->payrollService->createItem($request->all());
+
+            $items = $this->payrollService->getPayrollItems(1);
     
             return response()->json([
-                'status' => true,
-                'message' => "Los datos se almacenaron correctamente",
-                'data' => PayrollItems::where('salary_id', $id)->get(),
+                'status'  => true,
+                'message' => "Agregado correctamente",
+                'data'    => $items,
             ]);
         }
 
@@ -135,13 +131,21 @@ class PayrollController extends Controller
         }
     }
 
-    public function removeItem(Request $request)
-    {       
-        PayrollItems::where('id', $request->input('itemId'))->delete();
+    public function destroyItem(String $id)
+    {
+        try {
+            $this->payrollService->destroyItem($id);
 
-        return response()->json([
-            "success" => true,
-            "request" => $request->all()
-        ]);
+            return response()->json([
+                "success" => true,
+                "request" => $id
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                "success" => false,
+                "message" => $e->getMessage()
+            ]);
+        }
     }
 }
