@@ -6,6 +6,7 @@ use PDF;
 use App\Models\Service;
 use App\Models\ServiceItems;
 use App\Traits\Messenger;
+use App\Jobs\SendOrderNotification;
 
 class OrderService
 {
