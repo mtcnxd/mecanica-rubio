@@ -88,7 +88,7 @@ class ServicesController extends Controller
         if ($request->status == 'Entregado'){
             try {
                 $this->telegram(
-                    sprintf("<b>Service completed:</b> #%s - %s \n\r<b>Client:</b> %s \n\r<b>Fault:</b> %s \n\r<b>Total:</b> $%s", 
+                    sprintf("<b>Service completed:</b> #%s\n\r <b>Car:</b> %s\n\r<b>Client:</b> %s\n\r<b>Fault:</b> %s\n\r<b>Total:</b> %s", 
                         $service->id,
                         $service->car->brand ." ". $service->car->model,
                         $service->client->name,

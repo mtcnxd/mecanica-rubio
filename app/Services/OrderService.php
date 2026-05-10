@@ -37,7 +37,7 @@ class OrderService
 
         if (!$isQuote){
             $this->telegram(
-                sprintf("<b>New service created ID:</b> %s \n\r<b>Client name:</b> %s \n\r<b>Car model:</b> %s \n\r<b>Fault:</b> %s", 
+                sprintf("<b>Service created:</b> #%s\n\r<b>Client:</b> %s\n\r<b>Car model:</b> %s\n\r<b>Fault:</b> %s", 
                     $service->id,
                     $service->client->name,
                     $service->car->carName(),
