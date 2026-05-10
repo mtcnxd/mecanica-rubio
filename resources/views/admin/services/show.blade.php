@@ -270,34 +270,35 @@ $("#item").on('keyup', function(){
 });
 
 $("#addItemInvoice").on('click', function(event){
-    var service  = $("#service").val();
-    var amount   = $("#amount").val();
-    var item     = $("#item").val();
-    var supplier = $("#supplier").val();
-    var price    = $("#price").val();
-    var labour   = $("#labour").prop('checked');
+    var serviceItem = {
+        service:    $("#service").val(),
+        amount:     $("#amount").val(),
+        item:       $("#item").val(),
+        supplier:   $("#supplier").val(),
+        price:      $("#price").val(),
+        labour:     $("#labour").prop('checked')
+    }
 
-    if (item.length < 3 && !labour) {
+    if (serviceItem.item.length < 3 && !serviceItem.labour) {
         $("#item").focus();
         return;
     }
 
+    console.log(serviceItem);
+
     $.ajax({
-        url:"{{ route('services.itemCreate') }}",
+        url:"{{ route('service.createItem') }}",
         method:'POST',
-        data: {
-            service:service,
-            amount:amount,
-            item:item,
-            supplier:supplier,
-            price:price,
-            labour:labour
-        },
+        contentType: "application/json;", 
+        dataType: "json",
+        data: JSON.stringify(serviceItem),
         success:function(response){
-            if (response.success){
-                $("#createItem").modal('hide');
-                location.reload();
+            if (response.success = false){
+                showMessageAlert(response.message);
+                return;
             }
+
+            location.reload();
         }
     });
 });
@@ -305,7 +306,7 @@ $("#addItemInvoice").on('click', function(event){
 $(".removeItem").on('click', function (event){
     event.preventDefault();
     $.ajax({
-        url:"{{ route('services.itemDestroy', ':id') }}".replace(':id', this.id),
+        url:"{{ route('service.deleteItem', ':id') }}".replace(':id', this.id),
         method:'DELETE',
         success:function(response){
             //console.log(response);

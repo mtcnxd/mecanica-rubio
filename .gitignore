@@ -1,7 +1,8 @@
-/.phpunit.cache
+.phpunit.cache
 config/database.php
 public/storage
-/storage/*.key
+docker/data
+storage/*.key
 vendor/
 .env
 .env.backup

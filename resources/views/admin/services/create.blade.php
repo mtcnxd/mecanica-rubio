@@ -15,7 +15,7 @@
                             <div class="input-group">
                                 <select class="form-select" id="select-client" name="client_id" required>
                                     <option value="">- Seleccione un cliente -</option>
-                                    @foreach ($clients->where('status','Activo')->orderBy('name')->get() as $client)
+                                    @foreach ($clients as $client)
                                         <option value="{{ $client->id }}">{{ $client->name }}</option>
                                     @endforeach
                                 </select>
@@ -102,13 +102,27 @@ $(document).ready(function() {
     $("#select-client").select2();
 
     const selectCars = $("#car");
-    $("#select-client").on('change', function(){
-        $.ajax({
-            url: "{{ route('cars.searchByClient') }}",
-            method: 'POST',
-            data: {client: this.value},
+    
+    $("#select-client").on('change', function(event){
+        var clientId = $(this).val();
+
+        $.ajax({ 
+            url: "{{ route('cars.getCarsByClient', ':clientId') }}".replace(':clientId', clientId),
+            method: 'GET',
             success:function(response){
                 selectCars.empty();
+
+                if (!response.success){
+                    Swal.fire({
+                        title: 'Error',
+                        text: response.message,
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+
+                    return;
+                }
+
                 response.data.forEach(car => {
                     selectCars.append('<option value="'+ car.id +'">'+ car.brand +' '+ car.model +' ['+ car.year +']</option>');
                 });

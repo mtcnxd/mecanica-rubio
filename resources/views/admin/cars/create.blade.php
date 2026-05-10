@@ -135,7 +135,7 @@
                         Marca
                     </div>
                     <div class="col-md-9">
-                        <input type="text" class="form-control" id="model_brand">
+                        <input type="text" class="form-control" id="model_brand" readonly>
                     </div>
                 </div>
                 <div class="row mt-3">
@@ -169,66 +169,79 @@ $(document).ready(function() {
         placeholder: 'Selecciona un cliente para asignar automovil'
     });
 
-    $('#newBrand').on('click', function(){
-        const brand   = $("#new_brand").val();
-        const premium = $("#premium").prop('checked');
-        
+    $("#select-brand").on('change', function(event){
+        const brand = $(this).val();
+
+        $("#select-model").empty();
+        $("#model_brand").val(brand);
+
         $.ajax({
-            url: "{{ route('createBrand') }}",
-            method: 'POST',
-            data:{
-                brand:brand,
-                premium:premium
-            },
+            url:"{{ route('cars.getAllModels', ':brand') }}".replace(':brand', brand),
+            method: 'GET',
             success:function(response){
                 if (!response.success){
                     showMessageAlert('error', response.message);
                     return;
                 }
 
-                $("#select-brand").empty();
-                response.data.forEach(element =>{
-                    $("#select-brand").append('<option>' + element.brand + '</option');
-                });
-
-                showMessageAlert('success', response.message);
-                $('#createModel').modal('hide');
-            }
-        });
-
-    });
-
-    $("#select-brand").on('change', function(){
-        const brand = $("#select-brand").val();
-        $("#select-model").empty();
-        $("#model_brand").val(brand);
-
-        $.ajax({
-            url:"{{ route('loadModels') }}",
-            method: 'POST',
-            data:{
-                brand:brand
-            },
-            success:function(response){
                 response.data.forEach( model => {
                     $("#select-model").append('<option>' + model.model + '</option');
                 });
             }
         });
-    });        
+    }); 
+    
+    $('#newBrand').on('click', function(event){
+        const data = {
+            brand: $("#new_brand").val(),
+            premium: $("#premium").prop('checked')
+        };
+        
+        $.ajax({
+            url: "{{ route('cars.createCarBrand') }}",
+            method: 'POST',
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify(data),
+            success:function(response){
+                $("#select-brand").empty();
 
-    $('#newModel').on('click', function(){
-        const brand = $("#model_brand").val();
-        const model = $("#model").val();
+                if (!response.success){
+                    showMessageAlert('error', response.message);
+                    return;
+                }
+
+                showMessageAlert('success', response.message);
+                
+                /*
+                response.data.forEach(element =>{
+                    $("#select-brand").append('<option>' + element.brand + '</option');
+                });
+
+                $('#createModel').modal('hide');
+                */
+            }
+        });
+
+    });
+
+    $('#newModel').on('click', function(event){
+        event.preventDefault();
+
+        const data = {
+            brand:$("#model_brand").val(),
+            model:$("#model").val()
+        };
 
         $.ajax ({
-            url: "{{ route('createModel') }}",
-            method:'POST',
-            data: {
-                brand:brand,
-                model:model
-            },
+            url: "{{ route('cars.createCarModel') }}",
+            contentType: "application/json",
+            method: 'POST',
+            dataType: "json",
+            data: JSON.stringify(data),
             success:function(response){
+                console.log(response);
+
                 if (!response.success){
                     showMessageAlert('error', response.message);
                     return;
@@ -237,11 +250,13 @@ $(document).ready(function() {
                 $('#createModel').modal('hide');
                 $("#select-model").empty();
 
-                showMessageAlert('success', response.message);
+                showMessageAlert('success', response.message)
 
+                /*
                 response.data.forEach(model => {
                     $("#select-model").append('<option>' + model.model + '</option');
                 });
+                */
             }
         });
     
@@ -254,9 +269,11 @@ function showMessageAlert(type, message){
         icon: type,
         confirmButtonText: 'Aceptar'
     })
-    .then(() => {
-        history.go();
-    });
+    .then((result) => {
+        if (result.isConfirmed) {
+            history.go();
+        }
+    })
 }
 </script>    
 @endsection

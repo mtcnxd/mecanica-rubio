@@ -33,7 +33,7 @@ class ClientsController extends Controller
     {
         try {
             $client = $this->clientService->create($request->except('_method','_token'));
-            session()->flash('success', sprintf('El cliente %s se guardó correctamente', $client->name));
+            session()->flash('success', sprintf('Se guardó correctamente el cliente: %s', $client->name));
         }
         
         catch (\Exception $e){
@@ -99,6 +99,11 @@ class ClientsController extends Controller
         }
     }
 
+    /**
+     * Get all the clients (For WEB and API requests)
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getAll(Request $request)
     {
         try {

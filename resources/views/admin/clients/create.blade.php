@@ -123,13 +123,15 @@
 @section('js')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    $('#name').on('keyup', function(){
-        if (this.value.length >= 4){
+    $('#name').on('keyup', function(event){
+        var name = $(this).val()
+
+        if (name.length >= 4){
             $.ajax({
-                url: "{{ route('client.search') }}",
+                url: "{{ route('client.all', ':name') }}".replace(':name', name),
                 method: "GET",
                 data: {
-                    name:this.value
+                    name: name
                 },
                 success:function (response){
                     console.log(response);

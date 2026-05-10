@@ -57,9 +57,28 @@
                 </tr>
             </thead>
             <tbody>
-
+                @foreach ($services as $service)
+                <tr>
+                    <td>{{ $service->id }}</td>
+                    <td>
+                        <a href="{{ route('services.show', $service->id) }}">{{ $service->fault }}</a>
+                    </td>
+                    <td>
+                        <a href="{{ route('clients.show', $service->client->id) }}">{{ $service->client->name }}</a>
+                    </td>
+                    <td>{{ $service->car->brand }} {{ $service->car->model }}</td>
+                    <td>{{ $service->entry_date->format('d/m/Y') ?? '' }}</td>
+                    <td>{{ $service->finished_date ? $service->finished_date->format('d/m/Y') : '' }}</td>
+                    <td><x-badge-simple :status="$service->status"/></td>
+                    <td class="text-end">{{ Number::currency($service->total) }}</td>
+                </tr>
+                @endforeach
             </tbody>
         </table>
+
+        <div class="text-end mt-3">
+            <span class="pe-3">{{ $services->count() }} servicios encontrados</span>
+        </div>
     </div>
 
     <div class="row mt-5">
@@ -68,7 +87,7 @@
                 <div class="widget-simple-body fs-3" style="min-height: 40px;">
                     <div style="display: flex;justify-content: space-between;">
                         <div>
-                            <span>{{ $service->where('status', 'Entregado')->where('finished_date','>=', Carbon\Carbon::now()->startOfMonth())->count(); }}</span>
+                            <span>{{ $services->where('status', 'Entregado')->where('finished_date','>=', Carbon\Carbon::now()->startOfMonth())->count(); }}</span>
                             <div class="fs-6 text-uppercase fw-bold fs-7">Servicios Entregados</div>
                         </div>
                         <div style="display: flex;align-items: center;">
@@ -83,7 +102,7 @@
                 <div class="widget-simple-body fs-3" style="min-height: 40px;">
                     <div style="display: flex;justify-content: space-between;">
                         <div>
-                            <span>{{ $service->where('quote', false)->where('status', 'Pendiente')->count(); }}</span>
+                            <span>{{ $services->where('quote', false)->where('status', 'Pendiente')->count(); }}</span>
                             <div class="fs-6 text-uppercase fw-bold fs-7">Servicios Pendientes</div>
                         </div>
                         <div style="display: flex;align-items: center;">
@@ -98,7 +117,7 @@
                 <div class="widget-simple-body fs-3" style="min-height: 40px;">
                     <div style="display: flex;justify-content: space-between;">
                         <div>
-                            <span>{{ $service->whereNotIn('status', ['Entregado','Pendiente','Cancelado'])->count(); }}</span>
+                            <span>{{ $services->whereNotIn('status', ['Entregado','Pendiente','Cancelado'])->count(); }}</span>
                             <div class="fs-6 text-uppercase fw-bold fs-7">Servicios en espera</div>
                         </div>
                         <div style="display: flex;align-items: center;">
@@ -123,60 +142,17 @@
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 <script>
 
-$('#client').select2();
+    $('#client').select2();
 
-const client      = document.querySelector("#client");
-const status      = document.querySelector("#status");
-const folio       = document.querySelector("#folio");
-const applyFilter = document.querySelector('#applyFilter');
+    const table = new DataTable('#services', 
+    {
+        processing: true,
+        serverSide: false,
+        searching: true,
+        lengthChange:false,
+        pageLength: 20,
+        order: [5, 'asc'],
+    });
 
-const table = new DataTable('#services', 
-{
-    processing: true,
-    serverSide: true,
-    searching: true,
-    lengthChange:false,
-    pageLength: 15,
-    order: [5, 'asc'],
-    ajax: {
-        url: "{{ route('getDataTableServices') }}",
-        data: function(data) {
-            data.client = client.value;
-            data.status = status.value;
-            data.folio = folio.value;
-        }
-    },
-    columns:[
-        {
-            data:'service_id',
-            orderable: true
-        },{
-            data:'fault',
-            orderable: false
-        },{
-            data:'name'
-        },{
-            data:'car'
-        },{
-            data:'entry_date'
-        },{
-            data:'finished_date'
-        },{
-            data:'status'
-        },{
-            data:'total',
-            className: 'text-end',
-            orderable: false
-        }
-    ]
-});
-
-$("#searchBox").on('keyup', function(){
-    table.columns(3).search(this.value).draw();
-})
-
-applyFilter.addEventListener('click', function(){
-    table.draw();
-}); 
 </script>
 @endsection

@@ -8,14 +8,15 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Support\MailController;
 use App\Services\PayrollsService as PayrollService;
+use App\Services\EmployeeService;
 
 class PayrollController extends Controller
 {
-    protected $payrollService;
-
-    public function __construct()
-    {
-        $this->payrollService = new PayrollService();
+    public function __construct(
+        private EmployeeService $employeeService,
+        private PayrollService $payrollService
+    ) {
+    
     }
 
     public function index(Request $request)
@@ -27,20 +28,30 @@ class PayrollController extends Controller
     public function create()
     {
         /* We plus one because current salarie is still not saved */
+        $employees = [];
 
-        $id    = Payroll::max('id') + 1;
-        $items = PayrollItems::where('salary_id', $id)->get();
+        try {
+            $id    = Payroll::max('id') + 1;
+            $items = PayrollItems::where('salary_id', $id)->get();
+            
+            $employees = $this->employeeService->getAll();
+        
+        } catch (\Exception $e){
+            session()->flash('warning', 'Error | Message: '. $e->getMessage());
+        }
 
-        return view('admin.payrolls.create', compact('items'));
+        return view('admin.payrolls.create', compact('employees','items'));
     }
 
     public function store(Request $request)
     {
-        $request->merge(['user_id' => $request->employee]);
+        try {
+            $this->payrollService->create($request->all());
+            return to_route('payroll.index')->with('success', 'El registro se guardo correctamente');
 
-        $this->payrollService->create($request->except('_token'));
-
-        return to_route('payroll.index')->with('success', 'El registro se guardo correctamente');
+        } catch (\Exception $e) {
+            return to_route('payroll.index')->with('error', 'Error | Message: '. $e->getMessage());
+        }
     }
 
     public function update(Request $request)

@@ -13,10 +13,14 @@ class ServiceItems extends Model
 
     protected $fillable = [
         'service_id',
+        'amount',
         'item',
-        'quantity',
+        'supplier',
+        'labour',
         'price',
     ];
+
+    public $timestamps = false;
 
     public function service()
     {
