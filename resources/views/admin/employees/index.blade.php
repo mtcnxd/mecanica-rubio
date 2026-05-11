@@ -12,8 +12,7 @@
                     <th>Nombre</th>
                     <th>Teléfono</th>
                     <th>Correo</th>
-                    <th>Empleado</th>
-                    <th>Usuario</th>
+                    <th>Estatus</th>
                     <th>Fecha de inicio</th>
                     <th>&nbsp;</th>
                 </tr>
@@ -24,13 +23,12 @@
                         <td>{{ $employee->id }}</td>
                         <td>
                             <a href="{{ route('employees.show', $employee->id) }}">
-                                {{ $employee->user->name }}
+                                {{ $employee->name }}
                             </a>
                         </td>
-                        <td>{{ $employee->user->phone }}</td>
-                        <td>{{ $employee->user->email }}</td>
+                        <td>{{ $employee->phone }}</td>
+                        <td>{{ $employee->email }}</td>
                         <td>{{ $employee->status }}</td>
-                        <td>{{ $employee->user->status }}</td>
                         <td>{{ \Carbon\Carbon::parse($employee->start_date)->format('d M Y') }}</td>
                         <td>
                             <a href="{{ route('employees.edit', $employee->id) }}">

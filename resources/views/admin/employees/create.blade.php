@@ -12,12 +12,19 @@
                     @csrf
                     <div class="row">
                         <div class="col-md-12">
-                            <label>Seleccione usuario</label>
-                            <select class="form-select" name="name">
-                                @foreach ($users as $user)
-                                    <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                @endforeach
-                            </select>
+                            <label>Nombre</label>
+                            <input type="text" class="form-control" name="name" required>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label>Email</label>
+                            <input type="text" class="form-control" name="email" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Teléfono</label>
+                            <input type="text" class="form-control" name="phone" required>
                         </div>
                     </div>
 
@@ -28,7 +35,7 @@
                         </div>
                         <div class="col-md-6">
                             <label>NSS</label>
-                            <input type="text" class="form-control" name="rfc">
+                            <input type="text" class="form-control" name="nss">
                         </div>
                     </div>
 
@@ -39,12 +46,12 @@
                         </div>
                         <div class="col-md-6">
                             <label>Periodo</label>
-                            <select class="form-select" name="periodicity">
-                                <option value="Semanal">Semanal</option>
-                                <option value="Quincenal">Quincenal</option>
-                                <option value="Mensual">Mensual</option>
-                                <option value="Comisionista">Comisionista</option>
-                                <option value="Sin definir">Sin definir</option>
+                            <select class="form-select" name="periodicity" required>
+                                <option>Semanal</option>
+                                <option>Quincenal</option>
+                                <option>Mensual</option>
+                                <option>Comisionista</option>
+                                <option>Sin definir</option>
                             </select>
                         </div>
                     </div>

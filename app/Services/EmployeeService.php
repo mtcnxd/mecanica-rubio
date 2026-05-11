@@ -31,4 +31,13 @@ class EmployeeService
 
         return $employee;
     }
+
+    public function store(array $data) : bool
+    {
+        $data['start_date'] = now();
+        
+        Employee::create($data);
+
+        return true;
+    }
 }

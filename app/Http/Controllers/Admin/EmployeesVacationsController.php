@@ -1,37 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Services\EmployeeService;
 use Illuminate\Http\Request;
 
-class EmployeesController extends Controller
+class EmployeesVacationsController extends Controller
 {
-    public function __construct(
-        private EmployeeService $employeeService
-    ){}
-
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        try {
-            $employees = $this->employeeService->getAll();
-
-            return response()->json([
-                'success' => true,
-                'data' => $employees,
-                'request' => $request->all()
-            ]);
-            
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ]);
-        }
+        //
     }
 
     /**

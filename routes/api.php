@@ -4,10 +4,14 @@ use App\Http\Controllers\Api\BrandsController;
 use App\Http\Controllers\Api\CalendarController;
 use App\Http\Controllers\Api\CarsController;
 use App\Http\Controllers\Api\ClientsController;
+use App\Http\Controllers\Api\EmployeesController;
+use App\Http\Controllers\Api\EmployeesVacationsController;
 use App\Http\Controllers\Api\ExpensesController;
+use App\Http\Controllers\Api\ExpensesItemsController;
 use App\Http\Controllers\Api\FinanceController;
 use App\Http\Controllers\Api\ModelsController;
 use App\Http\Controllers\Api\PayrollController;
+use App\Http\Controllers\Api\PayrollItemsController;
 use App\Http\Controllers\Api\ServicesController;
 use App\Http\Controllers\Api\ServicesItemsController;
 use Illuminate\Http\Request;
@@ -49,7 +53,6 @@ Route::name('api.')
 
 // Cars
 Route::name('api.')
-    ->prefix('cars')
     ->group(function () {
         Route::apiResource('brands', BrandsController::class)->only('index', 'store');
         Route::apiResource('models', ModelsController::class)->only('index', 'store');
@@ -57,7 +60,6 @@ Route::name('api.')
 
 // Services
 Route::name('api.')
-    ->prefix('service')
     ->group(function () {
         Route::get('{service}/pdf', [ServicesController::class, 'createServicePDF'])->name('services.pdf');
 
@@ -85,8 +87,8 @@ Route::name('api.')
     });
 
 // Finance
-Route::name('api.')
-    ->prefix('finance')
+Route::prefix('finance')
+    ->name('api.')
     ->group(function () {
         /*
         Route::prefix('payroll')->group(function () {
@@ -101,34 +103,21 @@ Route::name('api.')
         Route::post('close', 'close')->name('finance.close');
         Route::post('createBalancePDF', 'createBalancePDF')->name('finance.createBalancePDF');
     });
-
-    Route::controller(ExpensesController::class)->group(function () {
-        Route::post('deleteItem', 'deleteItem')->name('expenses.deleteItem');
-        Route::post('getImageAttached', 'getImageAttached')->name('getImageAttached');
-    });
     */
-    
-    Route::controller(PayrollController::class)->group(function () {
-        Route::apiResource('payrolls', PayrollController::class)->only('update');
-    });
 
-    // Route::post('item', 'createItem')->name('finance.payroll.item.create');
-    // Route::delete('item/{id}', 'destroyItem')->name('finance.payroll.item.destroy');
+    Route::post('expenses-items/image', [ExpensesItemsController::class, 'getImageAttached'])->name('finance.expenses.image');
+
+    Route::apiResource('expenses-items', ExpensesItemsController::class)->only('store','destroy');
+    Route::apiResource('payrolls', PayrollController::class)->only('update');
+    Route::apiResource('payrolls-items', PayrollItemsController::class)->only('store','update','destroy');
 });
 
 // Employees
 Route::name('api.')
     ->prefix('employees')
     ->group(function () {
-        /*
-        Route::post('vacations/create', 'createPendindVacationDay')->name('employees.vacations.create');
-        Route::get('vacations/cancell', 'cancellPendingVacationDay')->name('employees.vacations.cancell');
-        Route::delete('delete/{id}', 'destroy')->name('employees.delete');
-
-        // new methods
-        Route::get('/', 'getAll')->name('employees.all');
-        Route::get('/{id}', 'getEmployeeById')->name('employees.getEmployeeById');
-        */
+        Route::apiResource('vacations', EmployeesVacationsController::class)->only('store','destroy');
+        Route::apiResource('employees', EmployeesController::class)->only('index');
     });
 
 Route::name('api.')

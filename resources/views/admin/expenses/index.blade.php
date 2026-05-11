@@ -130,11 +130,8 @@ const table = new DataTable('#expenses', {
 function removeItemExpense(buttonPressed){
     if (confirm('¿Confirma querer eliminar el registro?')){
         $.ajax({
-            url:"{{ route('expenses.deleteItem') }}",
-            method: 'POST',
-            data: {
-                id:buttonPressed
-            },
+            url:"{{ route('api.expenses-items.destroy',':id') }}".replace(':id', buttonPressed),
+            method: 'DELETE',
             success:function(response){
                 console.log('remove image');
             }
@@ -146,7 +143,7 @@ function removeItemExpense(buttonPressed){
 
 function getImageAttached(buttonPressed){
     $.ajax({
-        url:"{{ route('getImageAttached') }}",
+        url:"{{ route('api.finance.expenses.image') }}",
         method: 'POST',
         data: {
             id:buttonPressed

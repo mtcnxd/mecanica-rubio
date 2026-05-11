@@ -59,7 +59,7 @@
                     <td>
                         <span class="material-symbols-outlined" style="position:relative; top:5px; margin-right:6px;">badge</span>
                         <a href="{{ route('payroll.show', $salary->id) }}">
-                            {{ $salary->employee }}
+                            {{ $salary->employee->name }}
                         </a>
                     </td>
                     <td>
@@ -138,8 +138,8 @@ $(".dropdown-item").on('click', function(){
         data: JSON.stringify(data),
         success: function(response){
             console.log(response);
-
             showMessageAlert(response.message);
+            location.reload();
         }
     });
 });

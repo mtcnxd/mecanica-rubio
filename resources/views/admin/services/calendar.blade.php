@@ -109,7 +109,7 @@ $(".event").on('click', function(e){
     var eventId = $(this).data('id');
 
     $.ajax({
-        url: "{{ route('calendar.getEvent') }}",
+        url: "",
         method: 'GET',
         data: { 
             id: eventId
