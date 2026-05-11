@@ -253,12 +253,14 @@ $("#labour").on('change', function(){
 $("#item").on('keyup', function(){
     if (this.value.length >= 3){
         $.ajax({
-            url: "{{ route('services.itemByCriteria') }}",
+            url: "{{ route('api.services.items.index') }}",
             method: "GET",
             data: {
-                text:this.value
+                criteria:this.value
             },
             success:function (response){
+                console.log(response);
+
                 $("#resultListItems").empty();
                 $("#resultListItems").show();
                 response.data.forEach( (item) => {
@@ -284,15 +286,15 @@ $("#addItemInvoice").on('click', function(event){
         return;
     }
 
-    console.log(serviceItem);
-
     $.ajax({
-        url:"{{ route('service.createItem') }}",
+        url:"{{ route('api.services.items.store') }}",
         method:'POST',
         contentType: "application/json;", 
         dataType: "json",
         data: JSON.stringify(serviceItem),
         success:function(response){
+            console.log(response);
+
             if (response.success = false){
                 showMessageAlert(response.message);
                 return;
@@ -306,7 +308,7 @@ $("#addItemInvoice").on('click', function(event){
 $(".removeItem").on('click', function (event){
     event.preventDefault();
     $.ajax({
-        url:"{{ route('service.deleteItem', ':id') }}".replace(':id', this.id),
+        url:"{{ route('api.services.items.destroy', ':id') }}".replace(':id', this.id),
         method:'DELETE',
         success:function(response){
             //console.log(response);
@@ -333,8 +335,8 @@ function showMessageAlert(message){
 
 function downloadPDF(serviceid){
     $.ajax({
-        url: "{{ route('services.createServicePDF') }}",
-        method:'POST',
+        url: "{{ route('api.services.pdf', ':service') }}".replace(':service', serviceid),
+        method:'GET',
         data:{
             serviceid:serviceid
         },

@@ -2,15 +2,20 @@
 
 namespace App\Services;
 
-use App\Models\Charts;
 use App\Models\Expense;
 use App\Models\Payroll;
 use App\Models\Service;
 
 class FinanceService
 {
-    public function getDashboardData() : array
+    public function updatePayroll(string $id, array $data)
     {
-        return [];
+        $payroll = Payroll::find($id);
+        $payroll->update([
+            'status' => $data['action'],
+            'paid_date' => now(),
+        ]);
+
+        return true;
     }
 }

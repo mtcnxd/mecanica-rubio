@@ -96,9 +96,9 @@
                                 <x-feathericon-more-vertical style="height:20px;"/>
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#" data-action="pay" data-id="{{ $salary->id }}">Pagar</a></li>
-                                <li><a class="dropdown-item" href="#" data-action="cancell" data-id="{{ $salary->id }}">Cancelar</a></li>
-                                <li><a class="dropdown-item" href="#" data-action="delete" data-id="{{ $salary->id }}">Eliminar</a></li>
+                                <li><a class="dropdown-item" href="#" data-action="Pagado" data-id="{{ $salary->id }}">Pagar</a></li>
+                                <li><a class="dropdown-item" href="#" data-action="Cancelado" data-id="{{ $salary->id }}">Cancelar</a></li>
+                                <li><a class="dropdown-item" href="#" data-action="Borrado" data-id="{{ $salary->id }}">Eliminar</a></li>
                             </ul>
                             @endif
                         </div>
@@ -124,18 +124,24 @@
 <script>
 $(".dropdown-item").on('click', function(){
     const buttonGroup = $(this);
+
+    var data = {
+        'id': buttonGroup.data('id'),
+        'action': buttonGroup.data('action')
+    }
+    
     $.ajax({
-        url: "{{ route('manageSalaries') }}",
-        method: 'POST',
-        data: {
-            id:buttonGroup.data('id'),
-            action:buttonGroup.data('action')
-        },
+        url: "{{ route('api.payrolls.update', ':payroll') }}".replace(':payroll', data.id),
+        method: 'PATCH',
+        dataType: 'JSON',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
         success: function(response){
+            console.log(response);
+
             showMessageAlert(response.message);
         }
     });
-
 });
 
 function showMessageAlert(message){
@@ -143,9 +149,7 @@ function showMessageAlert(message){
         text: message,
         icon: 'success',
         confirmButtonText: 'Aceptar'
-    }).then( () => {
-        history.go();
-    })
+    });
 }
 </script>
 @endsection

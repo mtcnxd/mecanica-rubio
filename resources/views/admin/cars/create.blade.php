@@ -165,9 +165,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 $(document).ready(function() {
-    $('#client').select2({
-        placeholder: 'Selecciona un cliente para asignar automovil'
-    });
+    $('#client').select2();
 
     $("#select-brand").on('change', function(event){
         const brand = $(this).val();
@@ -176,9 +174,14 @@ $(document).ready(function() {
         $("#model_brand").val(brand);
 
         $.ajax({
-            url:"{{ route('cars.getAllModels', ':brand') }}".replace(':brand', brand),
+            url:"{{ route('api.models.index') }}",
             method: 'GET',
+            data: {
+                'brand': brand
+            },
             success:function(response){
+                console.log(response);
+
                 if (!response.success){
                     showMessageAlert('error', response.message);
                     return;
@@ -198,7 +201,7 @@ $(document).ready(function() {
         };
         
         $.ajax({
-            url: "{{ route('cars.createCarBrand') }}",
+            url: "{{ route('api.brands.store') }}",
             method: 'POST',
             contentType: "application/json",
             dataType: "json",
@@ -234,7 +237,7 @@ $(document).ready(function() {
         };
 
         $.ajax ({
-            url: "{{ route('cars.createCarModel') }}",
+            url: "{{ route('api.models.store') }}",
             method: 'POST',
             contentType: "application/json",
             dataType: "json",
