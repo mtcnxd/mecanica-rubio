@@ -189,22 +189,4 @@ class CarsController extends Controller
             ]);
         }
     }
-
-    public function report()
-    {
-        $brands = DB::table('autos')
-            ->select(DB::raw('count(*) as count, brand'))
-            ->groupBy('brand')
-            ->orderBy('count', 'desc')
-            ->get();
-
-        $items = DB::table('services_items')
-            ->select('item', DB::raw('count(*) as count'))
-            ->whereNotIn('item',['Servicio (mano de obra)'])
-            ->groupBy('item') 
-            ->orderBy('count', 'desc')
-            ->get();
-    
-        return view('admin.reports.autos', compact('brands', 'items'));
-    }
 }

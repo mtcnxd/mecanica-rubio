@@ -153,7 +153,7 @@
     $("#textPostalCode").on('keyup', function(){
         if (this.value.length > 3) {
             $.ajax({
-                url:"{{ route('clients.postal-codes') }}",
+                url:"{{ route('clients.postal-code') }}",
                 method: 'GET',
                 data:{ address:this.value },
                 success: function(response){
@@ -186,7 +186,7 @@
 
         if (postalcode.length >= 4){
             $.ajax({
-                url: "{{ route('clients.postal-codes') }}",
+                url: "{{ route('clients.postal-code') }}",
                 method: 'GET',
                 data:{code:postalcode},
                 success: function(response){

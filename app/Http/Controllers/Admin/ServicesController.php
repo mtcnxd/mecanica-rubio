@@ -108,7 +108,7 @@ class ServicesController extends Controller
         return to_route('services.index');
     }
 
-    public function search(Request $request)
+    public function getAll(Request $request)
     {
         $services = $this->orderService->findByCriteria($request->all());
 

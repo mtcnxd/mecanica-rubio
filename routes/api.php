@@ -36,16 +36,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Clients
 Route::group(['prefix' => 'clients', 'controller' => ClientsController::class], function(){    
     Route::get('/', 'getAll')->name('clients.all');
-    Route::get('/postal-codes', 'getPostalCodes')->name('clients.postal-codes');
+    Route::get('/postal-code', 'getPostalCodes')->name('clients.postal-code');
     Route::get('/{id}', 'clientDetails')->name('clients.detail')->whereNumber('id');
     Route::delete('/{id}', 'destroy')->name('clients.delete')->whereNumber('id');
 });
 
 // Cars
 Route::group(['prefix' => 'cars', 'controller' => CarsController::class], function () {
-    Route::get('SearchCar', 'SearchCar')->name('cars.SearchCar');
-
-    // New methods
     Route::get('client/{id}', 'getCarsByClient')->name('cars.getCarsByClient'); 
     Route::get('models/{brand}', 'getAllModels')->name('cars.getAllModels');
     
@@ -55,12 +52,11 @@ Route::group(['prefix' => 'cars', 'controller' => CarsController::class], functi
 
 // Services
 Route::group(['prefix' => 'service', 'controller' => ServicesController::class], function(){
-    Route::get('search', 'search')->name('services.search');
+    Route::get('/', 'getAll')->name('services.all');
 
     Route::post('createServicePDF', 'createServicePDF')->name('services.createServicePDF');
     Route::get('fromQuoteToService', 'fromQuoteToService')->name('services.change.quote');
     
-    Route::get('item', 'itemGetInfo')->name('services.itemGetInfo');
     Route::get('item/all', 'itemByCriteria')->name('services.itemByCriteria');
 
     // new methods
