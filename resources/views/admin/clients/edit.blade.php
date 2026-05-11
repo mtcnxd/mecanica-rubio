@@ -141,8 +141,8 @@
         console.log(client);
 
         $.ajax({
-            url: "{{ route('employees.delete') }}",
-            method: 'GET',
+            url: "{{ route('clients.delete', ':id') }}".replace(':id', client),
+            method: 'DELETE',
             data: {
                 client:client
             },
@@ -161,14 +161,17 @@
         ajaxRequest(this);
     });    
 
-    function ajaxRequest(element) {
-        if (element.value.length >= 4){
+    function ajaxRequest(postcode) {
+        console.log(postcode);
+
+        /*
+        if (postcode.length >= 4){
             $.ajax({
-                url: "{{ route('client.searchPostalCode') }}",
+                url: "{{ route('clients.postal-codes', ':postcode') }}".replace(':postcode', postcode),
                 method: 'GET',
-                data: {
-                    postcode:element.value
-                },
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify({postcode:postcode}),
                 success: function(response){
                     $("#address").empty();
                     response.data.forEach(element => {
@@ -176,16 +179,17 @@
                         $("#city").val(element.city);
                         $("#state").val(element.state);
                     });
-
                 }
             });
         }
+        */
     }
 
-    $("#textPostalCode").on('keyup', function(){
+    $("#textPostalCode").on('keyup', function(event){
+        /*
         if (this.value.length > 3) {
             $.ajax({
-                url:"{{ route('client.searchPostalCode') }}",
+                url:"{{ route('client.postal-codes') }}",
                 method: 'GET',
                 data:{
                     address:this.value
@@ -199,6 +203,7 @@
                 }
             });
         }
+        */
     });
 
     function selectItem(postalcode){

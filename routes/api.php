@@ -33,15 +33,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 */
 
-
 // Clients
-Route::group(['prefix' => 'client', 'controller' => ClientsController::class], function(){
-    Route::get('delete', 'destroy')->name('client.delete');
-    Route::get('searchPostalCode', 'searchPostalCode')->name('client.searchPostalCode');
-
-    // new methods
-    Route::get('/', 'getAll')->name('client.all');
-    Route::get('/{id}', 'clientDetails')->name('client.details');
+Route::group(['prefix' => 'clients', 'controller' => ClientsController::class], function(){    
+    Route::get('/', 'getAll')->name('clients.all');
+    Route::get('/postal-codes', 'getPostalCodes')->name('clients.postal-codes');
+    Route::get('/{id}', 'clientDetails')->name('clients.detail')->whereNumber('id');
+    Route::delete('/{id}', 'destroy')->name('clients.delete')->whereNumber('id');
 });
 
 // Cars

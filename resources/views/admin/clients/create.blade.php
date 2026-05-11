@@ -128,7 +128,7 @@
 
         if (name.length >= 4){
             $.ajax({
-                url: "{{ route('client.all', ':name') }}".replace(':name', name),
+                url: "{{ route('clients.all', ':name') }}".replace(':name', name),
                 method: "GET",
                 data: {
                     name: name
@@ -145,18 +145,15 @@
         }
     });
 
-    $("#postcode").on('focus', function(){
-        ajaxRequest(this);
-    })
-
-    $("#postcode").on('keyup', function() {
-        ajaxRequest(this);
+    $("#postcode").on('keyup', function(event) {
+        var postalcode = $(this).val();
+        ajaxRequest(postalcode);
     });
 
     $("#textPostalCode").on('keyup', function(){
         if (this.value.length > 3) {
             $.ajax({
-                url:"{{ route('client.searchPostalCode') }}",
+                url:"{{ route('clients.postal-codes') }}",
                 method: 'GET',
                 data:{ address:this.value },
                 success: function(response){
@@ -174,8 +171,8 @@
         var client = $(this).data('bsClient');
 
         $.ajax({
-            url: "{{ route('client.delete') }}",
-            method: 'POST',
+            url: "{{ route('clients.delete', ':id') }}".replace(':id', client),
+            method: 'DELETE',
             data: {
                 client:client
             },
@@ -185,18 +182,21 @@
         });
     });
 
-    function ajaxRequest(element){
-        if (element.value.length >= 4){
+    function ajaxRequest(postalcode){
+
+        if (postalcode.length >= 4){
             $.ajax({
-                url: "{{ route('client.searchPostalCode') }}",
+                url: "{{ route('clients.postal-codes') }}",
                 method: 'GET',
-                data: {
-                    postcode:element.value
-                },
+                data:{code:postalcode},
                 success: function(response){
+                    console.log(response);
+                    
                     $("#address").empty();
 
-                    console.log(response);
+                    if (!response.success){
+                        return;
+                    }
 
                     response.data.forEach(element => {
                         $("#address").append('<option>' + element.address + '</option>');
@@ -217,10 +217,8 @@
     function showMessageAlert(message){
         Swal.fire({
             text: message,
-            icon: 'success',
+            icon: 'error',
             confirmButtonText: 'Aceptar'
-        }).then(() => {
-            location.replace('/admin/clients');
         });
     }
 </script>

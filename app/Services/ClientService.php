@@ -45,13 +45,13 @@ class ClientService
         return $client;
     }
 
-    public function delete(string $id) : void
+    public function delete(string $id)
     {
         $client = Client::find($id);
+        $client->status = 'Eliminado'; 
+        $client->save();
 
-        $client->update([
-            'status' => 'Eliminado'
-        ]);
+        return true;
     }
 
     public function findByCriteria(array $criteria)

@@ -235,8 +235,8 @@ $(document).ready(function() {
 
         $.ajax ({
             url: "{{ route('cars.createCarModel') }}",
-            contentType: "application/json",
             method: 'POST',
+            contentType: "application/json",
             dataType: "json",
             data: JSON.stringify(data),
             success:function(response){

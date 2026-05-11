@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\ClientService;
 use App\Traits\Messenger;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ClientsController extends Controller
 {
@@ -71,14 +72,22 @@ class ClientsController extends Controller
         return to_route('clients.index');
     }
 
-    public function destroy(Request $request)
+    public function destroy(string $id)
     {
-        $this->clientService->delete($request->id);
-
-        return Response()->json([
-            'success' => true,
-            'message' => 'El cliente se elimino correctamente'
-        ]);
+        try {
+            $this->clientService->delete($id);
+    
+            return Response()->json([
+                'success' => true,
+                'message' => 'El cliente se elimino correctamente'
+            ]);
+        
+        } catch(\Exception $e){
+            return Response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 
     public function clientDetails(Request $request)
@@ -133,10 +142,9 @@ class ClientsController extends Controller
         }
     }
 
-    // Deprecates this method by search when search admites the search by postcode
-    public function searchPostalCode(Request $request)
+    public function getPostalCodes(Request $request)
     {
-        $result = \DB::table('postalcodes')
+        $result = DB::table('postalcodes')
             ->where(function ($query) use ($request) {
                 $query->where('postalcode', 'like', '%'.$request->postcode.'%')
                     ->where('address', 'like', '%'.$request->address.'%');
@@ -144,7 +152,8 @@ class ClientsController extends Controller
             ->get();
 
         return Response()->json([
-            "success" => true,
+            "success" => false,
+            "request" => $request->all(),
             "data"    => $result
         ]);
     }
