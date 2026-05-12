@@ -6,6 +6,7 @@ use App\Models\Service;
 use App\Models\Payroll;
 use App\Models\Expense;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class ChartService
 {
@@ -28,7 +29,7 @@ class ChartService
         $lastDate = DB::table('montly_balances')->orderBy('created_at','desc')->first();
 
         if ($lastDate){
-            return parse($lastDate->close_date);
+            return Carbon::parse($lastDate->close_date);
         }
 
         return now()->subMonth();
