@@ -27,4 +27,12 @@ class FinanceService
         }
 
     }
+
+    public function deleteExpenseItem(string $id) : bool
+    {
+        $expenseItem = Expense::find($id);
+        $expenseItem->delete();
+
+        return true;
+    }
 }

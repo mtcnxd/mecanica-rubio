@@ -16,7 +16,7 @@
                                     <select class="form-select" name="employee" id="employee" required>
                                         <option value="0"> - Seleccione empleado - </option>
                                         @foreach ($employees as $employee)
-                                            <option value="{{ $employee->id }}">{{ $employee->user->name }}</option>
+                                            <option value="{{ $employee->id }}">{{ $employee->name }}</option>
                                         @endforeach
                                     </select>
                                     <span class="input-group-text" id="basic-addon2">
@@ -168,7 +168,7 @@
 <script>
 $("#employee").on('change', function(){
     $.ajax({
-        url: "{{ route('api.employees.index', ':id') }}".replace(':id', $(this).val()),
+        url: "{{ route('api.employees.search', ':id') }}".replace(':id', this.value),
         method: 'GET',
         success: function(response){
             console.log(response);

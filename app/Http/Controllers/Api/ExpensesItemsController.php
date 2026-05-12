@@ -3,10 +3,15 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Services\FinanceService;
 use Illuminate\Http\Request;
 
 class ExpensesItemsController extends Controller
 {
+    public function __construct(
+        private FinanceService $financeService
+    ){ }
+
     /**
      * Display a listing of the resource.
      */
@@ -60,6 +65,19 @@ class ExpensesItemsController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $this->financeService->deleteExpenseItem($id);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Item eliminado correctamente',
+            ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ]);
+        }
     }
 }

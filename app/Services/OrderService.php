@@ -49,6 +49,35 @@ class OrderService
         return $service;
     }
 
+    public function updateOrder($data, $id)
+    {
+        $service = Service::find($id);
+
+    }
+
+    public function markAsCompleted(Order $order)
+    {
+        try {
+            $order->update([
+                'status' => 'Entregado',
+                'finished_date' => now(),
+            ]);
+
+            $this->telegram(
+                sprintf("<b>Service completed:</b> #%s\n\r<b>Car model:</b> %s\n\r<b>Client:</b> %s\n\r<b>Fault:</b> %s\n\r<b>Total:</b> %s", 
+                    $service->id,
+                    $service->car->brand ." ". $service->car->model,
+                    $service->client->name,
+                    $service->fault, 
+                    Number::currency($request->total)
+                )
+            );
+
+        } catch (\Exception $err) {
+            throw new Exception($err->getMessage());
+        }
+    }
+
     public function createOrderItem(array $request): ?ServiceItems
     {
         $amount = $request['amount'];

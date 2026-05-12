@@ -117,6 +117,9 @@ Route::name('api.')
     ->prefix('employees')
     ->group(function () {
         Route::apiResource('vacations', EmployeesVacationsController::class)->only('store','destroy');
+
+        Route::get('/{employee}', [EmployeesController::class, 'searchById'])->name('employees.search');
+
         Route::apiResource('employees', EmployeesController::class)->only('index');
     });
 
