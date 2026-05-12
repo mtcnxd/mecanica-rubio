@@ -3,7 +3,7 @@
 use App\Http\Controllers\Admin\CalendarController;
 use App\Http\Controllers\Admin\CarsController;
 use App\Http\Controllers\Admin\ClientsController;
-use App\Http\Controllers\Admin\Dashboard;
+use App\Http\Controllers\Admin\ChartsController;
 use App\Http\Controllers\Admin\EmployeesController;
 use App\Http\Controllers\Admin\ExpensesController;
 use App\Http\Controllers\Admin\FinanceController;
@@ -88,20 +88,22 @@ Route::group(['prefix' => 'admin', 'middleware' => 'isAdmin'], function () {
     Route::resource('payroll', PayrollController::class)->except('edit', 'destroy');
     Route::resource('expenses', ExpensesController::class);
 
+    Route::group(['prefix' => 'charts', 'controller' => ChartsController::class], function () {
+        Route::get('dashboard', 'index')->name('charts.dashboard');
+    });
+
     Route::get('calendar', [CalendarController::class, 'index'])->name('calendar.index');
     Route::get('emailInvoice/{service}', [ServicesController::class, 'sendEmailInvoice'])->name('sendEmailInvoice');
 
-    Route::group(['prefix' => 'finance'], function () {
-        Route::get('/', [FinanceController::class, 'index'])->name('finance.incomes');
+    Route::group(['prefix' => 'finance', 'controller' => FinanceController::class], function () {
+        Route::get('incomes', 'index')->name('finance.incomes');
+        Route::get('monthly-closing', 'montlyClosing')->name('finance.monthly-closing');
     });
 
     Route::group(['prefix' => 'reports'], function () {
-        Route::get('overview', [Dashboard::class, 'index'])->name('reports.overview');
         Route::get('employees/{userid}', [EmployeesController::class, 'report'])->name('reports.employees');
         Route::get('employees', [EmployeesController::class, 'report'])->name('reports.employees');
         Route::get('autos', [CarsController::class, 'report'])->name('reports.autos');
-        Route::get('close-month', [ExpensesController::class, 'report'])->name('reports.balance');
-
         Route::get('/client/{client}', [FinanceController::class, 'show'])->name('reports.client');
     });
 

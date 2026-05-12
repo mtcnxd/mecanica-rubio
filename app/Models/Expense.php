@@ -23,25 +23,12 @@ class Expense extends Model
         'attach',
     ];
 
-    protected $dates = [
-        'expense_date',
+    protected $casts = [
+        'expense_date' => 'date',
     ];
 
     public function getAttachAttribute($value)
     {
         return asset('storage/' . $value);
-    }
-
-    public function getTotalCurrentMonth()
-    {   
-        $total = $this->select(Expense::raw('SUM(amount * price) as total'))
-            ->whereMonth('expense_date', now()->month)
-            ->first()->total;
-
-        if ($total){
-            return $total;
-        }
-
-        return 0.0;
     }
 }

@@ -88,7 +88,7 @@
 				</h5>
 			</a>
 			<ul class="menu-dropdown">
-				<li><a class="a-item" href="{{ route('reports.overview') }}">Resumen</a></li>
+				<li><a class="a-item" href="{{ route('charts.dashboard') }}">Resumen</a></li>
 				<li>
 					<a class="a-item" href="#">Reportes</a>
 					<ul class="submenu">
@@ -104,7 +104,7 @@
 						<li><a class="a-item" href="{{ route('reports.employees') }}">Empleados</a></li>
 					</ul>
 				</li>
-				<li><a class="a-item" href="{{ route('reports.balance') }}">Cierre de mes</a></li>
+				<li><a class="a-item" href="{{ route('finance.monthly-closing') }}">Cierre de mes</a></li>
 			</ul>
 		</li>
 		<li>
