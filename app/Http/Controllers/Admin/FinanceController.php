@@ -8,9 +8,14 @@ use Illuminate\Http\Request;
 use App\Models\Service;
 use Carbon\Carbon;
 use PDF;
+use App\Services\FinanceService;
 
 class FinanceController extends Controller
 {
+    public function __construct(
+        private FinanceService $financeService
+    ) {}
+
     public function index(Service $service)
     {
         $list = $service->where('status', 'Entregado')
@@ -79,5 +84,20 @@ class FinanceController extends Controller
         $pdf = PDF::loadView('admin.templates.pdf_balance', $data);
         
         return $pdf->download('balance.pdf');
+    }
+
+    public function montlyClosing()
+    {
+        $montlyData = [];
+
+        try {
+            $montlyData = $this->financeService->montlyClosing();
+
+            return view('admin.reports.balance', compact('montlyData'));   
+
+        } catch (\Exception $err) {
+            session()->flash('error', 'ERROR: '. $err->getMessage());
+            return view('admin.reports.balance', compact('montlyData'));   
+        }
     }
 }

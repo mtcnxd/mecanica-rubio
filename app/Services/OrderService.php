@@ -2,11 +2,10 @@
 
 namespace App\Services;
 
-use PDF;
 use App\Models\Service;
 use App\Models\ServiceItems;
 use App\Traits\Messenger;
-use App\Jobs\SendOrderNotification;
+use PDF;
 
 class OrderService
 {
@@ -18,27 +17,27 @@ class OrderService
             ->where('quote', false)->get();
     }
 
-    public function find(string $id) : Service
+    public function find(string $id): Service
     {
         return Service::findOrFail($id);
     }
 
-    public function createOrder(array $data) : Service
+    public function createOrder(array $data): Service
     {
         $isQuote = false;
 
-        if (isset($data['quote']) && $data['quote'] == 'quote'){
+        if (isset($data['quote']) && $data['quote'] == 'quote') {
             $isQuote = true;
         }
 
         $data['entry_date'] = now();
-        $data['quote']      = $isQuote;
-        
+        $data['quote'] = $isQuote;
+
         $service = Service::create($data);
 
-        if (!$isQuote){
+        if (! $isQuote) {
             $this->telegram(
-                sprintf("<b>Service created:</b> #%s\n\r<b>Client:</b> %s\n\r<b>Car model:</b> %s\n\r<b>Fault:</b> %s", 
+                sprintf("<b>Service created:</b> #%s\n\r<b>Client:</b> %s\n\r<b>Car model:</b> %s\n\r<b>Fault:</b> %s",
                     $service->id,
                     $service->client->name,
                     $service->car->carName(),
@@ -50,20 +49,52 @@ class OrderService
         return $service;
     }
 
-    public function createOrderItem(array $request) : ?ServiceItems
+    public function updateOrder($data, $id)
+    {
+        $service = Service::find($id);
+
+    }
+
+    public function markAsCompleted(Order $order)
+    {
+        try {
+            $order->update([
+                'status' => 'Entregado',
+                'finished_date' => now(),
+            ]);
+
+            $this->telegram(
+                sprintf("<b>Service completed:</b> #%s\n\r<b>Car model:</b> %s\n\r<b>Client:</b> %s\n\r<b>Fault:</b> %s\n\r<b>Total:</b> %s", 
+                    $service->id,
+                    $service->car->brand ." ". $service->car->model,
+                    $service->client->name,
+                    $service->fault, 
+                    Number::currency($request->total)
+                )
+            );
+
+        } catch (\Exception $err) {
+            throw new Exception($err->getMessage());
+        }
+    }
+
+    public function createOrderItem(array $request): ?ServiceItems
     {
         $amount = $request['amount'];
-        $item   = $request['item'];
+        $item = $request['item'];
 
-        if ($request['labour'] == true){
+        if ($request['labour'] == true) {
             $amount = 1;
-            $item   = "Servicio (mano de obra)";
+            $item = 'Servicio (mano de obra)';
         }
 
-        return ServiceItems::create([
+        return ServiceItems::updateOrCreate([
             'service_id' => $request['service'],
-            'amount'     => $amount,
             'item'       => $item,
+        ], [
+            'service_id' => $request['service'],
+            'item'       => $item,
+            'amount'     => $amount,
             'supplier'   => $request['supplier'],
             'price'      => $request['price'],
             'labour'     => $request['labour'],
@@ -77,14 +108,14 @@ class OrderService
 
     public function findByCriteria(array $criteria)
     {
-        return Service::select('client_id','car_id','service_type','fault','status','entry_date','finished_date','total')
+        return Service::select('client_id', 'car_id', 'service_type', 'fault', 'status', 'entry_date', 'finished_date', 'total')
             ->with('client:id,name,email,phone')
             ->with('car:id,brand,model,year')
-            ->where(function($query) use ($criteria) {
-                if (isset($criteria['status'])){
+            ->where(function ($query) use ($criteria) {
+                if (isset($criteria['status'])) {
                     $query->where('status', $criteria['status']);
                 }
-                if(isset($criteria['id'])){
+                if (isset($criteria['id'])) {
                     $query->where('id', $criteria['id']);
                 }
             })->get();
@@ -94,8 +125,8 @@ class OrderService
     {
         return Service::select(
             'id',
-            //'client_id',
-            //'car_id',
+            // 'client_id',
+            // 'car_id',
             'service_type',
             'fault',
             'status',
@@ -103,20 +134,20 @@ class OrderService
             'finished_date',
             'total')
             ->whereBetween(
-                'created_at', [now()->startOfMonth(), now()->endOfMonth()], 
+                'created_at', [now()->startOfMonth(), now()->endOfMonth()],
             )
-            //->with('client:id,name,email,phone')
-            //->with('car:id,brand,model,year')
-            //->with('serviceItems:id,service_id,item,price,amount')
+            // ->with('client:id,name,email,phone')
+            // ->with('car:id,brand,model,year')
+            // ->with('serviceItems:id,service_id,item,price,amount')
             ->where('quote', false)
             ->get();
     }
 
     public function servicesSummary()
     {
-        return Service::select('id','service_type','fault','status','entry_date','finished_date','total')
+        return Service::select('id', 'service_type', 'fault', 'status', 'entry_date', 'finished_date', 'total')
             ->whereBetween(
-                'entry_date', [now()->startOfMonth(), now()->endOfMonth()], 
+                'entry_date', [now()->startOfMonth(), now()->endOfMonth()],
             )
             ->where('quote', false)
             ->get();
@@ -129,12 +160,12 @@ class OrderService
         $path = public_path('images/mainlogo.png');
         $type = pathinfo($path, PATHINFO_EXTENSION);
         $image = file_get_contents($path);
-        $base64 = 'data:image/' . $type . ';base64,' . base64_encode($image);
+        $base64 = 'data:image/'.$type.';base64,'.base64_encode($image);
 
         $pdf = PDF::loadView('admin.templates.pdf_invoice', [
-            "title"   => 'COTIZACION',
-            "service" => $service,
-            "image"   => $base64,
+            'title' => 'COTIZACION',
+            'service' => $service,
+            'image' => $base64,
         ]);
 
         return $pdf->download('invoice.pdf');

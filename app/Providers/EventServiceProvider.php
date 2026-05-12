@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Event;
 use App\Events\ServiceCompleted;
 use App\Listeners\SendEmailServiceNotification;
 
+use App\Events\PayrollCompletedEvent;
+use App\Listeners\PayrollCompletedListener;
+
 class EventServiceProvider extends ServiceProvider
 {
     /**
@@ -24,6 +27,10 @@ class EventServiceProvider extends ServiceProvider
 
         ServiceCompleted::class => [
             SendEmailServiceNotification::class,
+        ],
+
+        PayrollCompletedEvent::class => [
+            PayrollCompletedListener::class,
         ],
     ];
 

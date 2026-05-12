@@ -1,6 +1,12 @@
 @extends('includes.body')
 
 @section('content')
+
+@php
+    $income = 0;
+    $expenses = 0;
+@endphp
+
 <div class="window-container">
     <div class="row mb-4">
         <div class="col-md-12">
@@ -13,22 +19,66 @@
                     <th class="text-end">Egresos</th>
                 </thead>
                 <tbody>
-                    @foreach ($rows as $row)
+                    <tr>
+                        <td colspan="5">
+                            <strong class="text-uppercase">Ingresos</strong>
+                        </td>
+                    </tr>
+                    @foreach ($montlyData['services'] as $service)
+                        @php
+                            $income += $service->serviceItems->sum('price');
+                        @endphp
                         <tr>
-                            <td>{{ $row->id }}</td>
-                            <td><strong>{{ $row->type }}</strong> {{ $row->concept }}</td>
-                            <td>{{ Carbon\Carbon::parse($row->date)->format('d-m-Y') }}</td>
-                            <td class="text-end">{{ "$".number_format($row->cash_in, 2) }}</td>    
-                            <td class="text-end">{{ "$".number_format($row->cash_out, 2) }}</td>
+                            <td>{{ sprintf('#%s', $service->id) }}</td>
+                            <td><strong>Ingreso: </strong> {{ $service->car->brand }} {{ $service->car->model }} [{{ $service->car->year }}]</td>
+                            <td>{{ $service->finished_date->format('d/m/Y') }}</td>
+                            <td class="text-end">{{ Number::currency($service->serviceItems->sum('price')) }}</td>
+                            <td class="text-end"> - </td>
                         </tr>
                     @endforeach
+                    <tr style="background-color: #efefef;">
+                        <td colspan="5">
+                            <strong class="text-uppercase">Egresos</strong>
+                        </td>
+                    </tr>
+                    @foreach ($montlyData['expenses'] as $expense)
+                        @php
+                            $expenses += $expense->amount * $expense->price;
+                        @endphp
+                        <tr>
+                            <td>{{ sprintf('#%s', $expense->id) }}</td>
+                            <td><strong>Egreso: </strong> {{ $expense->name }}</td>
+                            <td>{{ $expense->expense_date->format('d/m/Y') }}</td>
+                            <td class="text-end"> - </td>    
+                            <td class="text-end">{{ Number::currency($expense->amount * $expense->price) }}</td>
+                        </tr>
+                    @endforeach
+                    <tr style="background-color: #efefef;">
+                        <td colspan="5">
+                            <strong class="text-uppercase">Nóminas</strong>
+                        </td>
+                    </tr>
+                    @foreach ($montlyData['payrolls'] as $payroll)
+                        @php
+                            $expenses += $payroll->total;
+                        @endphp
+
+                        <tr>
+                            <td>{{ sprintf('#%s', $payroll->id) }}</td>
+                            <td><strong>Nomina: </strong> {{ $payroll->employee->name }} <strong>Periodo:</strong> {{ $payroll->start_date->format('d/m/Y') }} - {{ $payroll->end_date->format('d/m/Y') }}</td>
+                            <td>{{ $payroll->paid_date->format('d/m/Y') }}</td>
+                            <td class="text-end"> - </td>    
+                            <td class="text-end">{{ Number::currency($payroll->total) }}</td>
+                        </tr>
+                    @endforeach
+
                     <tfoot>
                         <tr>
                             <td colspan="3"></td>
-                            <td class="text-end fw-bold">{{ count($rows) > 0 ? "$".number_format($rows->sum('cash_in'), 2) : 0 }}</td>
-                            <td class="text-end fw-bold">{{ count($rows) > 0 ? "$".number_format($rows->sum('cash_out'), 2) : 0 }}</td>
-                            <input type="hidden" id="income" value="{{ count($rows) > 0 ? $rows->sum('cash_in') : 0 }}">
-                            <input type="hidden" id="expenses" value="{{ count($rows) > 0 ? $rows->sum('cash_out') : 0 }}">
+                            <td class="text-end fw-bold">{{ Number::currency($income) }}</td>
+                            <td class="text-end fw-bold">{{ Number::currency($expenses) }}</td>
+                            <input type="hidden" id="income" value="">
+                            <input type="hidden" id="expenses" value="">
                         </tr>
                     </tfoot>
                 </tbody>
@@ -43,7 +93,7 @@
                     <strong>Saldo anterior</strong>
                 </div>
                 <div class="card-body">
-                    {{ "$".number_format($latestBalance, 2) }}
+                    {{ Number::currency($montlyData['balance']) }}
                 </div>
             </div>
         </div>
@@ -56,9 +106,8 @@
                 <div class="card-body">
                     @php
                         $currentBalance = 0;
-                        $currentBalance = count($rows) > 0 ? $rows->sum('cash_in') - $rows->sum('cash_out') : 0;
                     @endphp
-                    {{ "$".number_format($currentBalance, 2) }}
+                    {{ Number::currency($income - $expenses) }}
                 </div>
             </div>
         </div>
@@ -69,8 +118,8 @@
                     <strong>Saldo nuevo</strong>
                 </div>
                 <div class="card-body">
-                    {{ "$".number_format($latestBalance + $currentBalance, 2) }}
-                    <input type="hidden" id="balance" value="{{ ($latestBalance + $currentBalance) }}">
+                    {{ Number::currency($montlyData['balance'] + $income - $expenses) }}
+                    <input type="hidden" id="balance" value="{{ ($montlyData['balance'] + $income - $expenses) }}">
                 </div>
             </div>
         </div>
@@ -108,7 +157,6 @@ btnClose.addEventListener('click', (btn) => {
     ){
         $("#loader").show();
         $.ajax({
-            url: "{{ route('finance.close') }}",
             method: 'POST',
             data: {
                 income:income,
@@ -139,7 +187,6 @@ btnClose.addEventListener('click', (btn) => {
 
 function downloadPDF(){
     $.ajax({
-        url: "{{ route('finance.createBalancePDF') }}",
         method:'POST',
         data:{},
         xhrFields: {

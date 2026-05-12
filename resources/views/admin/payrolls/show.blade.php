@@ -130,19 +130,19 @@
 
 @section('js')
 <script>
-$("addConcept").on('click', function(btn){
-    btn.preventDefault();
+$("addConcept").on('click', function(event){
+    event.preventDefault();
     $('#popup').fadeIn();
     $('#overlay').fadeIn();
 });
 
-$(".removeItem").on('click', function(btn) {
-    let itemId = this.id;
+$(".removeItem").on('click', function(event) {
+    const itemId = this.id;
 
     $.ajax({
-        url: "{{ route('payroll.removeItem') }}",
+        url: "{{ route('api.payrolls-items.destroy', ':id') }}".replace(':id', itemId),
         data: {itemId:itemId},
-        method:'POST',
+        method:'DELETE',
         success: function (response) {
             console.log(response)
         }
@@ -152,9 +152,11 @@ $(".removeItem").on('click', function(btn) {
     });
 });
 
-$('#acceptPopup').click(function() {
+$('#acceptPopup').click(function(event) {
+    event.preventDefault();
+    
     $.ajax({
-        url: "{{ route('payroll.addItem') }}",
+        url: "{{ route('api.payrolls-items.store') }}",
         method: 'POST',
         data: {
             concept: $("#concept").val(),

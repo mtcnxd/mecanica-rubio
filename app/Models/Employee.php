@@ -13,6 +13,7 @@ class Employee extends Model
     protected $table = 'employees';
 
     protected $fillable = [
+        'name',
         'salary',
         'extra',
         'depto',
@@ -21,7 +22,11 @@ class Employee extends Model
         'nss',
         'email',
         'phone',
-        'comments'
+        'comments',
+        'periodicity',
+        'status',
+        'start_date',
+        'end_date',
     ];
 
     protected $casts = [

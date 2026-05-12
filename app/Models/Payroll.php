@@ -27,35 +27,19 @@ class Payroll extends Model
         'created_at',
     ];
 
-    protected $dates = [
-        'paid_date',
-        'start_date',
-        'end_date',
+    protected $casts = [
+        'paid_date' => 'date',
+        'start_date' => 'date',
+        'end_date' => 'date',
     ];
 
     public function employee()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(Employee::class, 'employee_id');
     }    
 
     public function payrollItems()
     {
         return $this->hasMany(PayrollItems::class, 'salary_id');
-    }
-
-    public function getTotalCurrentMonth()
-    {
-        $lastCutDate = Helpers::getLastCutDate();
-
-        $lastBalance = DB::table('salaries')
-            ->select(DB::raw('SUM(total) as total'))
-            ->where('paid_date','>', $lastCutDate)
-            ->first()->total;
-
-        if ($lastBalance){
-            return $lastBalance;
-        }
-
-        return 0.0;
     }
 }

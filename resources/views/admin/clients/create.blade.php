@@ -26,7 +26,7 @@
                     <div class="row mt-3">
                         <div class="col-md-6">
                             <label for="phone">Teléfono</label>
-                            <input type="number" class="form-control" name="phone" id="phone" required>
+                            <input type="number" class="form-control" name="phone" id="phone" required maxlength="10">
                         </div>
                         <div class="col-md-6">
                             <label for="postcode">Código Postal</label>
@@ -128,18 +128,21 @@
 
         if (name.length >= 4){
             $.ajax({
-                url: "{{ route('clients.all', ':name') }}".replace(':name', name),
+                url: "{{ route('api.clients.index') }}",
                 method: "GET",
-                data: {
-                    name: name
-                },
+                data: {name: name},
                 success:function (response){
                     console.log(response);
-                    $("#resultClientsList").empty();
-                    $("#resultClientsList").show();
-                    response.data.forEach( (client) => {
-                        $("#resultClientsList").append("<li>"+ client.name +"</li>");
-                    })
+
+                    if (response.success){
+                        $("#resultClientsList").empty();
+                        $("#resultClientsList").show();
+                        
+                        response.data.forEach( (client) => {
+                            $("#resultClientsList").append("<li>"+ client.name +"</li>");
+                        })
+                    }
+
                 }
             })
         }
@@ -153,7 +156,7 @@
     $("#textPostalCode").on('keyup', function(){
         if (this.value.length > 3) {
             $.ajax({
-                url:"{{ route('clients.postal-code') }}",
+                url:"{{ route('api.postal-codes') }}",
                 method: 'GET',
                 data:{ address:this.value },
                 success: function(response){
@@ -167,41 +170,22 @@
         }
     });
 
-    $("#deleteClient").on('click', function(btn){
-        var client = $(this).data('bsClient');
-
-        $.ajax({
-            url: "{{ route('clients.delete', ':id') }}".replace(':id', client),
-            method: 'DELETE',
-            data: {
-                client:client
-            },
-            success: function(response){
-                showMessageAlert(response);
-            }
-        });
-    });
-
     function ajaxRequest(postalcode){
 
         if (postalcode.length >= 4){
             $.ajax({
-                url: "{{ route('clients.postal-code') }}",
+                url: "{{ route('api.postal-codes') }}",
                 method: 'GET',
-                data:{code:postalcode},
+                data:{postcode:postalcode},
                 success: function(response){
                     console.log(response);
                     
                     $("#address").empty();
 
-                    if (!response.success){
-                        return;
-                    }
-
-                    response.data.forEach(element => {
-                        $("#address").append('<option>' + element.address + '</option>');
-                        $("#city").val(element.city);
-                        $("#state").val(element.state);
+                    response.data.forEach(item => {
+                        $("#address").append('<option value="' + item.address + '">' + item.address + '</option>');
+                        $("#city").val(item.city);
+                        $("#state").val(item.state);
                     });
                 }
             });

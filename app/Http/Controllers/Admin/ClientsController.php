@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Services\ClientService;
 use App\Traits\Messenger;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class ClientsController extends Controller
 {
@@ -14,7 +14,7 @@ class ClientsController extends Controller
 
     public function __construct(
         ClientService $clientService
-    ){
+    ) {
         $this->clientService = $clientService;
     }
 
@@ -22,7 +22,7 @@ class ClientsController extends Controller
     {
         $clients = $this->clientService->all();
 
-        return view ('admin.clients.index', compact('clients'));
+        return view('admin.clients.index', compact('clients'));
     }
 
     public function create()
@@ -33,13 +33,11 @@ class ClientsController extends Controller
     public function store(Request $request)
     {
         try {
-            $client = $this->clientService->create($request->except('_method','_token'));
+            $client = $this->clientService->create($request->except('_method', '_token'));
             session()->flash('success', sprintf('Se guardó correctamente el cliente: %s', $client->name));
-        }
-        
-        catch (\Exception $e){
+        } catch (\Exception $e) {
             session()->flash('warning', sprintf('Ocurrio un error | %s ', $e->getMessage()));
-		}
+        }
 
         return to_route('clients.index');
     }
@@ -61,11 +59,9 @@ class ClientsController extends Controller
     public function update(Request $request, string $id)
     {
         try {
-            $this->clientService->update($id, $request->except('_method','_token'));
-            session()->flash('success', sprintf("El cliente %s se actualizo correctamente", $request->name));
-        }
-        
-        catch (\Exception $err){
+            $this->clientService->update($id, $request->except('_method', '_token'));
+            session()->flash('success', sprintf('El cliente %s se actualizo correctamente', $request->name));
+        } catch (\Exception $err) {
             session()->flash('warning', sprintf('Error al actualizar | %s ', $err->getMessage()));
         }
 
@@ -76,16 +72,16 @@ class ClientsController extends Controller
     {
         try {
             $this->clientService->delete($id);
-    
+
             return Response()->json([
                 'success' => true,
-                'message' => 'El cliente se elimino correctamente'
+                'message' => 'El cliente se elimino correctamente',
             ]);
-        
-        } catch(\Exception $e){
+
+        } catch (\Exception $e) {
             return Response()->json([
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ]);
         }
     }
@@ -97,64 +93,48 @@ class ClientsController extends Controller
 
             return Response()->json([
                 'success' => true,
-                'data' => $client
+                'data' => $client,
             ]);
 
         } catch (\Exception $e) {
             return Response()->json([
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ]);
         }
     }
 
     /**
      * Get all the clients (For WEB and API requests)
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
+     *
+     * @return JsonResponse
      */
     public function getAll(Request $request)
     {
         try {
-            if ($request->name || $request->id){
+            if ($request->name || $request->id) {
                 $clients = $this->clientService->findByCriteria($request->all());
             } else {
                 $clients = $this->clientService->all();
             }
-    
+
             return Response()->json([
                 'success' => true,
-                'data'    => $clients->map(function ($client){
+                'data' => $clients->map(function ($client) {
                     return [
-                        'id'    => $client->id,
-                        'name'  => $client->name,
+                        'id' => $client->id,
+                        'name' => $client->name,
                         'email' => $client->email,
                         'phone' => $client->phone,
                     ];
-                })
+                }),
             ]);
 
         } catch (\Exception $e) {
             return Response()->json([
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ]);
         }
-    }
-
-    public function getPostalCodes(Request $request)
-    {
-        $result = DB::table('postalcodes')
-            ->where(function ($query) use ($request) {
-                $query->where('postalcode', 'like', '%'.$request->postcode.'%')
-                    ->where('address', 'like', '%'.$request->address.'%');
-            })
-            ->get();
-
-        return Response()->json([
-            "success" => false,
-            "request" => $request->all(),
-            "data"    => $result
-        ]);
     }
 }

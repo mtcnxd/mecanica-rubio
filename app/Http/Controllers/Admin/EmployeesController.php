@@ -19,16 +19,11 @@ class EmployeesController extends Controller
 {
     public function __construct(
         private EmployeeService $employeeService
-    ){
-
-    }
+    ){ }
 
     public function index()
     {
-        $employees = Employee::all();
-
-        $employee = Employee::find(3);
-        dd($employee->start_date, $employee->salary, $employee->created_at, $employee->periodicity);
+        $employees = $this->employeeService->getAll();
 
         return view('admin.employees.index', compact('employees'));
     }
@@ -40,39 +35,17 @@ class EmployeesController extends Controller
     }
 
     public function store(Request $request)
-    {        
-        $status = 'Inactivo';
-        if ($request->create == 'on'){
-            $status = 'Activo';
+    {
+        try {
+            $this->employeeService->store($request->all());
+
+            return to_route('employees.index')
+                ->with('success', 'El registro se creo con exito');
+        
+            } catch (Exception $e) {
+            return to_route('employees.index')
+                ->with('warning', 'Error | Message: '. $e->getMessage());
         }
-
-        User::create([
-            "name"       => $request->name,
-            "email"      => $request->email,
-            "phone"      => $request->phone,
-            "password"   => Hash::make($request->phone),
-            "status"     => $status,
-            "rol"        => 'Limit',
-            "comments"   => $request->comments,
-            "created_at" => Carbon::now(),
-            "updated_at" => Carbon::now()
-        ]);
-
-        DB::table('employees')
-            ->insert([
-                "user_id"     => User::where('email', $request->email)->first()->id,
-                "salary"      => $request->salary,
-                "extra"       => $request->extra,
-                "periodicity" => $request->periodicity,
-                "rfc"         => $request->rfc,
-                "status"      => 'Activo',
-                "comments"    => $request->comments,
-                "created_at"  => Carbon::now(),
-                "updated_at"  => Carbon::now()
-            ]);        
-
-        return to_route('employees.index')
-            ->with('message', 'Los datos se guardaron correctamente');
     }
 
     public function show(string $id)

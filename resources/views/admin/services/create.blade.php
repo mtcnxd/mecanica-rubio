@@ -107,9 +107,10 @@ $(document).ready(function() {
         var clientId = $(this).val();
 
         $.ajax({ 
-            url: "{{ route('cars.getCarsByClient', ':clientId') }}".replace(':clientId', clientId),
+            url: "{{ route('api.clients.cars.show', ':client') }}".replace(':client', clientId),
             method: 'GET',
             success:function(response){
+                console.log(response);
                 selectCars.empty();
 
                 if (!response.success){

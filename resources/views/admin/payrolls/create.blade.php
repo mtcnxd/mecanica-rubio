@@ -16,7 +16,7 @@
                                     <select class="form-select" name="employee" id="employee" required>
                                         <option value="0"> - Seleccione empleado - </option>
                                         @foreach ($employees as $employee)
-                                            <option value="{{ $employee->id }}">{{ $employee->user->name }}</option>
+                                            <option value="{{ $employee->id }}">{{ $employee->name }}</option>
                                         @endforeach
                                     </select>
                                     <span class="input-group-text" id="basic-addon2">
@@ -168,7 +168,7 @@
 <script>
 $("#employee").on('change', function(){
     $.ajax({
-        url: "{{ route('employees.getEmployeeById', ':id') }}".replace(':id', $(this).val()),
+        url: "{{ route('api.employees.search', ':id') }}".replace(':id', this.value),
         method: 'GET',
         success: function(response){
             console.log(response);
@@ -185,9 +185,10 @@ $("#openModal").on('click', function(btn){
 });
 
 $(".removeButton").on('click', function(event) {
+    event.preventDefault();
 
     $.ajax({
-        url: "{{ route('finance.payroll.item.destroy', ':id') }}".replace(':id', this.id),
+        url: "{{ route('api.payrolls-items.destroy', ':id') }}".replace(':id', this.id),
         method:'DELETE',
         success: function (response) {
             console.log(response)
@@ -196,32 +197,37 @@ $(".removeButton").on('click', function(event) {
 });
 
 $('#acceptButton').click(function() {
+    const data = {
+        concept: $("#concept").val(),
+        amount: $("#amount").val()
+    };
+
     $.ajax({
-        url: "{{ route('finance.payroll.item.create') }}",
+        url: "{{ route('api.payrolls-items.store') }}",
         method: 'POST',
-        data: {
-            concept: $("#concept").val(),
-            amount: $("#amount").val()
-        },
+        contentType: 'application/json',
+        data: JSON.stringify(data),
         success: function(response){
             console.log(response);
             
             $("#table-body").empty();
-            $.each (response.data, function(i, item){
-                $("#table-body").append(
-                    '<tr>'+
-                        '<td>'+ (i + 1) +'</td>'+
-                        '<td>'+ item.concept +'</td>'+
-                        '<td class="text-end">'+ numeral(item.amount).format('$0,000.00') +'</td>'+
-                        '<td><a href="#" class="removeButton" id="{{ $item->id }}"><x-feathericon-trash-2 class="table-icon"/></a></td>'+
-                    '</tr>'
-                );
-            });
-            
+
+            if (response.data) {
+                $.each (response.data, function(i, item){
+                    $("#table-body").append(
+                        '<tr>'+
+                            '<td>'+ (i + 1) +'</td>'+
+                            '<td>'+ item.concept +'</td>'+
+                            '<td class="text-end">'+ numeral(item.amount).format('$0,000.00') +'</td>'+
+                            '<td><a href="#" class="removeButton" id=""><x-feathericon-trash-2 class="table-icon"/></a></td>'+
+                        '</tr>'
+                    );
+                });
+            }
         }
     })
     .then(() => {
-        // history.go();
+        history.go();
     });
 
     closePopup();

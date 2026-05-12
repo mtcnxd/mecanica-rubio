@@ -1,20 +1,21 @@
 <?php
 
+use App\Http\Controllers\Api\BrandsController;
+use App\Http\Controllers\Api\CalendarController;
+use App\Http\Controllers\Api\CarsController;
+use App\Http\Controllers\Api\ClientsController;
+use App\Http\Controllers\Api\EmployeesController;
+use App\Http\Controllers\Api\EmployeesVacationsController;
+use App\Http\Controllers\Api\ExpensesController;
+use App\Http\Controllers\Api\ExpensesItemsController;
+use App\Http\Controllers\Api\FinanceController;
+use App\Http\Controllers\Api\ModelsController;
+use App\Http\Controllers\Api\PayrollController;
+use App\Http\Controllers\Api\PayrollItemsController;
+use App\Http\Controllers\Api\ServicesController;
+use App\Http\Controllers\Api\ServicesItemsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\QuotesController;
-use App\Http\Controllers\Admin\FinanceController;
-use App\Http\Controllers\Admin\CalendarController;
-
-use App\Http\Controllers\Admin\{
-    CarsController,
-    ClientsController,
-    PayrollController,
-    ExpensesController,
-    ServicesController,
-    EmployeesController,
-    InvestmentsController
-};
 
 /*
 |--------------------------------------------------------------------------
@@ -33,95 +34,106 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 */
 
+// Collections
+Route::get('postal-codes', [ClientsController::class, 'getPostalCodes'])->name('api.postal-codes');
+
 // Clients
-Route::group(['prefix' => 'clients', 'controller' => ClientsController::class], function(){    
-    Route::get('/', 'getAll')->name('clients.all');
-    Route::get('/postal-code', 'getPostalCodes')->name('clients.postal-code');
-    Route::get('/{id}', 'clientDetails')->name('clients.detail')->whereNumber('id');
-    Route::delete('/{id}', 'destroy')->name('clients.delete')->whereNumber('id');
-});
+Route::name('api.')
+    ->group(function () {
+        Route::apiResource('clients', ClientsController::class)->only('index', 'show');
+
+        Route::prefix('{client}/cars')->group(function () {
+            Route::get('/', [CarsController::class, 'show'])->name('clients.cars.show');
+        });
+
+        Route::prefix('{client}/services')->group(function () {
+            Route::get('/', [ServicesController::class, 'show'])->name('clients.services.show');
+        });
+    });
 
 // Cars
-Route::group(['prefix' => 'cars', 'controller' => CarsController::class], function () {
-    Route::get('client/{id}', 'getCarsByClient')->name('cars.getCarsByClient'); 
-    Route::get('models/{brand}', 'getAllModels')->name('cars.getAllModels');
-    
-    Route::post('brand', 'createCarBrand')->name('cars.createCarBrand');
-    Route::post('model', 'createCarModel')->name('cars.createCarModel');
-});
+Route::name('api.')
+    ->group(function () {
+        Route::apiResource('brands', BrandsController::class)->only('index', 'store');
+        Route::apiResource('models', ModelsController::class)->only('index', 'store');
+    });
 
 // Services
-Route::group(['prefix' => 'service', 'controller' => ServicesController::class], function(){
-    Route::get('/', 'getAll')->name('services.all');
+Route::name('api.')
+    ->group(function () {
+        Route::get('{service}/pdf', [ServicesController::class, 'createServicePDF'])->name('services.pdf');
 
-    Route::post('createServicePDF', 'createServicePDF')->name('services.createServicePDF');
-    Route::get('fromQuoteToService', 'fromQuoteToService')->name('services.change.quote');
-    
-    Route::get('item/all', 'itemByCriteria')->name('services.itemByCriteria');
+        Route::name('services')->apiResource('items', ServicesItemsController::class)->only('index', 'store', 'destroy');
 
-    // new methods
-    Route::get('/', 'servicesThisMonth')->name('services.all');
-    Route::get('summary', 'servicesSummary')->name('services.summary');
-    Route::get('/{id}', 'serviceDetails')->name('services.details');
-    
-    Route::group(['prefix' => 'item'], function(){
-        Route::post('/', 'createOrderItem')->name('service.createItem');
-        Route::delete('/{id}', 'deleteOrderItem')->name('service.deleteItem');
+        /*
+        Route::get('/', 'getAll')->name('services.all');
+        Route::get('fromQuoteToService', 'fromQuoteToService')->name('services.change.quote');
+
+        Route::get('/', 'servicesThisMonth')->name('services.all');
+        Route::get('summary', 'servicesSummary')->name('services.summary');
+        Route::get('/{id}', 'serviceDetails')->name('services.details');
+
+        Route::group(['prefix' => 'items', 'controller' => ServicesItemsController::class], function () {
+            Route::get('/', 'itemByCriteria')->name('services.itemByCriteria');
+            Route::post('/', 'createOrderItem')->name('service.createItem');
+            Route::delete('/{id}', 'deleteOrderItem')->name('service.deleteItem');
+        });
+
+        Route::group(['prefix' => 'calendar', 'controller' => CalendarController::class], function () {
+            Route::get('getAll', 'all')->name('calendar.all');
+            Route::get('/', 'getEvent')->name('calendar.getEvent');
+        });
+        */
     });
-});
 
 // Finance
-Route::group(['prefix' => 'finance'], function(){
-    Route::controller(FinanceController::class)->group(function() {
+Route::prefix('finance')
+    ->name('api.')
+    ->group(function () {
+        /*
+        Route::prefix('payroll')->group(function () {
+            Route::post('manageSalaries', 'manageSalaries')->name('manageSalaries');
+
+            Route::post('item', 'createItem')->name('payroll.item.create');
+            Route::delete('item/{id}', 'destroyItem')->name('payroll.item.destroy');
+        });
+    */
+        /*
+    Route::controller(FinanceController::class)->group(function () {
         Route::post('close', 'close')->name('finance.close');
         Route::post('createBalancePDF', 'createBalancePDF')->name('finance.createBalancePDF');
     });
+    */
 
-    Route::controller(ExpensesController::class)->group(function(){
-        Route::post('deleteItem', 'deleteItem')->name('expenses.deleteItem');
-        Route::post('getImageAttached', 'getImageAttached')->name('getImageAttached');
-    });
-    
-    Route::controller(PayrollController::class)->group(function(){
-        Route::post('manageSalaries', 'manageSalaries')->name('manageSalaries');
+    Route::post('expenses-items/image', [ExpensesItemsController::class, 'getImageAttached'])->name('finance.expenses.image');
 
-        Route::post('item', 'createItem')->name('finance.payroll.item.create');
-        Route::delete('item/{id}', 'destroyItem')->name('finance.payroll.item.destroy');
-    });
+    Route::apiResource('expenses-items', ExpensesItemsController::class)->only('store','destroy');
+    Route::apiResource('payrolls', PayrollController::class)->only('update');
+    Route::apiResource('payrolls-items', PayrollItemsController::class)->only('store','update','destroy');
 });
 
 // Employees
-Route::group(['prefix' => 'employees', 'controller' => EmployeesController::class], function () {
-    Route::post('vacations/create', 'createPendindVacationDay')->name('employees.vacations.create');
-    Route::get('vacations/cancell', 'cancellPendingVacationDay')->name('employees.vacations.cancell');
-    Route::delete('delete/{id}', 'destroy')->name('employees.delete');
+Route::name('api.')
+    ->prefix('employees')
+    ->group(function () {
+        Route::apiResource('vacations', EmployeesVacationsController::class)->only('store','destroy');
 
-    // new methods
-    Route::get('/', 'getAll')->name('employees.all'); 
-    Route::get('/{id}', 'getEmployeeById')->name('employees.getEmployeeById'); 
-});
+        Route::get('/{employee}', [EmployeesController::class, 'searchById'])->name('employees.search');
 
-Route::group(['prefix' => 'investments', 'controller' => InvestmentsController::class], function(){
-    Route::get('/','allInvestments')->name('investments.all');
-    Route::get('/{id}','investmentDetails')->name('investments.details');
-    
-    Route::group(['prefix' => 'bitso'], function(){
-        Route::get('trades', 'getActiveTrades')->name('investments.bitso.trades');
-        Route::post('/','store')->name('bitso.store');
-        Route::delete('/{id}','destroy')->name('bitso.destroy');
+        Route::apiResource('employees', EmployeesController::class)->only('index');
     });
-});
 
-Route::group(['prefix' => 'calendar', 'controller' => CalendarController::class], function(){
-    Route::get('getAll','all')->name('calendar.all');
-    Route::get('/','getEvent')->name('calendar.getEvent');
-});
+Route::name('api.')
+    ->prefix('investments')
+    ->group(function () {
+        /*
+        Route::get('/', 'allInvestments')->name('investments.all');
+        Route::get('/{id}', 'investmentDetails')->name('investments.details');
 
-Route::group(['prefix' => 'sensors'], function(){
-    Route::get('time', function () {
-        return response()->json([
-            'date' => now()->format('Y-m-d'),
-            'time' => now()->format('H:i:s'),
-        ]);
+        Route::group(['prefix' => 'bitso'], function () {
+            Route::get('trades', 'getActiveTrades')->name('investments.bitso.trades');
+            Route::post('/', 'store')->name('bitso.store');
+            Route::delete('/{id}', 'destroy')->name('bitso.destroy');
+        });
+        */
     });
-});

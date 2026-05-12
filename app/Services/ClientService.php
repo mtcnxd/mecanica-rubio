@@ -11,19 +11,21 @@ class ClientService
 
     public function all()
     {
-        return Client::where('status', 'Activo')->orderBy('name')->get();
+        return Client::where('status', 'Activo')
+            ->orderBy('name')
+            ->get();
     }
 
-    public function find(string $id) : Client
+    public function find(string $id): Client
     {
         return Client::findOrFail($id);
     }
 
-    public function create(array $data) : Client
+    public function create(array $data): Client
     {
         $client = Client::where('phone', $data['phone'])->first();
 
-        if ($client){
+        if ($client) {
             throw new \Exception('El número de teléfono ya esta registrado');
         }
 
@@ -36,7 +38,7 @@ class ClientService
         return $client;
     }
 
-    public function update(string $id, array $data) : Client
+    public function update(string $id, array $data): Client
     {
         $client = Client::find($id);
 
@@ -48,7 +50,7 @@ class ClientService
     public function delete(string $id)
     {
         $client = Client::find($id);
-        $client->status = 'Eliminado'; 
+        $client->status = 'Eliminado';
         $client->save();
 
         return true;
@@ -56,14 +58,14 @@ class ClientService
 
     public function findByCriteria(array $criteria)
     {
-        return Client::select('id','name','phone','email')
-            ->where(function($query) use ($criteria) {
-                if (isset($criteria['name'])){
-                    $query->where('name','LIKE', '%'.$criteria['name'].'%');
+        return Client::select('id', 'name', 'phone', 'email')
+            ->where(function ($query) use ($criteria) {
+                if (isset($criteria['name'])) {
+                    $query->where('name', 'LIKE', '%'.$criteria['name'].'%');
                 }
-                if(isset($criteria['id'])){
+                if (isset($criteria['id'])) {
                     $query->where('id', $criteria['id']);
                 }
             })->get();
-    }    
+    }
 }

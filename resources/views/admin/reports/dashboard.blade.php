@@ -14,7 +14,7 @@
                             <x-feathericon-tool class="window-title-icon"/>
                         </div>
                         <div class="widget-simple-body fs-3">
-                            {{ $charts->chartCarsReleaseThisMonth()->count() }} autos
+                            {{ $charts->servicesCompletedThisMonth()->count() }} autos
                         </div>
                     </div>
                 </div>
@@ -25,7 +25,7 @@
                             <x-feathericon-dollar-sign class="window-title-icon"/>
                         </div>
                         <div class="widget-simple-body fs-3">
-                            {{ Number::currency($payroll->getTotalCurrentMonth()) }}
+                            {{ Number::currency($charts->getTotalCurrentMonth()) }}
                         </div>
                     </div>
                 </div>
@@ -39,7 +39,7 @@
                             <x-feathericon-dollar-sign class="window-title-icon"/>
                         </div>
                         <div class="widget-simple-body fs-3">
-                            {{ Number::currency($data['income']) }}
+                            {{ Number::currency($charts->labourThisMonth()) }}
                             <div class="fs-6">Autos entregados</div>
                         </div>
                     </div>
@@ -51,7 +51,7 @@
                             <x-feathericon-dollar-sign class="window-title-icon"/>
                         </div>
                         <div class="widget-simple-body fs-3">
-                            {{ Number::currency($expense->getTotalCurrentMonth()) }}
+                            {{ Number::currency($charts->expensesThisMonth()) }}
                         </div>
                     </div>
                 </div>
@@ -82,10 +82,10 @@
                 </div>
                 <div class="widget-simple-body" style="min-height:180px; max-height:250px; overflow-y:overlay;">
                     <table class="table table-sm table-striped">
-                        @foreach ($charts->chartCarsReleaseThisMonth() as $service)
+                        @foreach ($charts->servicesCompletedThisMonth() as $service)
                             <tr>
                                 <td>{{ $service->car->carName() }}</td>
-                                <td>{{ Carbon\Carbon::parse($service->finished_date)->format('j M Y') }}</td>
+                                <td>{{ $service->finished_date->format('j M Y') }}</td>
                                 <td class="text-end">{{ Number::currency($service->total) }}</td>
                                 <td class="text-end">
                                     <x-feathericon-check-circle class="table-icon"/>
@@ -102,7 +102,7 @@
         <div class="col-md-4">
             <x-card_simple_overview_1 
                 title="Tiempo promedio de entrega en los ultimos 6 meses" 
-                message="{{ Number::format($data['avg'], 0) }} Días"
+                message="{{ Number::format(0) }} Días"
             />
         </div>
 
@@ -128,9 +128,9 @@
     var incomes = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: @json($charts->getServicesChart()['labels']),
+            labels: @json($charts->chartServicesByMonth()['labels']),
             datasets: [{
-                data: @json($charts->getServicesChart()['values']),
+                data: @json($charts->chartServicesByMonth()['values']),
                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
                 borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 1
@@ -161,9 +161,9 @@
     var services = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: @json($charts->getIncomeChart()['labels']),
+            labels: @json($charts->chartIncomeByMonth()['labels']),
             datasets: [{
-                data: @json($charts->getIncomeChart()['values']),
+                data: @json($charts->chartIncomeByMonth()['values']),
                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
                 borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 1
