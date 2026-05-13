@@ -98,12 +98,11 @@ Route::prefix('finance')
             Route::delete('item/{id}', 'destroyItem')->name('payroll.item.destroy');
         });
     */
-        /*
+    
     Route::controller(FinanceController::class)->group(function () {
-        Route::post('close', 'close')->name('finance.close');
-        Route::post('createBalancePDF', 'createBalancePDF')->name('finance.createBalancePDF');
+        Route::post('montly-closing', 'montlyCloseing')->name('finance.monthly-closing');
+        // Route::post('createBalancePDF', 'createBalancePDF')->name('finance.createBalancePDF');
     });
-    */
 
     Route::post('expenses-items/image', [ExpensesItemsController::class, 'getImageAttached'])->name('finance.expenses.image');
 

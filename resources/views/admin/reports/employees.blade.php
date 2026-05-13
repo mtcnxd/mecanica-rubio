@@ -7,14 +7,13 @@
     <div class="col-md-6">
         <div class="window-body shadow p-4 rounded mb-4">
             <form action="{{ route('reports.employees') }}" method="GET">
-                @csrf
                 <label class="text-uppercase fs-8 fw-bold mb-2">Seleccione un empleado para los detalles</label>
                 <div class="row">
                     <div class="col-md-10">
                         <select name="employee" id="employee" class="form-select">
                             <option value="">- Seleccione un empleado -</option>
-                            @foreach ( App\Models\Employee::all() as $employeesList)
-                                <option value="{{ $employeesList->user->id }}">{{ $employeesList->user->name }}</option>
+                            @foreach ( App\Models\Employee::all() as $employee)
+                                <option value="{{ $employee->id }}">{{ $employee->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -35,7 +34,7 @@
                         <label class="text-uppercase fs-8 fw-bold">Nombre</label>
                         <div class="input-group">
                             <span class="input-group-text"> #{{ $employee->id }}</span>
-                            <input type="text" class="form-control" value="{{ $employee->user->name }}" disabled>
+                            <input type="text" class="form-control" value="{{ $employee->name }}" disabled>
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -44,7 +43,7 @@
                             <span class="input-group-text">
                                 <x-feathericon-smartphone class="table-icon" style="margin: -2px 5px 2px"/>
                             </span>
-                            <input type="text" class="form-control" value="{{ $employee->user->phone }}" disabled>
+                            <input type="text" class="form-control" value="{{ $employee->phone }}" disabled>
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -53,7 +52,7 @@
                             <span class="input-group-text">
                                 <x-feathericon-mail class="table-icon" style="margin: -2px 5px 2px"/>
                             </span>
-                            <input type="text" class="form-control" value="{{ $employee->user->email }}" disabled>
+                            <input type="text" class="form-control" value="{{ $employee->email }}" disabled>
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -64,11 +63,11 @@
                 <div class="row mt-3">
                     <div class="col-md-3">
                         <label class="text-uppercase fs-8 fw-bold">Ingreso</label>
-                        <input type="text" class="form-control" value="{{ $employee->user->created_at->format('d/m/Y') }}" disabled>
+                        <input type="text" class="form-control" value="{{ $employee->created_at->format('d/m/Y') }}" disabled>
                     </div>
                     <div class="col-md-3">
                         <label class="text-uppercase fs-8 fw-bold">Antigüedad</label>
-                        <input type="text" class="form-control" value="{{ $employee->user->created_at->diffInMonths() }} meses" disabled>
+                        <input type="text" class="form-control" value="{{ $employee->created_at->diffInMonths() }} meses" disabled>
                     </div>
                     <div class="col-md-3">
                         <label class="text-uppercase fs-8 fw-bold">Vacaciones tomadas</label>
@@ -131,7 +130,7 @@
             </div>
         
             <div class="col-md-12">
-                <a href="{{ route('employees.show', $employeesList->user->id) }}" class="btn btn-sm">
+                <a href="{{ route('employees.show', $employee->id) }}" class="btn btn-sm">
                     <x-feathericon-info class="table-icon" style="margin: -2px 5px 2px"/>
                     Más información
                 </a>

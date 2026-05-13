@@ -15,9 +15,7 @@ class CarsController extends Controller
     public function __construct(
         private CarService $carService,
         private ClientService $clientService
-    ){
-        
-    }
+    ){ }
 
     public function index()
     {
@@ -59,7 +57,7 @@ class CarsController extends Controller
         $brands  = array();
         $clients = array();
         
-        $auto = DB::table('autos')
+        $auto = \DB::table('autos')
             ->select('autos.*', 'clients.name')
             ->join('clients', 'autos.client_id','clients.id')
             ->where('autos.id', $id)

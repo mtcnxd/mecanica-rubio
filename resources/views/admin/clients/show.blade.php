@@ -165,7 +165,6 @@
         <div class="row">
             <div class="col-md-12 text-end">
                 <a href="{{ route('clients.index') }}" class="btn btn-sm btn-success">Atras</a>
-                <a href="{{ route('reports.client', $client->id) }}" class="btn btn-sm btn-success">Mas Información</a>
             </div>
         </div>
     </div>

@@ -28,4 +28,9 @@ trait Messenger
             Log::error("ERROR: ". $e->getMessage());
         }
     }
+
+    public function sendNotification(string $message) : void
+    {
+        $this->telegram($message);
+    }
 }

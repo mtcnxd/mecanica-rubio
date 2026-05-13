@@ -7,7 +7,7 @@
     <div class="col-md-6">
         <h6 class="window-title shadow text-uppercase fw-bold"><span class="ms-3">Configuracion</span></h6>
         <div class="window-body shadow p-4">
-            <form action="{{ route('setting.store') }}" method="POST">
+            <form action="{{ route('settings.store') }}" method="POST">
                 <div class="form-container border">
                     <p class="fw-bold">Nuevo indice</p>
                     @csrf
@@ -32,7 +32,7 @@
                 </div>
             </form>
 
-            <form action="{{ route('setting.update') }}" method="POST">
+            <form action="" method="POST">
                 <div class="form-container border">
                     <p class="fw-bold">Editar indice</p>
                     @csrf
