@@ -175,6 +175,7 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+{{-- TODO: Rutas eliminadas temporalmente
 $("#chgService").on('click', function(event){
     if (
         confirm('Desea convertir esta cotizacion en servicio')
@@ -200,6 +201,7 @@ $("#chgService").on('click', function(event){
         })
     }
 });
+--}}
 
 $("#labour").on('change', function(){
     if ($(this).prop('checked')) {
@@ -213,6 +215,7 @@ $("#labour").on('change', function(){
     }
 });
 
+{{-- TODO: Rutas eliminadas temporalmente
 $("#item").on('keyup', function(){
     if (this.value.length >= 3){
         $.ajax({
@@ -231,7 +234,9 @@ $("#item").on('keyup', function(){
         });
     }
 });
+--}}
 
+{{-- TODO: Rutas eliminadas temporalmente
 $("#addItemInvoice").on('click', function(event){
     var service  = $("#service").val();
     var amount   = $("#amount").val();
@@ -264,7 +269,9 @@ $("#addItemInvoice").on('click', function(event){
         }
     });
 });
+--}}
 
+{{-- TODO: Rutas eliminadas temporalmente
 $(".removeItem").on('click', function (event){
     event.preventDefault();
     $.ajax({
@@ -276,6 +283,7 @@ $(".removeItem").on('click', function (event){
         }
     });
 });
+--}}
 function selectItem(element){
     let input = document.getElementById('item');
     input.value = element.textContent;
@@ -292,6 +300,7 @@ function showMessageAlert(message){
     });
 }
 
+{{-- TODO: Rutas eliminadas temporalmente
 function downloadPDF(serviceid){
     $.ajax({
         url: "{{ route('services.createServicePDF') }}",
@@ -318,5 +327,6 @@ function downloadPDF(serviceid){
         },
     });
 }
+--}}
 </script>    
 @endsection
