@@ -60,10 +60,14 @@ Route::name('api.')
 
 // Services
 Route::name('api.')
+    ->prefix('services')
     ->group(function () {
-        Route::get('{service}/pdf', [ServicesController::class, 'createServicePDF'])->name('services.pdf');
+        Route::post('{service}/pdf', [ServicesController::class, 'createServicePDF'])->name('services.pdf');
 
-        Route::name('services')->apiResource('items', ServicesItemsController::class)->only('index', 'store', 'destroy');
+        Route::apiResource('services', ServicesController::class)->only('update');
+
+        Route::name('services')
+            ->apiResource('items', ServicesItemsController::class)->only('index','store','destroy');
 
         /*
         Route::get('/', 'getAll')->name('services.all');

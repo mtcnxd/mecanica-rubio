@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Models\Service;
 use App\Models\ServiceItems;
 use App\Traits\Messenger;
+use App\Events\ServiceCompletedEvent;
+use Illuminate\Support\Number;
 use PDF;
 
 class OrderService
@@ -36,7 +38,7 @@ class OrderService
         $service = Service::create($data);
 
         if (! $isQuote) {
-            $this->telegram(
+            $this->sendNotification(
                 sprintf("<b>Service created:</b> #%s\n\r<b>Client:</b> %s\n\r<b>Car model:</b> %s\n\r<b>Fault:</b> %s",
                     $service->id,
                     $service->client->name,
@@ -55,27 +57,25 @@ class OrderService
 
     }
 
-    public function markAsCompleted(Order $order)
+    public function markAsCompleted(string $id)
     {
-        try {
-            $order->update([
-                'status' => 'Entregado',
-                'finished_date' => now(),
-            ]);
+        $service = Service::find($id);
+        
+        $service->update([
+            'status' => 'Entregado',
+            'finished_date' => now(),
+        ]);
 
-            $this->telegram(
-                sprintf("<b>Service completed:</b> #%s\n\r<b>Car model:</b> %s\n\r<b>Client:</b> %s\n\r<b>Fault:</b> %s\n\r<b>Total:</b> %s", 
-                    $service->id,
-                    $service->car->brand ." ". $service->car->model,
-                    $service->client->name,
-                    $service->fault, 
-                    Number::currency($request->total)
-                )
-            );
+        event(new ServiceCompletedEvent($service));
 
-        } catch (\Exception $err) {
-            throw new Exception($err->getMessage());
-        }
+        $this->sendNotification(
+            sprintf("<b>Service completed:</b> #%s\n\r<b>Car model:</b> %s\n\r<b>Client:</b> %s\n\r<b>Fault:</b> %s\n\r", 
+                $service->id,
+                $service->car->brand ." ". $service->car->model,
+                $service->client->name,
+                $service->fault
+            )
+        );
     }
 
     public function createOrderItem(array $request): ?ServiceItems

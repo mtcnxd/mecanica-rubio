@@ -69,11 +69,11 @@
                         <div class="row mt-3">
                             <div class="col-md-4">
                                 <label>Entrada</label>
-                                <input type="date" class="form-control" name="entry_date" value="{{ !is_null($service->entry_date) ? date('Y-m-d', strtotime($service->entry_date)) : '' }}" {{ $disabled }} />
+                                <input type="date" class="form-control" name="entry_date" value="{{ $service->entry_date->format('Y-m-d') }}" {{ $disabled }} />
                             </div>
                             <div class="col-md-4">
                                 <label>Salida</label>    
-                                <input type="date" class="form-control" name="client" value="{{ $service->finished_date }}" {{ $disabled }} />
+                                <input type="date" class="form-control" name="client" value="{{ isset($service->finished_date) ? $service->finished_date->format('Y-m-d') : '' }}" {{ $disabled }} />
                             </div>
                             <div class="col-md-4">
                                 <label>Días transcurridos</label>
@@ -111,27 +111,29 @@
                             <td class="text-end">{{ Number::currency($item->price) }}</td>
                             <td class="text-end">{{ Number::currency($item->amount * $item->price) }}</td>
                             <td>
-                                <a href="#" class="removeItem" id="{{ $item->id }}">
+                                <a href="#" class="removeItem" data-id="{{ $item->id }}">
                                     <x-feathericon-trash-2 class="table-icon"/>
                                 </a>
                             </td>
                         </tr>
                         @endforeach
                     </tbody>
-                    <tfoot class="border-top">
-                        <tr>
-                            <td colspan="3">
-                                <a href="#" data-bs-toggle="modal" data-bs-target="#createItem" id="addItem">
-                                    Agregar
-                                    <x-feathericon-plus-circle class="table-icon" style="margin: 0 0 2px 5px"/>
-                                </a>
-                            </td>
-                            <td class="text-end fw-bold">
-                                <input type="hidden" name="total" value="{{ $service->serviceItemsTotal() }}">
-                                {{ Number::currency($service->serviceItemsTotal()) }}
-                            </td>
-                        </tr>
-                    </tfoot>
+                    @if ($service->status !== 'Entregado')
+                        <tfoot class="border-top">
+                            <tr>
+                                <td colspan="3">
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#createItem" id="addItem">
+                                        Agregar
+                                        <x-feathericon-plus-circle class="table-icon" style="margin: 0 0 2px 5px"/>
+                                    </a>
+                                </td>
+                                <td class="text-end fw-bold">
+                                    <input type="hidden" name="total" value="{{ $service->serviceItemsTotal() }}">
+                                    {{ Number::currency($service->serviceItemsTotal()) }}
+                                </td>
+                            </tr>
+                        </tfoot>
+                    @endif
                 </table>
             </div>
 
@@ -143,14 +145,17 @@
                     </div>
                     <div class="col-md-3">
                         <label>Estatus</label>
-                        <select class="form-select" name="status" {{ $disabled }}>
-                            <option {{$service->status == "Cancelado" ? 'selected' : '' }}>Cancelado</option>
-                            <option {{$service->status == 'Pendiente' ? 'selected' : '' }}>Pendiente</option>
-                            <option {{$service->status == 'Esperando cliente' ? 'selected' : '' }}>Esperando cliente</option>
-                            <option {{$service->status == 'Esperando refaccion' ? 'selected' : '' }}>Esperando refaccion</option>
-                            <option {{$service->status == 'Finalizado' ? 'selected' : '' }} value="Finalizado">Finalizado [NO PAGADO]</option>
-                            <option {{$service->status == 'Entregado' ? 'selected' : '' }} value="Entregado">Entregado [PAGADO]</option>
-                        </select>
+                        @if ($service->status == 'Entregado')
+                            <input type="text" class="form-control" name="status" value="{{ $service->status }}" disabled>
+                        @else
+                            <select class="form-select" name="status" {{ $disabled }}>
+                                <option {{$service->status == "Cancelado" ? 'selected' : '' }}>Cancelado</option>
+                                <option {{$service->status == 'Pendiente' ? 'selected' : '' }}>Pendiente</option>
+                                <option {{$service->status == 'Esperando cliente' ? 'selected' : '' }}>Esperando cliente</option>
+                                <option {{$service->status == 'Esperando refaccion' ? 'selected' : '' }}>Esperando refaccion</option>
+                                <option {{$service->status == 'Finalizado' ? 'selected' : '' }} value="Finalizado">Finalizado [NO PAGADO]</option>
+                            </select>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -158,20 +163,20 @@
             <div class="row">
                 <div class="col-md-12 text-end">
                     <a href="{{ route('services.index') }}" class="btn btn-sm btn-secondary">Atras</a>
-                    <a href="#" class="btn btn-sm btn-secondary" onclick="downloadPDF({{ $service->id }})">
-                        <x-feathericon-printer class="table-icon" style="margin: -2px 5px 2px"/>
-                        Imprimir
-                    </a>
-                    <a href="{{ route('sendEmailInvoice', $service->id) }}" class="btn btn-sm btn-secondary">
-                        <x-feathericon-share-2 class="table-icon" style="margin: -2px 5px 2px"/>
-                        Enviar
-                    </a>
+                    <button class="btn btn-sm btn-secondary" id="getPdf">
+                        <x-feathericon-file-text class="table-icon" style="margin: -2px 5px 2px"/>
+                        Descargar
+                    </button>
                     @if ($service->status != 'Entregado')
                         <button type="submit" class="btn btn-sm btn-success">
                             <x-feathericon-save class="table-icon" style="margin: -2px 5px 2px"/>
                             Guardar
                         </button>
-                    @endif                    
+                        <button class="btn btn-sm btn-success" id="setAsCompleted">
+                            <x-feathericon-check-circle class="table-icon" style="margin: -2px 5px 2px"/>
+                            Entregado
+                        </button>
+                    @endif
                 </div>
             </div>
 
@@ -238,126 +243,13 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-$("#labour").on('change', function(){
-    if ($(this).prop('checked')) {
-        $("#amount").attr('disabled','disabled');
-        $("#item").attr('disabled','disabled');
-        $("#supplier").attr('disabled','disabled');
-    } else {
-        $("#amount").removeAttr('disabled');
-        $("#item").removeAttr('disabled');
-        $("#supplier").removeAttr('disabled');
+    const rutes = {
+        serviceItemsStore : "{{ route('api.services.items.store') }}",
+        serviceItemsIndex : "{{ route('api.services.items.index') }}",
+        serviceItemsDestroy : "{{ route('api.services.items.destroy', ':id') }}",
+        serviceUpdate : "{{ route('api.services.update', ':id') }}",
+        servicePdf : "{{ route('api.services.pdf', ':id') }}"
     }
-});
-
-$("#item").on('keyup', function(){
-    if (this.value.length >= 3){
-        $.ajax({
-            url: "{{ route('api.services.items.index') }}",
-            method: "GET",
-            data: {
-                criteria:this.value
-            },
-            success:function (response){
-                console.log(response);
-
-                $("#resultListItems").empty();
-                $("#resultListItems").show();
-                response.data.forEach( (item) => {
-                    $("#resultListItems").append("<li onClick='selectItem(this)'>"+ item +"</li>");
-                })
-            }
-        });
-    }
-});
-
-$("#addItemInvoice").on('click', function(event){
-    var serviceItem = {
-        service:    $("#service").val(),
-        amount:     $("#amount").val(),
-        item:       $("#item").val(),
-        supplier:   $("#supplier").val(),
-        price:      $("#price").val(),
-        labour:     $("#labour").prop('checked')
-    }
-
-    if (serviceItem.item.length < 3 && !serviceItem.labour) {
-        $("#item").focus();
-        return;
-    }
-
-    $.ajax({
-        url:"{{ route('api.services.items.store') }}",
-        method:'POST',
-        contentType: "application/json;", 
-        dataType: "json",
-        data: JSON.stringify(serviceItem),
-        success:function(response){
-            console.log(response);
-
-            if (response.success = false){
-                showMessageAlert(response.message);
-                return;
-            }
-
-            location.reload();
-        }
-    });
-});
-
-$(".removeItem").on('click', function (event){
-    event.preventDefault();
-    $.ajax({
-        url:"{{ route('api.services.items.destroy', ':id') }}".replace(':id', this.id),
-        method:'DELETE',
-        success:function(response){
-            //console.log(response);
-            showMessageAlert(response.message);
-        }
-    });
-});
-
-function selectItem(element){
-    let input = document.getElementById('item');
-    input.value = element.textContent;
-    $("#resultListItems").hide();
-}
-
-function showMessageAlert(message){
-    Swal.fire({
-        text: message,
-        icon: 'success',
-        confirmButtonText: 'Aceptar'
-    }).then(() => {
-        history.go();
-    });
-}
-
-function downloadPDF(serviceid){
-    $.ajax({
-        url: "{{ route('api.services.pdf', ':service') }}".replace(':service', serviceid),
-        method:'GET',
-        data:{
-            serviceid:serviceid
-        },
-        xhrFields: {
-            responseType: 'blob' // Recibir respuesta como un Blob
-        },
-        success: function (response){
-            console.log(response)
-
-            const blob = new Blob([response], { type: 'application/pdf' });
-            const url = window.URL.createObjectURL(blob);
-
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'invoice.pdf';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);
-        },
-    });
-}
-</script>    
+</script>
+<script src="{{ asset('js/services.js')}}"></script>
 @endsection
