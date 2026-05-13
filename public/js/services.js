@@ -94,8 +94,8 @@ class ServiceItems {
 
     getPdf(serviceid) {
         $.ajax({
-            url: this.rutes.servicePdf.replace(':service', serviceid),
-            method: 'GET',
+            url: this.rutes.servicePdf.replace(':id', serviceid),
+            method: 'POST',
             data: {
                 serviceid: serviceid
             },
@@ -173,4 +173,11 @@ $(".removeItem").on('click', function (event) {
     const id = $(this).data('id');
 
     serviceItems.removeItem(id);
+});
+
+$("#getPdf").on('click', function (event) {
+    event.preventDefault();
+    const serviceId = $("#service").val();
+
+    serviceItems.getPdf(serviceId);
 });

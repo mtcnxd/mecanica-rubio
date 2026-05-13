@@ -62,7 +62,7 @@ Route::name('api.')
 Route::name('api.')
     ->prefix('services')
     ->group(function () {
-        Route::get('{service}/pdf', [ServicesController::class, 'createServicePDF'])->name('pdf');
+        Route::post('{service}/pdf', [ServicesController::class, 'createServicePDF'])->name('services.pdf');
 
         Route::apiResource('services', ServicesController::class)->only('update');
 

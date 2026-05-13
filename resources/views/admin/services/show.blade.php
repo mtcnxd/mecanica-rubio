@@ -163,14 +163,10 @@
             <div class="row">
                 <div class="col-md-12 text-end">
                     <a href="{{ route('services.index') }}" class="btn btn-sm btn-secondary">Atras</a>
-                    <a href="#" class="btn btn-sm btn-secondary" onclick="downloadPDF({{ $service->id }})">
-                        <x-feathericon-printer class="table-icon" style="margin: -2px 5px 2px"/>
-                        Imprimir
-                    </a>
-                    <a href="#" class="btn btn-sm btn-secondary">
-                        <x-feathericon-share-2 class="table-icon" style="margin: -2px 5px 2px"/>
-                        Enviar
-                    </a>
+                    <button class="btn btn-sm btn-secondary" id="getPdf">
+                        <x-feathericon-file-text class="table-icon" style="margin: -2px 5px 2px"/>
+                        Descargar
+                    </button>
                     @if ($service->status != 'Entregado')
                         <button type="submit" class="btn btn-sm btn-success">
                             <x-feathericon-save class="table-icon" style="margin: -2px 5px 2px"/>
@@ -251,7 +247,8 @@
         serviceItemsStore : "{{ route('api.services.items.store') }}",
         serviceItemsIndex : "{{ route('api.services.items.index') }}",
         serviceItemsDestroy : "{{ route('api.services.items.destroy', ':id') }}",
-        serviceUpdate : "{{ route('api.services.update', ':id') }}"
+        serviceUpdate : "{{ route('api.services.update', ':id') }}",
+        servicePdf : "{{ route('api.services.pdf', ':id') }}"
     }
 </script>
 <script src="{{ asset('js/services.js')}}"></script>
