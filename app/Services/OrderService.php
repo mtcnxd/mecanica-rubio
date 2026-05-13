@@ -51,12 +51,6 @@ class OrderService
         return $service;
     }
 
-    public function updateOrder($data, $id)
-    {
-        $service = Service::find($id);
-
-    }
-
     public function markAsCompleted(string $id)
     {
         $service = Service::find($id);
