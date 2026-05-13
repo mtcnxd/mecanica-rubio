@@ -166,7 +166,7 @@
         /*
         if (postcode.length >= 4){
             $.ajax({
-                url: "{{ route('clients.postal-codes', ':postcode') }}".replace(':postcode', postcode),
+                url: "{{ route('api.postal-codes', ':postcode') }}".replace(':postcode', postcode),
                 method: 'GET',
                 contentType: 'application/json',
                 dataType: 'json',
