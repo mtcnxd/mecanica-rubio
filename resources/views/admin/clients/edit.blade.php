@@ -87,7 +87,6 @@
 
                 <div class="row mt-3">
                     <div class="col-md-12 text-end">
-                        <a href="#" class="btn btn-sm btn-danger" id="deleteClient" data-bs-client="{{ isset($client) ? $client->id : ''}}">Eliminar</a>
                         <a href="{{ route('clients.index') }}" class="btn btn-sm btn-secondary">Cancelar</a>
                         <button type="submit" class="btn btn-sm btn-success">
                             <x-feathericon-save class="table-icon" style="margin: -2px 5px 2px"/>
@@ -134,24 +133,6 @@
 @section('js')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    $("#deleteClient").on('click', function(event){
-        event.preventDefault();
-        var client = $(this).data('bsClient');
-
-        console.log(client);
-
-        $.ajax({
-            method: 'DELETE',
-            data: {
-                client:client
-            },
-            success: function(response){
-                console.log(response);
-                showMessageAlert(response.message);
-            }
-        });
-    });
-
     $("#postcode").on('focus', function(){
         ajaxRequest(this);
     })
