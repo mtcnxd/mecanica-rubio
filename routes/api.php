@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\BitsoController;
 use App\Http\Controllers\Api\BrandsController;
 use App\Http\Controllers\Api\CalendarController;
 use App\Http\Controllers\Api\CarsController;
@@ -98,6 +99,8 @@ Route::name('api.')
 Route::name('api.')
     ->prefix('investments')
     ->group(function () {
+        Route::apiResource('bitso', BitsoController::class)->only('store','destroy');
+
         /*
         Route::get('/', 'allInvestments')->name('investments.all');
         Route::get('/{id}', 'investmentDetails')->name('investments.details');

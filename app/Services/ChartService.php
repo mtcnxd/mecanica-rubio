@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Service;
 use App\Models\Payroll;
 use App\Models\Expense;
+use App\Models\Investment;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -181,7 +182,7 @@ class ChartService
         $values = [];
         foreach ($investments as $investment) {
             $labels[] = $investment->name;
-            $values[] = number_format($investment->investmentPercentage(), 1);
+            $values[] = [];
         }
 
         return [

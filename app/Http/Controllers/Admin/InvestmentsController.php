@@ -9,6 +9,7 @@ use App\Models\Charts;
 use App\Models\Investment;
 use App\Models\InvestmentData;
 use App\Services\InvestmentService;
+use App\Services\ChartService;
 use App\Traits\Messenger;
 use Carbon\Carbon;
 
@@ -18,16 +19,17 @@ use Illuminate\Support\Number;
 class InvestmentsController extends Controller
 {
     use Messenger;
-    protected $investmentService;
 
-    public function __construct()
-    {
-        $this->investmentService = new InvestmentService();
-    }
+    public function __construct(
+        private InvestmentService $investmentService,
+        private ChartService $chartsService
+    ) { }
 
-    public function index(Charts $charts)
+    public function index()
     {
         try {
+            $charts = $this->chartsService;
+
             $results = [
                 'investments' => $this->investmentService->getActiveInvestments(),
                 'bitso' => $this->investmentService->getActiveTrades(),
