@@ -188,7 +188,7 @@
         /*
         if (this.value.length > 3) {
             $.ajax({
-                url:"{{ route('client.postal-codes') }}",
+                url:"{{ route('api.postal-codes') }}",
                 method: 'GET',
                 data:{
                     address:this.value
