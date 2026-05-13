@@ -83,7 +83,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'isAdmin'], function () {
     Route::resource('users', UsersController::class)->except('destroy');
     Route::resource('payroll', PayrollController::class)->except('edit', 'destroy');
     Route::resource('expenses', ExpensesController::class)->except('destroy');
-    Route::resource('settings', SettingsController::class)->only('index');
+    Route::resource('settings', SettingsController::class)->only('index','store');
     Route::resource('profile', ProfileController::class)->only('index');
 
     Route::get('dashboard', [ChartsController::class, 'index'])->name('dashboard.index');
