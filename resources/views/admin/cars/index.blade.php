@@ -13,7 +13,6 @@
                     <th>Comentario</th>
                     <th>VIN</th>
                     <th>Año</th>
-                    <th class="text-end">&nbsp;</th>
                 </tr>
             </thead>
             <tbody>
@@ -33,11 +32,6 @@
                     <td>{{ $car->comments }}</td>
                     <td>{{ $car->serie }}</td>
                     <td>{{ $car->year }}</td>
-                    <td class="text-end">
-                        <a href="{{ route('cars.edit', $car->id) }}">
-                            <x-feathericon-edit class="table-icon"/>
-                        </a>
-                    </td>
                 </tr>
             @endforeach
             </tbody>
@@ -61,7 +55,7 @@
         lengthMenu: [10, 50, 100],
         columnDefs: [{
             orderable: false,
-            target: [2,3,4,5]
+            target: [2,3,4]
         }]            
     });
 </script>

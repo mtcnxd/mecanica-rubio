@@ -175,7 +175,7 @@ $(document).ready(function() {
         const premium = $("#premium").prop('checked');
         
         $.ajax({
-            url: "{{ route('createBrand') }}",
+            url: "createBrand",
             method: 'POST',
             data:{
                 brand:brand,
@@ -202,7 +202,7 @@ $(document).ready(function() {
         $("#model_brand").val(brand);
 
         $.ajax({
-            url:"{{ route('loadModels') }}",
+            url:"loadModels",
             method: 'POST',
             data:{
                 brand:brand
@@ -222,7 +222,7 @@ $(document).ready(function() {
         const model = $("#model").val();
 
         $.ajax ({
-            url: "{{ route('createModel') }}",
+            url: "createModel",
             method:'POST',
             data: {
                 brand:brand,

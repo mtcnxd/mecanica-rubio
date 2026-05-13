@@ -77,8 +77,6 @@
                             <td colspan="3"></td>
                             <td class="text-end fw-bold">{{ Number::currency($income) }}</td>
                             <td class="text-end fw-bold">{{ Number::currency($expenses) }}</td>
-                            <input type="hidden" id="income" value="">
-                            <input type="hidden" id="expenses" value="">
                         </tr>
                     </tfoot>
                 </tbody>
@@ -119,7 +117,6 @@
                 </div>
                 <div class="card-body">
                     {{ Number::currency($montlyData['balance'] + $income - $expenses) }}
-                    <input type="hidden" id="balance" value="{{ ($montlyData['balance'] + $income - $expenses) }}">
                 </div>
             </div>
         </div>
@@ -127,14 +124,21 @@
     <hr style="color: var(--orange-800);">
     <div class="row col-md-4">
         <div class="col">
-            <a class="btn btn-sm btn-outline-success" id="print" onclick="downloadPDF()">
-                Imprimir
-            </a>
-
-            <a class="btn btn-sm btn-outline-success" id="closeMonth">
-                Conciliar mes actual
-            </a>
-            <img src="{{ asset('/images/image.gif') }}" width="20px" height="20px" style="display:none;" class="ms-2" id="loader">
+            <form action="">
+                <input type="hidden" id="income" value="{{ $income }}">
+                <input type="hidden" id="expenses" value="{{ $expenses }}">
+                <input type="hidden" id="balance" value="{{ ($montlyData['balance'] + $income - $expenses) }}">
+            
+                <button class="btn btn-sm btn-outline-success" id="print" onclick="downloadPDF()">
+                    Imprimir
+                </button>
+    
+                <button class="btn btn-sm btn-outline-success" id="closeMonth">
+                    Conciliar mes actual
+                </button>
+                
+                <img src="{{ asset('/images/image.gif') }}" width="20px" height="20px" style="display:none;" class="ms-2" id="loader">
+            </form>
         </div>
     </div>    
 </div>
@@ -144,35 +148,41 @@
 @section('js')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-const btnClose = document.getElementById('closeMonth');
 
-btnClose.addEventListener('click', (btn) => {
-    btn.preventDefault();
-    let income   = document.getElementById('income').value;
-    let expenses = document.getElementById('expenses').value;
-    let balance  = document.getElementById('balance').value;
+$('#closeMonth').on('click', function (event) {
+    event.preventDefault();
 
-    if (
-        confirm('¿Confirmas que deseas cerrar el mes actual?')
-    ){
+    const data = {
+        'income': document.getElementById('income').value,
+        'expense': document.getElementById('expenses').value,
+        'balance': document.getElementById('balance').value,
+    }
+
+    if (confirm('¿Confirmas que deseas cerrar el mes actual?'))
+    {
         $("#loader").show();
         $.ajax({
+            url: "{{ route('api.finance.monthly-closing') }}",
+            contentType:"application/json",
             method: 'POST',
-            data: {
-                income:income,
-                expenses:expenses,
-                balance:balance
-            },
+            dataType: 'json',
+            data: JSON.stringify(data),
             success: function(response){
-                if (response.success){
+                console.log(response);
+
+                if (!response.success){
                     Swal.fire({
                         text: response.message,
-                        icon: 'success',
+                        icon: 'error',
                         confirmButtonText: 'Aceptar'
-                    }).then(() => {
-                        history.go();
                     });
                 }
+
+                Swal.fire({
+                    text: response.message,
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar'
+                });
             },
             error:function(error){
                 console.log(error);

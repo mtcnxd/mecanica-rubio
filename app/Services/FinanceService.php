@@ -8,9 +8,14 @@ use App\Models\Expense;
 use App\Models\Payroll;
 use App\Models\Service;
 use App\Models\ServiceItems;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Traits\Messenger;
 
 class FinanceService
 {
+    use Messenger;
+
     public function updatePayroll(string $id, array $data) : bool
     {
         try {
@@ -69,5 +74,22 @@ class FinanceService
             'payrolls' => $payrolls,
             'balance' => $latestCloseDate->balance ?? 0,
         ];
+    }
+
+    public function storeMontlyClosing(array $data) : bool
+    {
+        DB::table('montly_balances')->insert([
+            'income' => $data['income'],
+            'expenses' => $data['expense'],
+            'balance' => $data['balance'],
+            'comments' => 'Cierre de mes exitoso',
+            'close_date' => now(),
+        ]);
+
+        $this->sendNotification(
+            sprintf("Cierre de mes completado exitosamente con un balance de %s", $data['balance'])
+        );
+
+        return $data;
     }
 }
