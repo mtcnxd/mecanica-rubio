@@ -141,7 +141,6 @@
         console.log(client);
 
         $.ajax({
-            url: "{{ route('clients.delete', ':id') }}".replace(':id', client),
             method: 'DELETE',
             data: {
                 client:client
