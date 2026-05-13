@@ -111,7 +111,7 @@
                             <td class="text-end">{{ Number::currency($item->price) }}</td>
                             <td class="text-end">{{ Number::currency($item->amount * $item->price) }}</td>
                             <td>
-                                <a href="#" class="removeItem" id="{{ $item->id }}">
+                                <a href="#" class="removeItem" data-id="{{ $item->id }}">
                                     <x-feathericon-trash-2 class="table-icon"/>
                                 </a>
                             </td>
@@ -162,7 +162,7 @@
                         <x-feathericon-printer class="table-icon" style="margin: -2px 5px 2px"/>
                         Imprimir
                     </a>
-                    <a href="{{ route('sendEmailInvoice', $service->id) }}" class="btn btn-sm btn-secondary">
+                    <a href="#" class="btn btn-sm btn-secondary">
                         <x-feathericon-share-2 class="table-icon" style="margin: -2px 5px 2px"/>
                         Enviar
                     </a>
@@ -171,7 +171,11 @@
                             <x-feathericon-save class="table-icon" style="margin: -2px 5px 2px"/>
                             Guardar
                         </button>
-                    @endif                    
+                        <button class="btn btn-sm btn-success" id="setAsCompleted">
+                            <x-feathericon-check-circle class="table-icon" style="margin: -2px 5px 2px"/>
+                            Entregado
+                        </button>
+                    @endif
                 </div>
             </div>
 
@@ -238,126 +242,11 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-$("#labour").on('change', function(){
-    if ($(this).prop('checked')) {
-        $("#amount").attr('disabled','disabled');
-        $("#item").attr('disabled','disabled');
-        $("#supplier").attr('disabled','disabled');
-    } else {
-        $("#amount").removeAttr('disabled');
-        $("#item").removeAttr('disabled');
-        $("#supplier").removeAttr('disabled');
+    const rutes = {
+        serviceItemsStore : "{{ route('api.services.items.store') }}",
+        serviceItemsIndex : "{{ route('api.services.items.index') }}",
+        serviceItemsDestroy : "{{ route('api.services.items.destroy', ':id') }}"
     }
-});
-
-$("#item").on('keyup', function(){
-    if (this.value.length >= 3){
-        $.ajax({
-            url: "{{ route('api.services.items.index') }}",
-            method: "GET",
-            data: {
-                criteria:this.value
-            },
-            success:function (response){
-                console.log(response);
-
-                $("#resultListItems").empty();
-                $("#resultListItems").show();
-                response.data.forEach( (item) => {
-                    $("#resultListItems").append("<li onClick='selectItem(this)'>"+ item +"</li>");
-                })
-            }
-        });
-    }
-});
-
-$("#addItemInvoice").on('click', function(event){
-    var serviceItem = {
-        service:    $("#service").val(),
-        amount:     $("#amount").val(),
-        item:       $("#item").val(),
-        supplier:   $("#supplier").val(),
-        price:      $("#price").val(),
-        labour:     $("#labour").prop('checked')
-    }
-
-    if (serviceItem.item.length < 3 && !serviceItem.labour) {
-        $("#item").focus();
-        return;
-    }
-
-    $.ajax({
-        url:"{{ route('api.services.items.store') }}",
-        method:'POST',
-        contentType: "application/json;", 
-        dataType: "json",
-        data: JSON.stringify(serviceItem),
-        success:function(response){
-            console.log(response);
-
-            if (response.success = false){
-                showMessageAlert(response.message);
-                return;
-            }
-
-            location.reload();
-        }
-    });
-});
-
-$(".removeItem").on('click', function (event){
-    event.preventDefault();
-    $.ajax({
-        url:"{{ route('api.services.items.destroy', ':id') }}".replace(':id', this.id),
-        method:'DELETE',
-        success:function(response){
-            //console.log(response);
-            showMessageAlert(response.message);
-        }
-    });
-});
-
-function selectItem(element){
-    let input = document.getElementById('item');
-    input.value = element.textContent;
-    $("#resultListItems").hide();
-}
-
-function showMessageAlert(message){
-    Swal.fire({
-        text: message,
-        icon: 'success',
-        confirmButtonText: 'Aceptar'
-    }).then(() => {
-        history.go();
-    });
-}
-
-function downloadPDF(serviceid){
-    $.ajax({
-        url: "{{ route('api.services.pdf', ':service') }}".replace(':service', serviceid),
-        method:'GET',
-        data:{
-            serviceid:serviceid
-        },
-        xhrFields: {
-            responseType: 'blob' // Recibir respuesta como un Blob
-        },
-        success: function (response){
-            console.log(response)
-
-            const blob = new Blob([response], { type: 'application/pdf' });
-            const url = window.URL.createObjectURL(blob);
-
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'invoice.pdf';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);
-        },
-    });
-}
-</script>    
+</script>
+<script src="{{ asset('js/services.js')}}"></script>
 @endsection
