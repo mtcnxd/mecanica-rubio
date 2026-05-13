@@ -70,8 +70,26 @@ class ServiceItems {
     }
 
     setAsCompleted(serviceId) {
-        console.log(`Hola mundo ${serviceId}`);
-        this.showMessageAlert("El servicio se ha marcado como pagado");
+        $.ajax({
+            url: this.rutes.serviceUpdate.replace(':id', serviceId),
+            method: 'PATCH',
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify({ id: serviceId }),
+            success: (response) => {
+                console.log(response);
+
+                if (response.success == false) {
+                    serviceItems.showMessageAlert(response.message, 'error');
+                    return;
+                }
+
+                this.showMessageAlert(response.message)
+                    .then(() => {
+                        location.reload();
+                    });
+            }
+        });
     }
 
     getPdf(serviceid) {

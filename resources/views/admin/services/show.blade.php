@@ -69,11 +69,11 @@
                         <div class="row mt-3">
                             <div class="col-md-4">
                                 <label>Entrada</label>
-                                <input type="date" class="form-control" name="entry_date" value="{{ !is_null($service->entry_date) ? date('Y-m-d', strtotime($service->entry_date)) : '' }}" {{ $disabled }} />
+                                <input type="date" class="form-control" name="entry_date" value="{{ $service->entry_date->format('Y-m-d') }}" {{ $disabled }} />
                             </div>
                             <div class="col-md-4">
                                 <label>Salida</label>    
-                                <input type="date" class="form-control" name="client" value="{{ $service->finished_date }}" {{ $disabled }} />
+                                <input type="date" class="form-control" name="client" value="{{ isset($service->finished_date) ? $service->finished_date->format('Y-m-d') : '' }}" {{ $disabled }} />
                             </div>
                             <div class="col-md-4">
                                 <label>Días transcurridos</label>
@@ -118,20 +118,22 @@
                         </tr>
                         @endforeach
                     </tbody>
-                    <tfoot class="border-top">
-                        <tr>
-                            <td colspan="3">
-                                <a href="#" data-bs-toggle="modal" data-bs-target="#createItem" id="addItem">
-                                    Agregar
-                                    <x-feathericon-plus-circle class="table-icon" style="margin: 0 0 2px 5px"/>
-                                </a>
-                            </td>
-                            <td class="text-end fw-bold">
-                                <input type="hidden" name="total" value="{{ $service->serviceItemsTotal() }}">
-                                {{ Number::currency($service->serviceItemsTotal()) }}
-                            </td>
-                        </tr>
-                    </tfoot>
+                    @if ($service->status !== 'Entregado')
+                        <tfoot class="border-top">
+                            <tr>
+                                <td colspan="3">
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#createItem" id="addItem">
+                                        Agregar
+                                        <x-feathericon-plus-circle class="table-icon" style="margin: 0 0 2px 5px"/>
+                                    </a>
+                                </td>
+                                <td class="text-end fw-bold">
+                                    <input type="hidden" name="total" value="{{ $service->serviceItemsTotal() }}">
+                                    {{ Number::currency($service->serviceItemsTotal()) }}
+                                </td>
+                            </tr>
+                        </tfoot>
+                    @endif
                 </table>
             </div>
 
@@ -143,14 +145,17 @@
                     </div>
                     <div class="col-md-3">
                         <label>Estatus</label>
-                        <select class="form-select" name="status" {{ $disabled }}>
-                            <option {{$service->status == "Cancelado" ? 'selected' : '' }}>Cancelado</option>
-                            <option {{$service->status == 'Pendiente' ? 'selected' : '' }}>Pendiente</option>
-                            <option {{$service->status == 'Esperando cliente' ? 'selected' : '' }}>Esperando cliente</option>
-                            <option {{$service->status == 'Esperando refaccion' ? 'selected' : '' }}>Esperando refaccion</option>
-                            <option {{$service->status == 'Finalizado' ? 'selected' : '' }} value="Finalizado">Finalizado [NO PAGADO]</option>
-                            <option {{$service->status == 'Entregado' ? 'selected' : '' }} value="Entregado">Entregado [PAGADO]</option>
-                        </select>
+                        @if ($service->status == 'Entregado')
+                            <input type="text" class="form-control" name="status" value="{{ $service->status }}" disabled>
+                        @else
+                            <select class="form-select" name="status" {{ $disabled }}>
+                                <option {{$service->status == "Cancelado" ? 'selected' : '' }}>Cancelado</option>
+                                <option {{$service->status == 'Pendiente' ? 'selected' : '' }}>Pendiente</option>
+                                <option {{$service->status == 'Esperando cliente' ? 'selected' : '' }}>Esperando cliente</option>
+                                <option {{$service->status == 'Esperando refaccion' ? 'selected' : '' }}>Esperando refaccion</option>
+                                <option {{$service->status == 'Finalizado' ? 'selected' : '' }} value="Finalizado">Finalizado [NO PAGADO]</option>
+                            </select>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -245,7 +250,8 @@
     const rutes = {
         serviceItemsStore : "{{ route('api.services.items.store') }}",
         serviceItemsIndex : "{{ route('api.services.items.index') }}",
-        serviceItemsDestroy : "{{ route('api.services.items.destroy', ':id') }}"
+        serviceItemsDestroy : "{{ route('api.services.items.destroy', ':id') }}",
+        serviceUpdate : "{{ route('api.services.update', ':id') }}"
     }
 </script>
 <script src="{{ asset('js/services.js')}}"></script>

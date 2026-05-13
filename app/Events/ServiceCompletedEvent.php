@@ -12,7 +12,7 @@ use Illuminate\Queue\SerializesModels;
 use App\Models\Service;
 use App\Traits\Messenger;
 
-class ServiceCompleted
+class ServiceCompletedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels, Messenger;
 
