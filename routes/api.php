@@ -66,12 +66,13 @@ Route::name('api.')
 Route::name('api.')
     ->prefix('services')
     ->group(function () {
+        Route::post('/', [ServicesController::class, 'update'])->name('services.update');
+        
         Route::post('{service}/pdf', [ServicesController::class, 'createServicePDF'])->name('services.pdf');
 
-        Route::post('/', [ServicesController::class, 'update'])->name('services.update');
-
-        Route::name('services')
-            ->apiResource('items', ServicesItemsController::class)->only('index','store','destroy');
+        Route::name('services')->group(function(){
+            Route::apiResource('items', ServicesItemsController::class)->only('index','store','destroy');
+        });
     });
 
 // Finance
@@ -97,8 +98,8 @@ Route::name('api.')
     ->prefix('employees')
     ->group(function () {
         Route::get('/', [EmployeesController::class, 'index'])->name('employees.index');
-        Route::apiResource('vacations', EmployeesVacationsController::class)->only('store','destroy');
         Route::get('/{employee}', [EmployeesController::class, 'searchById'])->name('employees.search');
+        Route::apiResource('vacations', EmployeesVacationsController::class)->only('store','destroy');
     });
 
 

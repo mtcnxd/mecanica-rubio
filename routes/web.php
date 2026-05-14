@@ -70,34 +70,40 @@ Route::group(['controller' => LoginController::class], function () {
 
     Route::post('/register', 'store')->name('user.store');
     Route::post('/admin', 'login');
-    Route::post('/admin/logout', 'logout')->name('logout');
+    Route::post('/admin/logout', 'logout')->name('admin.logout');
 });
 
-Route::group(['prefix' => 'admin', 'middleware' => 'isAdmin'], function () {
+Route::prefix('admin')
+    ->name('admin.')
+    ->middleware('isAdmin')
+    ->group(function () {
+        Route::get('dashboard', [ChartsController::class, 'index'])->name('dashboard.index');
 
-    Route::resource('clients', ClientsController::class)->except('destroy');
-    Route::resource('cars', CarsController::class)->except('destroy','edit','update');
-    Route::resource('services', ServicesController::class)->except('destroy');
-    Route::resource('employees', EmployeesController::class)->except('destroy','update');
-    Route::resource('quotes', QuotesController::class)->only('index', 'show');
-    Route::resource('users', UsersController::class)->except('destroy');
-    Route::resource('payroll', PayrollController::class)->except('edit', 'destroy');
-    Route::resource('expenses', ExpensesController::class)->except('destroy');
-    Route::resource('settings', SettingsController::class)->only('index','store');
-    Route::resource('profile', ProfileController::class)->only('index');
+        Route::resource('clients', ClientsController::class)->except('destroy');
+        Route::resource('cars', CarsController::class)->except('destroy','edit','update');
+        Route::resource('services', ServicesController::class)->except('destroy');
+        Route::resource('employees', EmployeesController::class)->except('destroy','update');
+        Route::resource('users', UsersController::class)->except('destroy');
+        Route::resource('settings', SettingsController::class)->only('index','store');
+        Route::resource('profile', ProfileController::class)->only('index');
 
-    Route::get('dashboard', [ChartsController::class, 'index'])->name('dashboard.index');
+        Route::name('finance.')->prefix('finance')->group(function(){
+            Route::get('incomes', [FinanceController::class, 'index'])->name('incomes');
+        
+            Route::get('monthly-closing', [FinanceController::class, 'montlyClosing'])->name('monthly-closing');
 
-    Route::get('calendar', [CalendarController::class, 'index'])->name('calendar.index');
+            Route::resource('expenses', ExpensesController::class)->except('destroy');
+            Route::resource('payroll', PayrollController::class)->except('edit', 'destroy');
+        });
 
-    Route::group(['prefix' => 'finance', 'controller' => FinanceController::class], function () {
-        Route::get('incomes', 'index')->name('finance.incomes');
-        Route::get('monthly-closing', 'montlyClosing')->name('finance.monthly-closing');
+        Route::name('services.')->prefix('services')->group(function(){
+            Route::get('calendar', [CalendarController::class, 'index'])->name('calendar.index');
+            Route::resource('quotes', QuotesController::class)->only('index', 'show');
+        });
+
+        Route::group(['prefix' => 'investments', 'controller' => InvestmentsController::class], function () {
+            Route::get('/', 'index')->name('investments.index');
+            Route::post('update', 'update')->name('investments.update');
+            Route::get('instrument/{investment_id}', 'show')->name('investments.show');
+        });
     });
-
-    Route::group(['prefix' => 'investments', 'controller' => InvestmentsController::class], function () {
-        Route::get('/', 'index')->name('investments.index');
-        Route::post('update', 'update')->name('investments.update');
-        Route::get('instrument/{investment_id}', 'show')->name('investments.show');
-    });
-});
