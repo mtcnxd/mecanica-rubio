@@ -47,10 +47,10 @@ class PayrollController extends Controller
     {
         try {
             $this->payrollService->createPayroll($request->all());
-            return to_route('payroll.index')->with('success', 'El registro se guardo correctamente');
+            return to_route('admin.finance.payroll.index')->with('success', 'El registro se guardo correctamente');
 
         } catch (\Exception $e) {
-            return to_route('payroll.index')->with('warning', 'Error | Message: '. $e->getMessage());
+            return to_route('admin.finance.payroll.index')->with('warning', 'Error | Message: '. $e->getMessage());
         }
     }
 

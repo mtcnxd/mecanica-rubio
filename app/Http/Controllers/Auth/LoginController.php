@@ -53,11 +53,11 @@ class LoginController extends Controller
             switch (Auth::user()->rol){
                 case 'Admin':
                     $request->session()->regenerate();
-                    return redirect()->route('services.index');
+                    return redirect()->route('admin.service.index');
 
                 case 'Limit':
                     $request->session()->regenerate();
-                    return redirect()->route('services.index');
+                    return redirect()->route('admin.service.index');
                 
                 case 'Client':
                     $request->session()->regenerate();

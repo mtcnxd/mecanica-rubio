@@ -22,7 +22,7 @@
                     <tr>
                         <td>{{ $employee->id }}</td>
                         <td>
-                            <a href="{{ route('employees.show', $employee->id) }}">
+                            <a href="{{ route('admin.employee.show', $employee->id) }}">
                                 {{ $employee->name }}
                             </a>
                         </td>
@@ -31,7 +31,7 @@
                         <td>{{ $employee->status }}</td>
                         <td>{{ \Carbon\Carbon::parse($employee->start_date)->format('d M Y') }}</td>
                         <td>
-                            <a href="{{ route('employees.edit', $employee->id) }}">
+                            <a href="{{ route('admin.employee.edit', $employee->id) }}">
                                 <x-feathericon-edit class="table-icon"/>
                             </a>
                         </td>
@@ -41,7 +41,7 @@
         </table>
         
         <div class="m-3" style="display: flex; justify-content: space-between;">
-            <a href="{{ route('employees.create') }}" class="btn btn-sm btn-success">
+            <a href="{{ route('admin.employee.create') }}" class="btn btn-sm btn-success">
                 Crear nuevo
             </a>
 

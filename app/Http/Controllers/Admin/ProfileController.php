@@ -19,7 +19,7 @@ class ProfileController extends Controller
     public function update(Request $request)
     {
         if ($request->password != $request->repeat){
-            return to_route('profile.index')->with('message', 'Las contraseñas introducidas no coinciden');
+            return to_route('admin.profile.index')->with('message', 'Las contraseñas introducidas no coinciden');
         }
 
         $result = DB::table('users')->where('id', $request->id)->update([
@@ -28,6 +28,6 @@ class ProfileController extends Controller
             "password" => Hash::make($request->password)
         ]);
 
-        return to_route('profile.index')->with('message', 'Los datos se actualizaron correctamente');
+        return to_route('admin.profile.index')->with('message', 'Los datos se actualizaron correctamente');
     }
 }

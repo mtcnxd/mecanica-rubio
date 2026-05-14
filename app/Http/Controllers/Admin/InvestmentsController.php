@@ -50,7 +50,7 @@ class InvestmentsController extends Controller
             session()->flash('warning', sprintf("FAILED UPDATE DATA | MESSAGE: %s", $er->getMessage()));
         }
 
-        return to_route('investments.index');
+        return to_route('investment.index');
     }
 
     public function show(int $investmentId)

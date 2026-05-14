@@ -101,7 +101,7 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>
-                                            <a href="{{ route('payroll.show', $result->id) }}">{{ $result->type }} #{{ $result->id }}</a>
+                                            <a href="{{ route('admin.finance.payroll.show', $result->id) }}">{{ $result->type }} #{{ $result->id }}</a>
                                         </td>
                                         <td class="text-center">{{ Carbon\Carbon::parse($result->paid_date)->format('d M Y') }}</td>
                                         <td class="text-center">
@@ -130,7 +130,7 @@
             </div>
         
             <div class="col-md-12">
-                <a href="{{ route('employees.show', $employee->id) }}" class="btn btn-sm">
+                <a href="{{ route('admin.employee.show', $employee->id) }}" class="btn btn-sm">
                     <x-feathericon-info class="table-icon" style="margin: -2px 5px 2px"/>
                     Más información
                 </a>

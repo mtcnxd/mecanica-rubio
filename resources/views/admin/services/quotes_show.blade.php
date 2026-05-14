@@ -194,7 +194,7 @@ $("#chgService").on('click', function(event){
                         confirmButtonText: 'Aceptar'
                     })
                     .then(() => {
-                        location.replace("{{ route('services.show', $service->id) }}");
+                        location.replace("{{ route('admin.service.show', $service->id) }}");
                     })
                 }
             }

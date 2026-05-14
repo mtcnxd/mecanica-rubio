@@ -57,8 +57,8 @@ Route::name('api.')
     ->prefix('car')
     ->group(function () {
         Route::name('car.')->group(function(){
-            Route::apiResource('brands', BrandsController::class)->only('index', 'store');
-            Route::apiResource('models', ModelsController::class)->only('index', 'store');
+            Route::apiResource('brand', BrandsController::class)->only('index', 'store');
+            Route::apiResource('model', ModelsController::class)->only('index', 'store');
         });
     });
 

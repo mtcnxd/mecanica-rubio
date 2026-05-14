@@ -162,7 +162,7 @@
 
             <div class="row">
                 <div class="col-md-12 text-end">
-                    <a href="{{ route('services.index') }}" class="btn btn-sm btn-secondary">Atras</a>
+                    <a href="{{ route('admin.service.index') }}" class="btn btn-sm btn-secondary">Atras</a>
                     <button class="btn btn-sm btn-secondary" id="getPdf">
                         <x-feathericon-file-text class="table-icon" style="margin: -2px 5px 2px"/>
                         Descargar

@@ -56,7 +56,7 @@ Route::get('/auth/callback', function () {
 
         Auth::login($user);
 
-        return to_route('services.index');
+        return to_route('admin.services.index');
     } catch (Exception $err) {
         print_r(
             sprintf('Error: %s', $err->getMessage())
