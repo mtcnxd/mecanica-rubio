@@ -19,6 +19,7 @@ class ServicesItemsController extends Controller
     public function index(Request $request)
     {
         try {
+            $serviveItems = [];
             $serviceItems = ServiceItems::findByCriteria($request->criteria);
 
             return response()->json([

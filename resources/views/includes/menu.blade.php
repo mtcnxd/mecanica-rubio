@@ -36,7 +36,7 @@
 					<a class="a-item" href="{{ route('admin.service.index') }}">Servicios</a>
 					<ul class="submenu">
 						<li><a class="a-item" href="{{ route('admin.service.create') }}">Nueva cotización</a></li>
-						<li><a class="a-item" href="{{ route('admin.service.quotes.index') }}">Cotizaciones</a></li>
+						<li><a class="a-item" href="{{ route('admin.service.quote.index') }}">Cotizaciones</a></li>
 						<li><a class="a-item" href="{{ route('admin.service.create') }}">Nuevo Servicio</a></li>
 						<li><a class="a-item" href="{{ route('admin.service.index') }}">Servicios</a></li>
 					</ul>

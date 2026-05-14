@@ -72,7 +72,7 @@ Route::name('api.')
         
         Route::post('{service}/pdf', [ServicesController::class, 'createServicePDF'])->name('service.pdf');
 
-        Route::name('service-item.')->group(function(){
+        Route::prefix('service-item')->name('service.')->group(function(){
             Route::apiResource('service-item', ServicesItemsController::class)->only('index','store','destroy');
         });
     });

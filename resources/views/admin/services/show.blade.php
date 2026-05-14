@@ -10,7 +10,7 @@
     @include('includes.alert')
     <h6 class="window-title shadow text-uppercase fw-bold"><span class="ms-3">Servicio</span></h6>
     <div class="window-body shadow p-4">
-        <form action="{{ route('services.update', $service) }}" method="POST">
+        <form action="{{ route('admin.service.update', $service) }}" method="POST">
             <div class="form-container border mb-0">
                 @csrf
                 @method('PATCH')
@@ -244,11 +244,11 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     const rutes = {
-        serviceItemsStore : "{{ route('api.services.items.store') }}",
-        serviceItemsIndex : "{{ route('api.services.items.index') }}",
-        serviceItemsDestroy : "{{ route('api.services.items.destroy', ':id') }}",
-        serviceUpdate : "{{ route('api.services.update', ':id') }}",
-        servicePdf : "{{ route('api.services.pdf', ':id') }}"
+        serviceItemsStore : "{{ route('api.service.service-item.store') }}",
+        serviceItemsIndex : "{{ route('api.service.service-item.index') }}",
+        serviceItemsDestroy : "{{ route('api.service.service-item.destroy', ':id') }}",
+        serviceUpdate : "{{ route('api.service.update', ':id') }}",
+        servicePdf : "{{ route('api.service.pdf', ':id') }}"
     }
 </script>
 <script src="{{ asset('js/services.js')}}"></script>

@@ -6,7 +6,7 @@
     <div class="col-md-7">
         <h6 class="window-title shadow text-uppercase fw-bold"><span class="ms-3">Buscar cliente</span></h6>
         <div class="window-body shadow p-4">
-            <form action="{{ route('clients.update', $client->id) }}" method="POST">
+            <form action="{{ route('admin.client.update', $client->id) }}" method="POST">
                 <div class="form-container border">
                     @method('PUT')
                     @csrf
@@ -87,7 +87,6 @@
 
                 <div class="row mt-3">
                     <div class="col-md-12 text-end">
-                        <a href="#" class="btn btn-sm btn-danger" id="deleteClient" data-bs-client="{{ isset($client) ? $client->id : ''}}">Eliminar</a>
                         <a href="{{ route('admin.client.index') }}" class="btn btn-sm btn-secondary">Cancelar</a>
                         <button type="submit" class="btn btn-sm btn-success">
                             <x-feathericon-save class="table-icon" style="margin: -2px 5px 2px"/>
@@ -134,25 +133,6 @@
 @section('js')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    $("#deleteClient").on('click', function(event){
-        event.preventDefault();
-        var client = $(this).data('bsClient');
-
-        console.log(client);
-
-        $.ajax({
-            url: "{{ route('clients.delete', ':id') }}".replace(':id', client),
-            method: 'DELETE',
-            data: {
-                client:client
-            },
-            success: function(response){
-                console.log(response);
-                showMessageAlert(response.message);
-            }
-        });
-    });
-
     $("#postcode").on('focus', function(){
         ajaxRequest(this);
     })
@@ -163,47 +143,10 @@
 
     function ajaxRequest(postcode) {
         console.log(postcode);
-
-        /*
-        if (postcode.length >= 4){
-            $.ajax({
-                url: "{{ route('clients.postal-codes', ':postcode') }}".replace(':postcode', postcode),
-                method: 'GET',
-                contentType: 'application/json',
-                dataType: 'json',
-                data: JSON.stringify({postcode:postcode}),
-                success: function(response){
-                    $("#address").empty();
-                    response.data.forEach(element => {
-                        $("#address").append('<option>' + element.address + '</option>');
-                        $("#city").val(element.city);
-                        $("#state").val(element.state);
-                    });
-                }
-            });
-        }
-        */
     }
 
     $("#textPostalCode").on('keyup', function(event){
-        /*
-        if (this.value.length > 3) {
-            $.ajax({
-                url:"{{ route('client.postal-codes') }}",
-                method: 'GET',
-                data:{
-                    address:this.value
-                },
-                success: function(response){
-                    $("#resultList").empty();
-                    $("#resultList").show();
-                    response.data.forEach((pc) => {
-                        $("#resultList").append("<li onClick='selectItem("+ pc.postalcode +")'>" + pc.postalcode +" - "+ pc.address + "</a></li>");
-                    })
-                }
-            });
-        }
-        */
+
     });
 
     function selectItem(postalcode){

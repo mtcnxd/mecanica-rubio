@@ -105,7 +105,7 @@
                             <th>Año</th>
                             <th>Servicio/Fallo</th>
                             <th></th>
-                            <th class="text-center">Status</th>
+                            <th>Status</th>
                             <th class="text-end">Fecha servicio</th>
                         </thead>
                         <tbody>
@@ -121,7 +121,9 @@
                                         <span class="badge text-bg-warning">Cotización</span>
                                     @endif
                                 </td>
-                                <td class="text-center"><span class="badge text-bg-success">{{ $service->status }}</span></td>
+                                <td>
+                                    <x-badge-simple status="{{ $service->status }}"></x-badge-simple>
+                                </td>
                                 <td class="text-end">
                                     <span title="{{ $service->created_at->diffForHumans() }}">
                                         {{ $service->created_at->format('j M Y') }}
