@@ -5,7 +5,7 @@
     @include('includes.alert')
     <h6 class="window-title shadow text-uppercase fw-bold"><span class="ms-3">Listado de nominas</span></h6>
     <div class="window-body shadow py-4">
-        <form action="{{ route('payroll.index') }}" method="POST">
+        <form action="{{ route('admin.finance.payroll.index') }}" method="POST">
             @csrf
             @method('GET')
 
@@ -58,7 +58,7 @@
                     <td>{{ $salary->id }}</td>
                     <td>
                         <span class="material-symbols-outlined" style="position:relative; top:5px; margin-right:6px;">badge</span>
-                        <a href="{{ route('payroll.show', $salary->id) }}">
+                        <a href="{{ route('admin.finance.payroll.show', $salary->id) }}">
                             {{ $salary->employee->name }}
                         </a>
                     </td>
@@ -131,7 +131,7 @@ $(".dropdown-item").on('click', function(){
     }
     
     $.ajax({
-        url: "{{ route('api.payrolls.update', ':payroll') }}".replace(':payroll', data.id),
+        url: "{{ route('api.finance.payroll.update', ':payroll') }}".replace(':payroll', data.id),
         method: 'PATCH',
         dataType: 'JSON',
         contentType: 'application/json',

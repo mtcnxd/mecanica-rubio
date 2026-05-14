@@ -4,7 +4,7 @@
 <div class="window-container">
     @include('includes.alert')
     <x-window_main title="Nominas" class="p-4">
-        <form action="{{ route('payroll.store') }}" method="POST">
+        <form action="{{ route('admin.finance.payroll.store') }}" method="POST">
             <div class="form-container border mb-0">
                 @csrf
                 <div class="row pt-0 p-4 pb-0">
@@ -115,7 +115,7 @@
             
             <div class="row mt-3">
                 <div class="col-md-12 text-end">
-                    <a href="{{ route('payroll.index') }}" class="btn btn-sm btn-secondary">Cancelar</a>
+                    <a href="{{ route('admin.finance.payroll.index') }}" class="btn btn-sm btn-secondary">Cancelar</a>
                     <button type="submit" class="btn btn-sm btn-success">
                         <x-feathericon-save class="table-icon" style="margin: -2px 5px 2px"/>
                         Guardar
@@ -168,7 +168,7 @@
 <script>
 $("#employee").on('change', function(){
     $.ajax({
-        url: "{{ route('api.employees.search', ':id') }}".replace(':id', this.value),
+        url: "{{ route('api.employee.search', ':id') }}".replace(':id', this.value),
         method: 'GET',
         success: function(response){
             console.log(response);
@@ -188,7 +188,7 @@ $(".removeButton").on('click', function(event) {
     event.preventDefault();
 
     $.ajax({
-        url: "{{ route('api.payrolls-items.destroy', ':id') }}".replace(':id', this.id),
+        url: "{{ route('api.finance.payroll-item.destroy', ':id') }}".replace(':id', this.id),
         method:'DELETE',
         success: function (response) {
             console.log(response)
@@ -203,7 +203,7 @@ $('#acceptButton').click(function() {
     };
 
     $.ajax({
-        url: "{{ route('api.payrolls-items.store') }}",
+        url: "{{ route('api.finance.payroll-item.store') }}",
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(data),

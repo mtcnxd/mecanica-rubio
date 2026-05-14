@@ -137,7 +137,7 @@
                     @foreach ($car->services as $service)
                         <tr>
                             <td>
-                                <a href="{{ route('services.show', $service->id) }}">{{ Str::limit($service->fault, 80) }}</a>
+                                <a href="{{ route('admin.service.show', $service->id) }}">{{ Str::limit($service->fault, 80) }}</a>
                             </td>
                             <td>{{ $service->service_type }}</td>
                             <td>{{ $service->entry_date?->format('d-m-Y') }}</td>
@@ -168,7 +168,7 @@
                     @endif
                 </div>
                 <div class="col-md-6 mt-3 text-end">
-                    <a href="{{ route('cars.index') }}" class="btn btn-sm btn-success">Atras</a>
+                    <a href="{{ route('admin.car.index') }}" class="btn btn-sm btn-success">Atras</a>
                 </div>
             </div>
 

@@ -50,7 +50,7 @@ class ServicesController extends Controller
             session()->flash('warning', "Error al crear servicio | Message: {$err->getMessage()}");
         }
 
-        return to_route('services.index');
+        return to_route('service.index');
     }
 
     public function show(string $id)
@@ -105,6 +105,6 @@ class ServicesController extends Controller
             }
         }
 
-        return to_route('services.index');
+        return to_route('service.index');
     }
 }

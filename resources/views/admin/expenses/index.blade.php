@@ -54,7 +54,7 @@
                             {{ $expense->id }}
                         </td>
                         <td>
-                            <a href="{{ route('expenses.edit', $expense->id) }}">{{ $expense->name }}</a>
+                            <a href="{{ route('admin.finance.expense.edit', $expense->id) }}">{{ $expense->name }}</a>
                         </td>
                         <td>{{ Str::limit($expense->description, 60) }}</td>
                         <td>
@@ -130,7 +130,7 @@ const table = new DataTable('#expenses', {
 function removeItemExpense(buttonPressed){
     if (confirm('¿Confirma querer eliminar el registro?')){
         $.ajax({
-            url:"{{ route('api.expenses-items.destroy',':id') }}".replace(':id', buttonPressed),
+            url:"{{ route('api.finance.expense-item.destroy',':id') }}".replace(':id', buttonPressed),
             method: 'DELETE',
             success:function(response){
                 console.log('remove image');
@@ -143,7 +143,7 @@ function removeItemExpense(buttonPressed){
 
 function getImageAttached(buttonPressed){
     $.ajax({
-        url:"{{ route('api.finance.expenses.image') }}",
+        url:"{{ route('api.finance.expense-item.image') }}",
         method: 'POST',
         data: {
             id:buttonPressed

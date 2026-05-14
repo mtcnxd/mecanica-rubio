@@ -27,7 +27,7 @@
                         <td> #{{ $row->id }}</td>
                         <td>{{ Carbon\Carbon::parse($row->finished_date)->format('j M Y') }}</td>
                         <td>
-                            <a href="{{ route('services.show', $row->id) }}">{{ $row->car->carName() }}</a>
+                            <a href="{{ route('admin.service.show', $row->id) }}">{{ $row->car->carName() }}</a>
                         </td>
                         <td class="text-end">{{ Number::currency($row->serviceItems->where('item','Servicio (mano de obra)')->first()->price) }}</td>
                         <td class="text-end">{{ Number::currency($row->total) }}</td>

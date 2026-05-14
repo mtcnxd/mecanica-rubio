@@ -19,7 +19,7 @@
             @foreach ($clients as $client)
                 <tr>
                     <td>
-                        <a href="{{ route('clients.show', $client->id) }}">
+                        <a href="{{ route('admin.client.show', $client->id) }}">
                             <span class="table-icon-round">{{ Str::limit($client->name,1, null) }}</span>
                             {{ $client->name }}
                         </a>
@@ -35,7 +35,7 @@
                         @endif
                     </td>
                     <td class="text-end">
-                        <a href="{{ route('clients.edit', $client->id) }}">
+                        <a href="{{ route('admin.client.edit', $client->id) }}">
                             <x-feathericon-edit class="table-icon"/>
                         </a>
                     </td>

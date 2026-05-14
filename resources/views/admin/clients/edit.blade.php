@@ -88,7 +88,7 @@
                 <div class="row mt-3">
                     <div class="col-md-12 text-end">
                         <a href="#" class="btn btn-sm btn-danger" id="deleteClient" data-bs-client="{{ isset($client) ? $client->id : ''}}">Eliminar</a>
-                        <a href="{{ route('clients.index') }}" class="btn btn-sm btn-secondary">Cancelar</a>
+                        <a href="{{ route('admin.client.index') }}" class="btn btn-sm btn-secondary">Cancelar</a>
                         <button type="submit" class="btn btn-sm btn-success">
                             <x-feathericon-save class="table-icon" style="margin: -2px 5px 2px"/>
                             Guardar
@@ -218,7 +218,7 @@
             icon: 'success',
             confirmButtonText: 'Aceptar'
         }).then(() => {
-            location.replace("{{ route('clients.index') }}");
+            location.replace("{{ route('admin.client.index') }}");
         });
     }
 </script>
