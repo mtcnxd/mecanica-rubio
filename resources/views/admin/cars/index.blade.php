@@ -9,7 +9,7 @@
             <thead>
                 <tr>
                     <th>Automovil</th>
-                    <th>Año</th>
+                    <th>Modelo</th>
                     <th>VIN</th>
                     <th>Cliente</th>
                     <th>Comentario</th>

@@ -76,6 +76,18 @@ a:hover {
     padding-top: 5px;
 }
 
+.table-icon-square {
+    background-color: var(--amber-700);
+    width: 40px;
+    height: 24px;
+    border-radius: 10px;
+    display: inline-block;
+    text-align: center;
+    margin-right: 10px;
+    color: #fff;
+    padding-top: 1px;
+}
+
 #resultList {
     padding-left: 0px;
     border: solid 2px var(--blue-gray-100);
