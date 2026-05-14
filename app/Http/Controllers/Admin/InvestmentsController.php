@@ -2,38 +2,30 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Contracts\Notificator;
 use App\Http\Controllers\Controller;
-use App\Models\BitsoData;
-use App\Models\Charts;
-use App\Models\Investment;
-use App\Models\InvestmentData;
-use App\Services\InvestmentService;
-use App\Services\ChartService;
 use App\Traits\Messenger;
-use Carbon\Carbon;
-
+use App\Services\ChartService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Number;
+use App\Services\Investments\CryptoService;
+use App\Services\Investments\FiatService;
 
 class InvestmentsController extends Controller
 {
     use Messenger;
 
     public function __construct(
-        private InvestmentService $investmentService,
-        private ChartService $chartsService
-    ) { }
+        private ChartService $chartsService,
+        private CryptoService $cryptoService,
+        private FiatService $fiatService
+    ){}
 
     public function index()
     {
         try {
             $charts = $this->chartsService;
-
-            $results = [
-                'investments' => $this->investmentService->getActiveInvestments(),
-                'bitso' => $this->investmentService->getActiveTrades(),
-            ];
+            $results['crypto'] = $this->cryptoService->allActive();
+            $results['other']  = $this->fiatService->allActive();
 
             return view('admin.investments.index', compact('results', 'charts'));
         }
@@ -43,19 +35,6 @@ class InvestmentsController extends Controller
 
             return view('error-page');
         }
-    }
-
-    public function store(Request $request)
-    {
-        $request->merge([
-            'purchase_value' => ($request->amount * $request->price)
-        ]);
-
-        BitsoData::create($request->except('_token'));
-
-        session()->flash('success', sprintf('Registro almacenado con exito!'));
-
-        return to_route('investments.index');
     }
 
     public function update(Request $request)
@@ -78,67 +57,5 @@ class InvestmentsController extends Controller
         $investment = $this->investmentService->investmentDetails($investmentId);
         
         return view('admin.investments.show', compact('investment'));
-    }
-
-    public function destroy(Request $request)
-    {
-        try {
-            $this->investmentService->delete($request->id);
-
-            return response()->json([
-                'success' => true,
-                'type'    => 'success',
-                'message' => sprintf('The element with id: %s was deleted successfully', $request->id)
-            ]);
-        }
-
-        catch (\Exception $er){
-            return response()->json([
-                'success' => false,
-                'type'    => 'error',
-                'message' => $er->getMessage()
-            ]);
-        }
-    }
-
-    public function investmentDetails(Request $request)
-    {
-        try {
-            $investment = $this->investmentService->investmentDetails($request->id);
-
-            return response()->json([
-                'success' => true,
-                'data' => $investment
-            ]);
-
-        } catch (\Exception $e){
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage()
-            ]);
-        }
-    }
-
-    public function allInvestments()
-    {
-        try {
-            $balances = $this->investmentService->getTotal();
-    
-            return response()->json([
-                'total' => Number::currency($balances['total']),
-                'items' => $balances['items']
-            ]);
-        
-        } catch (\Exception $e){
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage()
-            ]);
-        }
-    }
-
-    public function getActiveTrades()
-    {
-        return $this->investmentService->getActiveTrades();
     }
 }

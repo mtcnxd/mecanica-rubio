@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Services\Bitso\BitsoClient;
 
 /**
  * @property string $book
@@ -37,15 +36,12 @@ class BitsoData extends Model
         'active'
     ];
 
+    /*
     protected $appends = [
         'current_value'
     ];
-
-    public function __construct()
-    {
-        $this->bitso = new BitsoClient();
-    }
-
+    */
+    /*
     public function getCurrentValueAttribute()
     {
         $currenBookPrice = $this->getTickerByBook($this->book);
@@ -88,4 +84,5 @@ class BitsoData extends Model
         $currentPrice = $this->getTickerByBook($book)->last;
         return ($currentPrice * $this->amount);
     }
+    */
 }

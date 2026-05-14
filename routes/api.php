@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Api\BitsoController;
 use App\Http\Controllers\Api\BrandsController;
 use App\Http\Controllers\Api\CalendarController;
 use App\Http\Controllers\Api\CarsController;
@@ -10,6 +9,7 @@ use App\Http\Controllers\Api\EmployeesVacationsController;
 use App\Http\Controllers\Api\ExpensesController;
 use App\Http\Controllers\Api\ExpensesItemsController;
 use App\Http\Controllers\Api\FinanceController;
+use App\Http\Controllers\Api\InvestmentsController;
 use App\Http\Controllers\Api\ModelsController;
 use App\Http\Controllers\Api\PayrollController;
 use App\Http\Controllers\Api\PayrollItemsController;
@@ -99,7 +99,7 @@ Route::name('api.')
 Route::name('api.')
     ->prefix('investments')
     ->group(function () {
-        Route::apiResource('bitso', BitsoController::class)->only('store','destroy');
+        Route::apiResource('bitso', InvestmentsController::class)->only('store','destroy');
 
         /*
         Route::get('/', 'allInvestments')->name('investments.all');

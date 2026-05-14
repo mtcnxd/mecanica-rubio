@@ -1,0 +1,76 @@
+class Investment {
+
+    constructor(rutes) {
+        this.rutes = rutes;
+    }
+
+    addItem(data) {
+        console.log(data);
+
+        $.ajax({
+            url: this.rutes.investmentItemStore,
+            method: 'POST',
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            success: (response) => {
+                console.log(response);
+                if (!response.success) {
+                    this.showSwalMessage(response.message, 'error');
+                }
+
+                this.showSwalMessage(response.message);
+
+            },
+            error: (response) => {
+                console.log(response);
+            }
+        })
+    }
+
+    removeItem(id) {
+        $.ajax({
+            url: this.rutes.investmentItemRemove.replace(':id', id),
+            method: 'DELETE',
+            contentType: 'application/json',
+            data: JSON.stringify({ id: id }),
+            success: (response) => {
+                console.log(response);
+
+                this.showSwalMessage(response.message, response.type)
+                    .then(() => {
+                        location.reload();
+                    });
+            }
+        });
+    }
+
+    showSwalMessage(message, type = 'success') {
+        return Swal.fire({
+            text: message,
+            icon: type,
+            confirmButtonText: 'Aceptar',
+        })
+    }
+
+}
+
+const investment = new Investment(rutes);
+
+$("#insert-item").on('click', function (event) {
+    event.preventDefault();
+
+    const data = {
+        book: $("#book").val(),
+        amount: $("#amount").val(),
+        price: $("#price").val(),
+    };
+
+    investment.addItem(data);
+});
+
+$(".cancell-trade").on('click', function (event) {
+    event.preventDefault();
+
+    const id = $(this).data('id');
+    investment.removeItem(id);
+});

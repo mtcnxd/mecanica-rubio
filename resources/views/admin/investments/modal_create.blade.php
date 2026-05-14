@@ -11,7 +11,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <label class="mb-2">Book</label>
-                            <select id="parity" class="form-select" name="book">
+                            <select id="book" class="form-select" name="book">
                                 <option>btc_mxn</option>
                                 <option>eth_mxn</option>
                                 <option>xrp_mxn</option>
@@ -22,17 +22,17 @@
                         </div>
                         <div class="col-md-6">
                             <label class="mb-2">Cantidad</label>
-                            <input type="text" name="amount" class="form-control">
+                            <input type="text" id="amount" name="amount" class="form-control">
                         </div>
                     </div>
                     <div class="col-md-12 mt-3">
                         <label class="mb-2">Precio de compra</label>
-                        <input type="text" name="price" class="form-control">
+                        <input type="text" id="price" name="price" class="form-control">
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-primary" id="insertData">Guardar</button>
+                    <button type="button" class="btn btn-primary" id="insert-item">Guardar</button>
                 </div>
             </form>
         </div>
