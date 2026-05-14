@@ -134,24 +134,30 @@
                     <th class="text-end">Total</th>
                 </thead>
                 <tbody>
-                    @foreach ($car->services as $service)
+                    @if(!is_null($car->services))
+                        @foreach ($car->services as $service)
+                            <tr>
+                                <td>
+                                    <a href="{{ route('admin.service.show', $service->id) }}">{{ Str::limit($service->fault, 80) }}</a>
+                                </td>
+                                <td>{{ $service->service_type }}</td>
+                                <td>{{ $service->entry_date?->format('d-m-Y') }}</td>
+                                <td>{{ $service->finished_date?->format('d-m-Y') }}</td>
+                                <td>
+                                    @if ($service->status == 'Finalizado')
+                                        <span class="badge text-bg-success">{{ $service->status }}</span>    
+                                    @else
+                                        <span class="badge text-bg-warning">{{ $service->status }}</span>
+                                    @endif
+                                </td>
+                                <td class="text-end">{{ Number::currency($service->total, 2) }}</td>
+                            </tr>
+                        @endforeach
+                    @else
                         <tr>
-                            <td>
-                                <a href="{{ route('admin.service.show', $service->id) }}">{{ Str::limit($service->fault, 80) }}</a>
-                            </td>
-                            <td>{{ $service->service_type }}</td>
-                            <td>{{ $service->entry_date?->format('d-m-Y') }}</td>
-                            <td>{{ $service->finished_date?->format('d-m-Y') }}</td>
-                            <td>
-                                @if ($service->status == 'Finalizado')
-                                    <span class="badge text-bg-success">{{ $service->status }}</span>    
-                                @else
-                                    <span class="badge text-bg-warning">{{ $service->status }}</span>
-                                @endif
-                            </td>
-                            <td class="text-end">{{ Number::currency($service->total, 2) }}</td>
+                            <td colspan="6" class="text-center">No se encontraron servicios.</td>
                         </tr>
-                    @endforeach
+                    @endif
                 </tbody>
             </table>
         </div>
@@ -161,10 +167,10 @@
             <div class="row">
                 <div class="col-md-6 mt-3">
                     <x-feathericon-clipboard class="table-icon"/>
-                    @if (count($car->services) > 1)
-                        Se encontraron {{ count($car->services) }} registros.
+                    @if ($car->services && count($car->services) > 1)
+                        Se encontraron {{-- count($car->services) --}} registros.
                     @else 
-                        Se encontro {{ count($car->services) }} registro.
+                        Se encontro {{-- count($car->services) --}} registro.
                     @endif
                 </div>
                 <div class="col-md-6 mt-3 text-end">

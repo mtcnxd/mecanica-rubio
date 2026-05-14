@@ -46,7 +46,7 @@ class ClientsController extends Controller
     {
         $client = $this->clientService->find($id);
 
-        return view('admin.client.show', compact('client'));
+        return view('admin.clients.show', compact('client'));
     }
 
     public function edit(string $id)

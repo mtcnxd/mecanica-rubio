@@ -15,8 +15,9 @@ class OrderService
 
     public function all()
     {
-        return Service::whereBetween('created_at', [now()->subMonths(3), now()->endOfMonth()])
-            ->where('quote', false)->get();
+        return Service::whereBetween('created_at', [now()->subMonths(4), now()->endOfMonth()])
+            ->where('quote', false)
+            ->get();
     }
 
     public function find(string $id): Service

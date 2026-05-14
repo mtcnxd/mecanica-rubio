@@ -56,7 +56,7 @@ Route::get('/auth/callback', function () {
 
         Auth::login($user);
 
-        return to_route('admin.services.index');
+        return to_route('admin.service.index');
     } catch (Exception $err) {
         print_r(
             sprintf('Error: %s', $err->getMessage())
@@ -79,6 +79,11 @@ Route::prefix('admin')
     ->group(function () {
         Route::get('dashboard', [ChartsController::class, 'index'])->name('dashboard.index');
 
+        Route::name('service.')->prefix('service')->group(function(){
+            Route::get('calendar', [CalendarController::class, 'index'])->name('calendar.index');
+            Route::resource('quote', QuotesController::class)->only('index', 'show');
+        });
+
         Route::resource('client', ClientsController::class)->except('destroy');
         Route::resource('car', CarsController::class)->except('destroy','edit','update');
         Route::resource('service', ServicesController::class)->except('destroy');
@@ -94,11 +99,6 @@ Route::prefix('admin')
 
             Route::resource('expense', ExpensesController::class)->except('destroy');
             Route::resource('payroll', PayrollController::class)->except('edit', 'destroy');
-        });
-
-        Route::name('service.')->prefix('service')->group(function(){
-            Route::get('calendar', [CalendarController::class, 'index'])->name('calendar.index');
-            Route::resource('quotes', QuotesController::class)->only('index', 'show');
         });
 
         Route::group(['prefix' => 'investment', 'controller' => InvestmentsController::class], function () {

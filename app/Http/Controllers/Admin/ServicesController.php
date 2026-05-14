@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Number;
-
-use App\Http\Controllers\Controller;
 use App\Services\OrderService;
 use App\Services\ClientService;
 use App\Traits\Messenger;
@@ -19,10 +18,9 @@ class ServicesController extends Controller
     use Messenger;
 
     public function __construct(
-        private OrderService $orderService
-    ){
-        $this->orderService = $orderService;
-    }
+        private OrderService $orderService,
+        private ClientService $clientService
+    ){ }
 
     public function index()
     {
@@ -32,9 +30,9 @@ class ServicesController extends Controller
         return view('admin.services.index', compact('services'));
     }
 
-    public function create(ClientService $clientService)
+    public function create()
     {
-        $clients = $clientService->all();
+        $clients = $this->clientService->all();
 
         return view('admin.services.create', compact('clients'));
     }
@@ -44,20 +42,18 @@ class ServicesController extends Controller
         try {
             $service = $this->orderService->createOrder($request->all());
 
-            session()->flash('success', "Servicio creado correctamente | Folio: #{$service->id}");
+            return to_route('admin.service.index')
+                ->with('success', "Servicio creado correctamente | Folio: #{$service->id}");
 
         } catch(\Exception $err){
-            session()->flash('warning', "Error al crear servicio | Message: {$err->getMessage()}");
+            return to_route('admin.service.index')
+                ->with('warning', "Error al crear servicio | Message: {$err->getMessage()}");
         }
-
-        return to_route('service.index');
     }
 
     public function show(string $id)
     {
         $service = $this->orderService->find($id);
-
-        // event(new ServiceCompleted($service));
 
         return view('admin.services.show', compact('service'));
     }
@@ -105,6 +101,6 @@ class ServicesController extends Controller
             }
         }
 
-        return to_route('service.index');
+        return to_route('admin.service.index');
     }
 }

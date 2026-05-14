@@ -17,8 +17,6 @@ class ServiceItems {
             method: "GET",
             data: { criteria: criteria },
             success: (response) => {
-                console.log(response);
-
                 $("#resultListItems").empty();
                 $("#resultListItems").show();
 
@@ -72,7 +70,7 @@ class ServiceItems {
     setAsCompleted(serviceId) {
         $.ajax({
             url: this.rutes.serviceUpdate.replace(':id', serviceId),
-            method: 'PATCH',
+            method: 'PUT',
             contentType: "application/json",
             dataType: "json",
             data: JSON.stringify({ id: serviceId }),

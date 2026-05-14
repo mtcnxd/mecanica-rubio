@@ -34,9 +34,14 @@ class Car extends Model
         return $this->belongsTo(Client::class, 'client_id');
     }
 
-    public function services()
+    public function service()
     {
         return $this->hasMany(Service::class, 'car_id');
+    }
+
+    public function lastService()
+    {
+        return $this->hasOne(Service::class, 'car_id')->latest('entry_date')->limit(1);
     }
 
     public function carName()
