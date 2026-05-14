@@ -134,8 +134,8 @@
                     <th class="text-end">Total</th>
                 </thead>
                 <tbody>
-                    @if(!is_null($car->services))
-                        @foreach ($car->services as $service)
+                    @if(!is_null($car->service))
+                        @foreach ($car->service as $service)
                             <tr>
                                 <td>
                                     <a href="{{ route('admin.service.show', $service->id) }}">{{ Str::limit($service->fault, 80) }}</a>
@@ -167,10 +167,8 @@
             <div class="row">
                 <div class="col-md-6 mt-3">
                     <x-feathericon-clipboard class="table-icon"/>
-                    @if ($car->services && count($car->services) > 1)
-                        Se encontraron {{-- count($car->services) --}} registros.
-                    @else 
-                        Se encontro {{-- count($car->services) --}} registro.
+                    @if ($car->service)
+                        Se encontraron {{ $car->service->count() }} registros.
                     @endif
                 </div>
                 <div class="col-md-6 mt-3 text-end">
