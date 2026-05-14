@@ -20,25 +20,25 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($results['bitso']['data'] as $item)
+                @foreach ($results['crypto'] as $crypto)
                     <tr>
-                        <td scope="row">{{ $item->book }}</td>
-                        <td class="text-end">{{ $item->amount }}</td>
-                        <td class="text-end">{{ Number::currency($item->price) }}</td>
-                        <td class="text-end">{{ Number::currency($item->purchase_value) }}</td>
-                        <td class="text-end">{{ Number::currency($item->currentPurchaseValue($item->book)) }}</td>
+                        <td scope="row">{{ $crypto->book }}</td>
+                        <td class="text-end">{{ $crypto->amount }}</td>
+                        <td class="text-end">{{ Number::currency($crypto->price) }}</td>
+                        <td class="text-end">{{ Number::currency($crypto->purchase_value) }}</td>
+                        <td class="text-end">{{ Number::currency(0) }}</td>
                         <td class="text-end">
-                            @if ($item->currentGainOrLost($item->book) < 0)
-                                <span class="badge text-bg-danger rounded-pill">{{ Number::percentage($item->currentGainOrLost($item->book), 2) }}</span>
+                            @if (true)
+                                <span class="badge text-bg-danger rounded-pill">{{ Number::percentage(0, 2) }}</span>
                             @else
-                                <span class="badge text-bg-success rounded-pill">{{ Number::percentage($item->currentGainOrLost($item->book), 2) }}</span>
+                                <span class="badge text-bg-success rounded-pill">{{ Number::percentage(0, 2) }}</span>
                             @endif
                         </td>
                         <td class="text-end">
-                            <span title="{{ $item->created_at->diffForHumans() }}">{{ $item->created_at->format('j M Y') }}</span>
+                            <span title="{{ $crypto->created_at->diffForHumans() }}">{{ $crypto->created_at->format('d M Y') }}</span>
                         </td>
                         <td class="text-end">
-                            <a href="#" class="cancell-trade" data-id="{{ $item->id }}">
+                            <a href="#" class="cancell-trade" data-id="{{ $crypto->id }}">
                                 <x-feathericon-trash class="table-icon" />
                             </a>
                         </td>
@@ -49,8 +49,8 @@
                 <tr>
                     <td></td>
                     <td colspan="2"></td>
-                    <td class="text-end fw-bold">{{ Number::currency($results['bitso']['purchased_total']) }}</td>
-                    <td class="text-end fw-bold">{{ Number::currency($results['bitso']['current_total']) }}</td>
+                    <td class="text-end fw-bold">{{ Number::currency(0) }}</td>
+                    <td class="text-end fw-bold">{{ Number::currency(0) }}</td>
                     <td colspan="3"></td>
                 </tr>
             </tfoot>
@@ -58,7 +58,7 @@
         
         <div style="display: flex; justify-content:space-between;">
             <a href="#" class="ms-3 ps-3 pe-3 btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addShopping">Nueva Compra</a>
-            <span class="pe-3">{{ $results['bitso']['data']->count() }} Registros encontrados</span>
+            <span class="pe-3">{{ 0 }} Registros encontrados</span>
         </div>
     </x-window_main>
 
@@ -72,13 +72,13 @@
             <div class="row">
                 <x-card_simple_overview_1
                     title="$ Incremento en 30 días"
-                    message="{{ Number::currency(App\Models\Investment::getInvestmentAmountMonthAgo(30)) }}"
+                    message="{{ 0 }}"
                 />
             </div>
             <div class="row mt-3">
                 <x-card_simple_overview_1
                     title="% Incremento en 30 días"
-                    message="{{ Number::percentage(App\Models\Investment::getInvestmentPercentageMonthAgo(30), 2) }}"
+                    message="{{ 0 }}"
                 />
             </div>
             <div class="row mt-3">
@@ -102,8 +102,8 @@
                     @csrf
                     <label for="investment_id" class="mb-1">Instrumento de inversion</label>
                     <select name="investment_id" class="form-select">
-                        @foreach ($results['investments'] as $investment)
-                            <option value="{{ $investment->id }}">{{ $investment->name }}</option>
+                        @foreach ($results as $investment)
+                            <option value="{{-- $investment->id --}}">{{-- $investment->name --}}</option>
                         @endforeach
                     </select>
                     <label for="amount" class="mt-3 mb-1">Cantidad actual</label>
@@ -129,27 +129,20 @@
                         @php
                             $sumDifference = 0;
                         @endphp
-
-                        @foreach ($results['investments'] as $investment)
-                            @if ($investment->investmentData->last())
-                                @php
-                                    $sumDifference += $investment->differenceBetweenDeposits();
-                                @endphp
-
-                                <tr>
-                                    <td><a href="{{ route('investments.show', $investment->id) }}">{{ $investment->name }}</a></td>
-                                    <td class="text-end">{{ Number::currency($investment->investmentData->last()->amount) }}</td>
-                                    <td class="text-end">{{ Number::currency($investment->differenceBetweenDeposits()) }}</td>
-                                    <td class="text-end">{{ Number::percentage($investment->investmentPercentage(), 1) }}</td>
-                                    <td class="text-end">{{ $investment->investmentData->last()->created_at->format('d M Y') }}</td>
-                                </tr>                            
-                            @endif
+                        @foreach ($results['other'] as $investment)
+                            <tr>
+                                <td><a href="{{ route('investments.show', $investment->id) }}">{{ $investment->name }}</a></td>
+                                <td class="text-end">{{ Number::currency(0) }}</td>
+                                <td class="text-end">{{ Number::currency(0) }}</td>
+                                <td class="text-end">{{ Number::percentage(0, 1) }}</td>
+                                <td class="text-end">{{ $investment->date->format('d M Y') }}</td>
+                            </tr>
                         @endforeach
                     </tbody>
                     <tfoot>
                         <tr>
                             <td></td>
-                            <td class="text-end fw-bold">{{ Number::currency($results['investments']->sum('current_amount')) }}</td>
+                            <td class="text-end fw-bold">{{ 0 }}</td>
                             <td class="text-end fw-bold">{{ Number::currency($sumDifference) }}</td>
                             <td colspan="2"></td>
                         </tr>
@@ -171,6 +164,13 @@
 @section('js')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const rutes = {
+        investmentItemStore : "{{ route('api.bitso.store') }}",
+        investmentItemRemove : "{{ route('api.bitso.destroy', ':id') }}",
+    }
+</script>
+<script src="{{ asset('js/investments.js') }}"></script>
 <script>
     var ctx = document.getElementById('chartRevenue').getContext('2d');
     var incomes = new Chart(ctx, {
@@ -225,27 +225,6 @@
                 }
             }
         }
-    });
-
-    $(".cancell-trade").on('click', function(event){
-        event.preventDefault();
-        
-        $.ajax({
-            url: `/api/investments/bitso/${this.dataset.id}`,
-            method:'DELETE',
-            success:function(response){
-                console.log(response);
-
-                Swal.fire({
-                    text: response.message,
-                    icon: response.type,
-                    confirmButtonText: 'Aceptar'
-                })
-                .then(() => {
-                    history.go();
-                });
-            }
-        });
     });
 </script>
 @endsection
