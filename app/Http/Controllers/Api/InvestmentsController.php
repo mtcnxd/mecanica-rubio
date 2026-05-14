@@ -33,7 +33,7 @@ class InvestmentsController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => $request->all()
+                'message' => "Registro guardado correctamente"
             ]);
 
         } catch (\Exception $e){

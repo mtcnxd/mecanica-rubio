@@ -10,6 +10,7 @@ use App\Models\Service;
 use App\Models\ServiceItems;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Number;
 use App\Traits\Messenger;
 
 class FinanceService
@@ -76,7 +77,7 @@ class FinanceService
         ];
     }
 
-    public function storeMontlyClosing(array $data) : bool
+    public function storeMonthlyClosing(array $data) : bool
     {
         DB::table('montly_balances')->insert([
             'income' => $data['income'],
@@ -87,9 +88,13 @@ class FinanceService
         ]);
 
         $this->sendNotification(
-            sprintf("Cierre de mes completado exitosamente con un balance de %s", $data['balance'])
+            sprintf("Cierre de mes completado con exito!\n\rIngresos: %s\n\rEgresos: %s\n\r<b>Saldo: %s</b>", 
+                Number::currency($data['income']), 
+                Number::currency($data['expense']), 
+                Number::currency($data['balance'])
+            )
         );
 
-        return $data;
+        return true;
     }
 }

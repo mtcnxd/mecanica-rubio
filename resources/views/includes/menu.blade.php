@@ -104,7 +104,7 @@
 						<li><a class="a-item" href="#">Empleados</a></li>
 					</ul>
 				</li>
-				<li><a class="a-item" href="{{ route('api.finance.monthly-closing') }}">Cierre de mes</a></li>
+				<li><a class="a-item" href="{{ route('admin.finance.monthly-closing') }}">Cierre de mes</a></li>
 			</ul>
 		</li>
 		<li>

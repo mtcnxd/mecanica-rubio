@@ -12,10 +12,10 @@ class FinanceController extends Controller
         private FinanceService $financeService
     ) {}
 
-    public function montlyCloseing(Request $request)
+    public function monthlyClosing(Request $request)
     {
         try {
-            $response = $this->financeService->storeMontlyClosing($request->all());
+            $response = $this->financeService->storeMonthlyClosing($request->all());
 
             return response()->json([
                 'success' => true,

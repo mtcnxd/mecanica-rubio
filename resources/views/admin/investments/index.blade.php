@@ -98,7 +98,7 @@
     <div class="row mt-4">
         <div class="col-md-5">
             <x-window_main title="Actualizar Saldo" class="p-4">
-                <form action="{{ route('investments.update') }}" method="POST">
+                <form>
                     @csrf
                     <label for="investment_id" class="mb-1">Instrumento de inversion</label>
                     <select id="investment_instrument" class="form-select">
@@ -131,7 +131,7 @@
                         @endphp
                         @foreach ($results['other'] as $investment)
                             <tr>
-                                <td><a href="{{ route('investments.show', $investment->id) }}">{{ $investment->name }}</a></td>
+                                <td><a href="{{ route('admin.investment.show', $investment->id) }}">{{ $investment->name }}</a></td>
                                 <td class="text-end">{{ Number::currency(0) }}</td>
                                 <td class="text-end">{{ Number::currency(0) }}</td>
                                 <td class="text-end">{{ Number::percentage(0, 1) }}</td>
@@ -166,8 +166,8 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     const rutes = {
-        investmentItemStore : "{{ route('api.store-crypto') }}",
-        investmentItemRemove : "{{ route('api.destroy-crypto', ':id') }}",
+        investmentItemStore : "{{ route('api.investment.crypto') }}",
+        investmentItemRemove : "{{ route('api.investment.crypto', ':id') }}",
     }
 </script>
 <script src="{{ asset('js/investments.js') }}"></script>
