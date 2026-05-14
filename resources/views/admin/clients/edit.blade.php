@@ -143,10 +143,47 @@
 
     function ajaxRequest(postcode) {
         console.log(postcode);
+
+        /*
+        if (postcode.length >= 4){
+            $.ajax({
+                url: "{{ route('api.postal-codes', ':postcode') }}".replace(':postcode', postcode),
+                method: 'GET',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify({postcode:postcode}),
+                success: function(response){
+                    $("#address").empty();
+                    response.data.forEach(element => {
+                        $("#address").append('<option>' + element.address + '</option>');
+                        $("#city").val(element.city);
+                        $("#state").val(element.state);
+                    });
+                }
+            });
+        }
+        */
     }
 
     $("#textPostalCode").on('keyup', function(event){
-
+        /*
+        if (this.value.length > 3) {
+            $.ajax({
+                url:"{{ route('api.postal-codes') }}",
+                method: 'GET',
+                data:{
+                    address:this.value
+                },
+                success: function(response){
+                    $("#resultList").empty();
+                    $("#resultList").show();
+                    response.data.forEach((pc) => {
+                        $("#resultList").append("<li onClick='selectItem("+ pc.postalcode +")'>" + pc.postalcode +" - "+ pc.address + "</a></li>");
+                    })
+                }
+            });
+        }
+        */
     });
 
     function selectItem(postalcode){
