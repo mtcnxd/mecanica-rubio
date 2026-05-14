@@ -3,10 +3,18 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Services\InvestmentService;
+use App\Services\Investments\CryptoService;
+use App\Services\Investments\FiatService;
 use Illuminate\Http\Request;
 
 class InvestmentsController extends Controller
 {
+    public function __construct(
+        private FiatService $fiatService,
+        private CryptoService $cryptoService
+    ) { }
+
     /**
      * Display a listing of the resource.
      */
@@ -16,19 +24,24 @@ class InvestmentsController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $this->cryptoService->dataStore($request->all());
+
+            return response()->json([
+                'success' => true,
+                'message' => $request->all()
+            ]);
+
+        } catch (\Exception $e){
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 
     /**
@@ -40,26 +53,26 @@ class InvestmentsController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
-        //
+        try {
+            $this->cryptoService->destroy($request->id);
+
+            return response()->json([
+                'success' => true,
+                'message' => sprintf('The element with id: %s was deleted successfully', $request->id),
+                'type'    => 'success',
+            ]);
+        }
+
+        catch (\Exception $er){
+            return response()->json([
+                'success' => false,
+                'type'    => 'error',
+                'message' => $er->getMessage()
+            ]);
+        }
     }
 }

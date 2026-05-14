@@ -6,10 +6,10 @@ use Exception;
 use App\Traits\Messenger;
 use Illuminate\Support\Number;
 use Illuminate\Console\Command;
-use App\Services\Bitso\BitsoService;
+// use App\Services\Bitso\BitsoService;
 use App\Http\Helpers;
 
-class priceChangeNotificator extends Command
+class PriceChangeNotificator extends Command
 {
     use Messenger;
 
@@ -23,7 +23,7 @@ class priceChangeNotificator extends Command
     public function __construct()
     {
         parent::__construct();
-        $this->bitsoService = new BitsoService();
+        // $this->bitsoService = new BitsoService();
     }
 
     /**

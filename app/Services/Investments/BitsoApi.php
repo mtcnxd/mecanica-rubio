@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Services\Bitso;
+namespace App\Services\Investments;
 
 use Exception;
 use Illuminate\Http\Request;
 
-class BitsoClient
+class BitsoApi
 {
 	protected $bitsoKey;
 	protected $bitsoSecret;
