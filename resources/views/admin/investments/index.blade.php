@@ -22,11 +22,11 @@
             <tbody>
                 @foreach ($results['crypto'] as $crypto)
                     <tr>
-                        <td scope="row">{{ $crypto->book }}</td>
-                        <td class="text-end">{{ $crypto->amount }}</td>
-                        <td class="text-end">{{ Number::currency($crypto->price) }}</td>
-                        <td class="text-end">{{ Number::currency($crypto->purchase_value) }}</td>
-                        <td class="text-end">{{ Number::currency(0) }}</td>
+                        <td scope="row">{{ $crypto['book'] }}</td>
+                        <td class="text-end">{{ $crypto['amount'] }}</td>
+                        <td class="text-end">{{ Number::currency($crypto['price']) }}</td>
+                        <td class="text-end">{{ Number::currency($crypto['purchase_value']) }}</td>
+                        <td class="text-end">{{ Number::currency($crypto['current_value']) }}</td>
                         <td class="text-end">
                             @if (true)
                                 <span class="badge text-bg-danger rounded-pill">{{ Number::percentage(0, 2) }}</span>
@@ -35,10 +35,10 @@
                             @endif
                         </td>
                         <td class="text-end">
-                            <span title="{{ $crypto->created_at->diffForHumans() }}">{{ $crypto->created_at->format('d M Y') }}</span>
+                            <span title="{{ $crypto['created_at'] }}">{{ $crypto['created_at'] }}</span>
                         </td>
                         <td class="text-end">
-                            <a href="#" class="cancell-trade" data-id="{{ $crypto->id }}">
+                            <a href="#" class="cancell-trade" data-id="{{ $crypto['id'] }}">
                                 <x-feathericon-trash class="table-icon" />
                             </a>
                         </td>
