@@ -56,8 +56,10 @@ Route::name('api.')
 Route::name('api.')
     ->prefix('cars')
     ->group(function () {
-        Route::apiResource('brands', BrandsController::class)->only('index', 'store');
-        Route::apiResource('models', ModelsController::class)->only('index', 'store');
+        Route::name('cars.')->group(function(){
+            Route::apiResource('brands', BrandsController::class)->only('index', 'store');
+            Route::apiResource('models', ModelsController::class)->only('index', 'store');
+        });
     });
 
 // Services
@@ -66,7 +68,7 @@ Route::name('api.')
     ->group(function () {
         Route::post('{service}/pdf', [ServicesController::class, 'createServicePDF'])->name('services.pdf');
 
-        Route::apiResource('services', ServicesController::class)->only('update');
+        Route::post('/', [ServicesController::class, 'update'])->name('services.update');
 
         Route::name('services')
             ->apiResource('items', ServicesItemsController::class)->only('index','store','destroy');
@@ -76,31 +78,36 @@ Route::name('api.')
 Route::prefix('finance')
     ->name('api.')
     ->group(function () {
+        Route::post('expenses-items/image', [ExpensesItemsController::class, 'getImageAttached'])->name('finance.expenses-items.image');
     
         Route::controller(FinanceController::class)->group(function () {
             Route::post('montly-closing', 'montlyCloseing')->name('finance.monthly-closing');
         });
+        
+        Route::name('finance.')->group(function(){
+            Route::apiResource('expenses-items', ExpensesItemsController::class)->only('store','destroy');
+            Route::apiResource('payrolls', PayrollController::class)->only('update');
+            Route::apiResource('payrolls-items', PayrollItemsController::class)->only('store','update','destroy');
+        });
+    });
 
-        Route::post('expenses-items/image', [ExpensesItemsController::class, 'getImageAttached'])->name('finance.expenses.image');
-        Route::apiResource('expenses-items', ExpensesItemsController::class)->only('store','destroy');
-        Route::apiResource('payrolls', PayrollController::class)->only('update');
-        Route::apiResource('payrolls-items', PayrollItemsController::class)->only('store','update','destroy');
-});
 
 // Employees
 Route::name('api.')
     ->prefix('employees')
     ->group(function () {
+        Route::get('/', [EmployeesController::class, 'index'])->name('employees.index');
         Route::apiResource('vacations', EmployeesVacationsController::class)->only('store','destroy');
         Route::get('/{employee}', [EmployeesController::class, 'searchById'])->name('employees.search');
-        Route::apiResource('employees', EmployeesController::class)->only('index');
     });
 
+
+// Investments
 Route::name('api.')
     ->prefix('investments')
     ->controller(InvestmentsController::class)
     ->group(function () {
-        Route::post('store-crypto', 'store')->name('store-crypto');
-        Route::delete('destroy-crypto', 'destroy')->name('destroy-crypto');
-        Route::post('store-fiat', 'storeFiat')->name('store-fiat');
+        Route::post('store-crypto', 'store')->name('investment.store-crypto');
+        Route::delete('destroy-crypto', 'destroy')->name('investment.destroy-crypto');
+        Route::post('store-fiat', 'storeFiat')->name('investment.store-fiat');
     });
