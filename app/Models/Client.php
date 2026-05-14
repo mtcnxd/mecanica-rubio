@@ -63,4 +63,9 @@ class Client extends Model
     {
         return $this->hasMany(Car::class, 'client_id');
     }
+
+    public function howManyCars()
+    {
+        return $this->cars()->count();
+    }
 }

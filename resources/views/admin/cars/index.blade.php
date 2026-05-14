@@ -9,7 +9,7 @@
             <thead>
                 <tr>
                     <th>Automovil</th>
-                    <th>Año</th>
+                    <th>Modelo</th>
                     <th>VIN</th>
                     <th>Cliente</th>
                     <th>Comentario</th>
@@ -35,9 +35,9 @@
                     <td>{{ $car->comments }}</td>
                     <td class="text-end">
                         @if ($car->lastService)
-                        <a href="{{ route('admin.service.show', $car->lastService->id) }}">
-                            {{ $car->lastService->entry_date->format('d/m/Y') }}
-                        </a>
+                            <a href="{{ route('admin.service.show', $car->lastService->id) }}">
+                                {{ $car->lastService->entry_date->format('d/m/Y') }}
+                            </a>
                         @endif
                     </td>
                 </tr>

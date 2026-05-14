@@ -41,7 +41,7 @@ class Car extends Model
 
     public function lastService()
     {
-        return $this->hasOne(Service::class, 'car_id')->latest('entry_date')->limit(1);
+        return $this->hasOne(Service::class, 'car_id')->latest('entry_date');
     }
 
     public function carName()

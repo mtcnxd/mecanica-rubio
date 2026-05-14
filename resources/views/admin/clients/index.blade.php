@@ -11,6 +11,7 @@
                     <th>Nombre</th>
                     <th>Teléfono</th>
                     <th>Dirección</th>
+                    <th>Autos</th>
                     <th class="text-end">Cliente desde</th>
                     <th class="text-end">Editar</th>
                 </tr>
@@ -29,6 +30,9 @@
                         {{ $client->phone }}
                     </td>
                     <td>{{ $client->street }} {{ $client->address }}</td>
+                    <td>
+                        <span class="table-icon-square bg-secondary">{{ $client->howManyCars() }}</span>
+                    </td>
                     <td class="text-end">
                         @if ($client->created_at)
                             <span title="{{ $client->created_at->diffForHumans() }}">{{ $client->created_at->format('j M Y') }}</span>

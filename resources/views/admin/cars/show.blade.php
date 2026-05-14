@@ -167,10 +167,8 @@
             <div class="row">
                 <div class="col-md-6 mt-3">
                     <x-feathericon-clipboard class="table-icon"/>
-                    @if ($car->services && count($car->services) > 1)
-                        Se encontraron {{-- count($car->services) --}} registros.
-                    @else 
-                        Se encontro {{-- count($car->services) --}} registro.
+                    @if ($car->service)
+                        Se encontraron {{ $car->service->count() }} registros.
                     @endif
                 </div>
                 <div class="col-md-6 mt-3 text-end">
