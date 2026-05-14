@@ -94,7 +94,6 @@ Route::prefix('admin')
 
         Route::name('finance.')->prefix('finance')->group(function(){
             Route::get('income', [FinanceController::class, 'index'])->name('income');
-        
             Route::get('monthly-closing', [FinanceController::class, 'monthlyClosing'])->name('monthly-closing');
 
             Route::resource('expense', ExpensesController::class)->except('destroy');

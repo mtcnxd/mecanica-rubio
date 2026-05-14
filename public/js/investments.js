@@ -18,7 +18,10 @@ class Investment {
                     this.showSwalMessage(response.message, 'error');
                 }
 
-                this.showSwalMessage(response.message);
+                this.showSwalMessage(response.message)
+                    .then(() => {
+                        location.reload();
+                    });
 
             },
             error: (response) => {

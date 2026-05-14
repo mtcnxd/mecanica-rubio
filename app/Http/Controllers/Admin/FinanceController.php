@@ -86,7 +86,7 @@ class FinanceController extends Controller
         return $pdf->download('balance.pdf');
     }
 
-    public function montlyClosing()
+    public function monthlyClosing()
     {
         $montlyData = [];
 

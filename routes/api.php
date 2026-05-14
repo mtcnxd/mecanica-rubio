@@ -84,7 +84,7 @@ Route::prefix('finance')
         Route::post('expense-item/image', [ExpensesItemsController::class, 'getImageAttached'])->name('finance.expense-item.image');
     
         Route::controller(FinanceController::class)->group(function () {
-            Route::post('monthly-closing', 'monthlyCloseing')->name('finance.monthly-closing');
+            Route::post('monthly-closing', 'monthlyClosing')->name('finance.monthly-closing');
         });
         
         Route::name('finance.')->group(function(){
@@ -110,7 +110,7 @@ Route::name('api.')
     ->prefix('investment')
     ->controller(InvestmentsController::class)
     ->group(function () {
+        Route::delete('crypto', 'destroy')->name('investment.crypto');
         Route::post('crypto', 'store')->name('investment.crypto');
-        Route::delete('crypto/{id}', 'destroy')->name('investment.crypto');
         Route::post('fiat', 'storeFiat')->name('investment.fiat');
     });
