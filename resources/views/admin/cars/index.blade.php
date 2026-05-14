@@ -9,29 +9,37 @@
             <thead>
                 <tr>
                     <th>Automovil</th>
+                    <th>Año</th>
+                    <th>VIN</th>
                     <th>Cliente</th>
                     <th>Comentario</th>
-                    <th>VIN</th>
-                    <th>Año</th>
+                    <th class="text-end">Ultimo servicio</th>
                 </tr>
             </thead>
             <tbody>
             @foreach ($cars as $car)
                 <tr>
                     <td>
-                        <a href="{{ route('cars.show', $car->id) }}">
+                        <a href="{{ route('admin.car.show', $car->id) }}">
                             <span class="table-icon-round">{{ Str::limit($car->brand,1, null) }}</span>
                             {{ $car->brand }} {{ $car->model }}
                         </a>
                     </td>
+                    <td>{{ $car->year }}</td>
+                    <td>{{ $car->serie }}</td>
                     <td>
-                        <a href="{{ route('clients.show', $car->client->id) }}">
+                        <a href="{{ route('admin.client.show', $car->client->id) }}">
                             {{ $car->client->name }}
                         </a>
                     </td>
                     <td>{{ $car->comments }}</td>
-                    <td>{{ $car->serie }}</td>
-                    <td>{{ $car->year }}</td>
+                    <td class="text-end">
+                        @if ($car->lastService)
+                        <a href="{{ route('admin.service.show', $car->lastService->id) }}">
+                            {{ $car->lastService->entry_date->format('d/m/Y') }}
+                        </a>
+                        @endif
+                    </td>
                 </tr>
             @endforeach
             </tbody>

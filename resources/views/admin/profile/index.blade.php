@@ -83,7 +83,7 @@
 
             <div class="row mt-3">
                 <div class="col-md-12 text-end">
-                    <a href="{{ route('employees.index') }}" class="btn btn-sm btn-secondary">Atras</a>
+                    <a href="{{ route('admin.employee.index') }}" class="btn btn-sm btn-secondary">Atras</a>
                     <button type="submit" class="btn btn-sm btn-success">
                         <x-feathericon-save class="table-icon" style="margin: -2px 5px 2px"/>
                         Guardar

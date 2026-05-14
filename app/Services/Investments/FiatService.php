@@ -3,6 +3,7 @@
 namespace App\Services\Investments;
 
 use App\Models\InvestmentData;
+use App\Models\Investment;
 
 class FiatService
 {
@@ -14,5 +15,10 @@ class FiatService
     public function allActive()
     {
         return InvestmentData::all();
+    }
+
+    public function allInstruments()
+    {
+        return Investment::where('active', true)->get();
     }
 }

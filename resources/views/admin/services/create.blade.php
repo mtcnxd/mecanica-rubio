@@ -6,7 +6,7 @@
     <div class="col-md-7">
         <h6 class="window-title shadow text-uppercase fw-bold"><span class="ms-3">Servicio</span></h6>
         <div class="window-body shadow p-4">
-            <form action="{{ route('services.store') }}" method="POST">
+            <form action="{{ route('admin.service.store') }}" method="POST">
                 <div class="form-container border">
                     @csrf
                     <div class="row">
@@ -77,7 +77,7 @@
 
                 <div class="row mt-3">
                     <div class="col-md-12 text-end">
-                        <a href="{{ route('services.index') }}" class="btn btn-sm btn-secondary">Cancelar</a>
+                        <a href="{{ route('admin.service.index') }}" class="btn btn-sm btn-secondary">Cancelar</a>
                         <button type="submit" class="btn btn-sm btn-success">
                             <x-feathericon-save class="table-icon" style="margin: -2px 5px 2px"/>
                             Guardar
@@ -107,7 +107,7 @@ $(document).ready(function() {
         var clientId = $(this).val();
 
         $.ajax({ 
-            url: "{{ route('api.clients.cars.show', ':client') }}".replace(':client', clientId),
+            url: "{{ route('api.client.car.show', ':client') }}".replace(':client', clientId),
             method: 'GET',
             success:function(response){
                 console.log(response);

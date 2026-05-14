@@ -42,7 +42,7 @@ class CarsController extends Controller
             session()->flash('warning', "ERROR | MESSAGE: {$e->getMessage()}");
 		}
 
-        return to_route('cars.index');
+        return to_route('admin.car.index');
     }
 
     public function show(string $id)
@@ -77,7 +77,7 @@ class CarsController extends Controller
             "comments" => $request->comments,
         ]);
 
-        return to_route('cars.index')->with('message', 'Los datos se guardaron correctamente');
+        return to_route('car.index')->with('message', 'Los datos se guardaron correctamente');
     }
 
     public function loadModels(Request $request)

@@ -49,7 +49,7 @@ class UsersController extends Controller
             );
         }
 
-        return to_route('users.index');
+        return to_route('user.index');
     }
 
     public function show(User $user)

@@ -6,7 +6,7 @@
     <div class="col-md-7">
         <h6 class="window-title shadow text-uppercase fw-bold"><span class="ms-3">automovil</span></h6>
         <div class="window-body shadow p-4">
-            <form action="{{ route('cars.store') }}" method="POST">
+            <form action="{{ route('admin.car.store') }}" method="POST">
                 <div class="form-container border">
                     @method('POST')
                     @csrf
@@ -75,7 +75,7 @@
 
                 <div class="row mt-3">
                     <div class="col-md-12 text-end">
-                        <a href="{{ route('cars.index') }}" class="btn btn-sm btn-secondary">Cancelar</a>
+                        <a href="{{ route('admin.car.index') }}" class="btn btn-sm btn-secondary">Cancelar</a>
                         <button type="submit" class="btn btn-sm btn-success">
                             <x-feathericon-save class="table-icon" style="margin: -2px 5px 2px"/>
                             Guardar
@@ -174,7 +174,7 @@ $(document).ready(function() {
         $("#model_brand").val(brand);
 
         $.ajax({
-            url:"{{ route('api.models.index') }}",
+            url:"{{ route('api.car.model.index') }}",
             method: 'GET',
             data: {
                 'brand': brand
@@ -201,7 +201,7 @@ $(document).ready(function() {
         };
         
         $.ajax({
-            url: "{{ route('api.brands.store') }}",
+            url: "{{ route('api.car.brand.store') }}",
             method: 'POST',
             contentType: "application/json",
             dataType: "json",
@@ -237,7 +237,7 @@ $(document).ready(function() {
         };
 
         $.ajax ({
-            url: "{{ route('api.models.store') }}",
+            url: "{{ route('api.car.model.store') }}",
             method: 'POST',
             contentType: "application/json",
             dataType: "json",

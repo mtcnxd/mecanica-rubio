@@ -9,17 +9,17 @@
 			</a>
 			<ul class="menu-dropdown">
 				<li>
-					<a class="a-item" href="{{ route('clients.index') }}">Clientes</a>
+					<a class="a-item" href="{{ route('admin.client.index') }}">Clientes</a>
 					<ul class="submenu">
-						<li><a class="a-item" href="{{ route('clients.create') }}">Crear nuevo</a></li>
-						<li><a class="a-item" href="{{ route('clients.index') }}">Buscar</a></li>
+						<li><a class="a-item" href="{{ route('admin.client.create') }}">Crear nuevo</a></li>
+						<li><a class="a-item" href="{{ route('admin.client.index') }}">Buscar</a></li>
 					</ul>
 				</li>
 				<li>
-					<a class="a-item" href="{{ route('cars.index') }}">Automoviles</a>
+					<a class="a-item" href="{{ route('admin.car.index') }}">Automoviles</a>
 					<ul class="submenu">
-						<li><a class="a-item" href="{{ route('cars.create') }}">Crear nuevo</a></li>
-						<li><a class="a-item" href="{{ route('cars.index') }}">Buscar</a></li>
+						<li><a class="a-item" href="{{ route('admin.car.create') }}">Crear nuevo</a></li>
+						<li><a class="a-item" href="{{ route('admin.car.index') }}">Buscar</a></li>
 					</ul>
 				</li>
 			</ul>
@@ -33,16 +33,16 @@
 			</a>
 			<ul class="menu-dropdown">
 				<li>
-					<a class="a-item" href="{{ route('services.index') }}">Servicios</a>
+					<a class="a-item" href="{{ route('admin.service.index') }}">Servicios</a>
 					<ul class="submenu">
-						<li><a class="a-item" href="{{ route('services.create') }}">Nueva cotización</a></li>
-						<li><a class="a-item" href="{{ route('quotes.index') }}">Cotizaciones</a></li>
-						<li><a class="a-item" href="{{ route('services.create') }}">Nuevo Servicio</a></li>
-						<li><a class="a-item" href="{{ route('services.index') }}">Servicios</a></li>
+						<li><a class="a-item" href="{{ route('admin.service.create') }}">Nueva cotización</a></li>
+						<li><a class="a-item" href="{{ route('admin.service.quote.index') }}">Cotizaciones</a></li>
+						<li><a class="a-item" href="{{ route('admin.service.create') }}">Nuevo Servicio</a></li>
+						<li><a class="a-item" href="{{ route('admin.service.index') }}">Servicios</a></li>
 					</ul>
 				</li>
 				<li>
-					<a class="a-item" href="{{ route('calendar.index') }}">
+					<a class="a-item" href="{{ route('admin.service.calendar.index') }}">
 						Calendario
 						<!--
 						<span class="top-0 badge rounded-pill bg-danger">
@@ -62,20 +62,20 @@
 			</a>
 			<ul class="menu-dropdown">
 				<li>
-					<a class="a-item" href="{{ route('finance.incomes') }}">Ingresos</a>
+					<a class="a-item" href="{{ route('admin.finance.income') }}">Ingresos</a>
 				</li>
 				<li>
-					<a class="a-item" href="{{ route('payroll.index') }}">Nominas</a>
+					<a class="a-item" href="{{ route('admin.finance.payroll.index') }}">Nominas</a>
 					<ul class="submenu">
-						<li><a class="a-item" href="{{ route('payroll.create') }}">Crear nuevo</a></li>
-						<li><a class="a-item" href="{{ route('payroll.index') }}">Buscar</a></li>
+						<li><a class="a-item" href="{{ route('admin.finance.payroll.create') }}">Crear nuevo</a></li>
+						<li><a class="a-item" href="{{ route('admin.finance.payroll.index') }}">Buscar</a></li>
 					</ul>
 				</li>
 				<li>
-					<a class="a-item" href="{{ route('expenses.index') }}">Egresos</a>
+					<a class="a-item" href="{{ route('admin.finance.expense.index') }}">Egresos</a>
 					<ul class="submenu">
-						<li><a class="a-item" href="{{ route('expenses.create') }}">Crear nuevo</a></li>
-						<li><a class="a-item" href="{{ route('expenses.index') }}">Buscar</a></li>
+						<li><a class="a-item" href="{{ route('admin.finance.expense.create') }}">Crear nuevo</a></li>
+						<li><a class="a-item" href="{{ route('admin.finance.expense.index') }}">Buscar</a></li>
 					</ul>
 				</li>
 			</ul>
@@ -88,7 +88,7 @@
 				</h5>
 			</a>
 			<ul class="menu-dropdown">
-				<li><a class="a-item" href="{{ route('dashboard.index') }}">Resumen</a></li>
+				<li><a class="a-item" href="{{ route('admin.dashboard.index') }}">Resumen</a></li>
 				<li>
 					<a class="a-item" href="#">Reportes</a>
 					<ul class="submenu">
@@ -104,7 +104,7 @@
 						<li><a class="a-item" href="#">Empleados</a></li>
 					</ul>
 				</li>
-				<li><a class="a-item" href="{{ route('finance.monthly-closing') }}">Cierre de mes</a></li>
+				<li><a class="a-item" href="{{ route('api.finance.monthly-closing') }}">Cierre de mes</a></li>
 			</ul>
 		</li>
 		<li>
@@ -116,20 +116,20 @@
 			</a>
 			<ul class="menu-dropdown">
 				<li>
-					<a class="a-item" href="{{ route('users.index') }}">Usuarios</a>
+					<a class="a-item" href="{{ route('admin.user.index') }}">Usuarios</a>
 					<ul class="submenu">
-						<li><a class="a-item" href="{{ route('users.create') }}">Crear nuevo</a></li>
-						<li><a class="a-item" href="{{ route('users.index') }}">Buscar</a></li>
+						<li><a class="a-item" href="{{ route('admin.user.create') }}">Crear nuevo</a></li>
+						<li><a class="a-item" href="{{ route('admin.user.index') }}">Buscar</a></li>
 					</ul>
 				</li>
 				<li>
-					<a class="a-item" href="{{ route('employees.index') }}">Empleados</a>
+					<a class="a-item" href="{{ route('admin.employee.index') }}">Empleados</a>
 					<ul class="submenu">
-						<li><a class="a-item" href="{{ route('employees.create') }}">Crear nuevo</a></li>
-						<li><a class="a-item" href="{{ route('employees.index') }}">Buscar</a></li>
+						<li><a class="a-item" href="{{ route('admin.employee.create') }}">Crear nuevo</a></li>
+						<li><a class="a-item" href="{{ route('admin.employee.index') }}">Buscar</a></li>
 					</ul>
 				</li>
-				<li><a class="a-item" href="{{ route('settings.index') }}">Configuración</a></li>
+				<li><a class="a-item" href="{{ route('admin.setting.index') }}">Configuración</a></li>
 			</ul>
 		</li>
 	</ul>
@@ -144,15 +144,15 @@
 			</a>
 			<ul class="menu-dropdown">
 				<li>
-					<a class="a-item" href="{{ route('profile.index') }}">Perfil</a>
+					<a class="a-item" href="{{ route('admin.profile.index') }}">Perfil</a>
 				</li>
 				@if (Auth::user()->id == 1)
 					<li>
-						<a class="a-item" href="{{ route('investments.index') }}">Inversiones</a>
+						<a class="a-item" href="{{ route('admin.investment.index') }}">Inversiones</a>
 					</li>
 				@endif
 				<li>
-					<form action="{{ route('logout') }}" method="POST">
+					<form action="{{ route('admin.logout') }}" method="POST">
 						@csrf
 						<button class="btn btn-logout a-item" type="submit">Cerrar sesion</button>
 					</form>

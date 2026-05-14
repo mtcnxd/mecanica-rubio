@@ -111,7 +111,7 @@
             </div>
 
             <div class="col-md-12 text-end">
-                <a href="{{ route('payroll.index') }}" class="btn btn-sm btn-secondary">Atras</a>
+                <a href="{{ route('admin.finance.payroll.index') }}" class="btn btn-sm btn-secondary">Atras</a>
                 <button type="button" onclick="print()" class="btn btn-sm btn-secondary">
                     Imprimir
                     <x-feathericon-printer class="table-icon" style="margin: -2px 5px 2px"/>
@@ -140,7 +140,7 @@ $(".removeItem").on('click', function(event) {
     const itemId = this.id;
 
     $.ajax({
-        url: "{{ route('api.payrolls-items.destroy', ':id') }}".replace(':id', itemId),
+        url: "{{ route('api.finance.payroll-item.destroy', ':id') }}".replace(':id', itemId),
         data: {itemId:itemId},
         method:'DELETE',
         success: function (response) {
@@ -156,7 +156,7 @@ $('#acceptPopup').click(function(event) {
     event.preventDefault();
     
     $.ajax({
-        url: "{{ route('api.payrolls-items.store') }}",
+        url: "{{ route('api.finance.payroll-item.store') }}",
         method: 'POST',
         data: {
             concept: $("#concept").val(),

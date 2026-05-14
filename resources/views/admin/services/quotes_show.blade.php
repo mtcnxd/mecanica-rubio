@@ -5,7 +5,7 @@
     @include('includes.alert')
     <h6 class="window-title shadow text-uppercase fw-bold"><span class="ms-3">Cotizacion</span></h6>
     <div class="window-body shadow p-4">
-        <form action="{{ route('services.update', $service->id) }}" method="POST">
+        <form action="{{ route('admin.service.update', $service->id) }}" method="POST">
             <div class="form-container border mb-0">
                 @csrf
                 @method('PATCH')
@@ -194,7 +194,7 @@ $("#chgService").on('click', function(event){
                         confirmButtonText: 'Aceptar'
                     })
                     .then(() => {
-                        location.replace("{{ route('services.show', $service->id) }}");
+                        location.replace("{{ route('admin.service.show', $service->id) }}");
                     })
                 }
             }

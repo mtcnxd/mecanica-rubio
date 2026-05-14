@@ -6,7 +6,7 @@
     <div class="col-md-7">
         <h6 class="window-title shadow text-uppercase fw-bold"><span class="ms-3">Buscar cliente</span></h6>
         <div class="window-body shadow p-4">
-            <form action="{{ route('clients.update', $client->id) }}" method="POST">
+            <form action="{{ route('admin.client.update', $client->id) }}" method="POST">
                 <div class="form-container border">
                     @method('PUT')
                     @csrf
@@ -87,7 +87,7 @@
 
                 <div class="row mt-3">
                     <div class="col-md-12 text-end">
-                        <a href="{{ route('clients.index') }}" class="btn btn-sm btn-secondary">Cancelar</a>
+                        <a href="{{ route('admin.client.index') }}" class="btn btn-sm btn-secondary">Cancelar</a>
                         <button type="submit" class="btn btn-sm btn-success">
                             <x-feathericon-save class="table-icon" style="margin: -2px 5px 2px"/>
                             Guardar
@@ -198,7 +198,7 @@
             icon: 'success',
             confirmButtonText: 'Aceptar'
         }).then(() => {
-            location.replace("{{ route('clients.index') }}");
+            location.replace("{{ route('admin.client.index') }}");
         });
     }
 </script>

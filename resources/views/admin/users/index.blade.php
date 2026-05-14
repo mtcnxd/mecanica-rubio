@@ -21,13 +21,13 @@
                 @foreach ($users as $user) 
                     <tr>
                         <td>{{ $user->id }}</td>
-                        <td><a href="{{ route('users.show', $user->id) }}">{{ $user->name }}</a></td>
+                        <td><a href="{{ route('admin.user.show', $user->id) }}">{{ $user->name }}</a></td>
                         <td>{{ $user->phone }}</td>
                         <td>{{ $user->email }}</td>
                         <td>{{ $user->status }}</td>
                         <td>{{ Carbon\Carbon::parse($user->created_at)->format('d-m-Y') }}</td>
                         <td>
-                            <a href="{{ route('users.edit', $user) }}">
+                            <a href="{{ route('admin.user.edit', $user) }}">
                                 <x-feathericon-edit class="table-icon"/>
                             </a>
                         </td>
@@ -36,7 +36,7 @@
             </tbody>
         </table>
         <div class="m-3" style="display: flex; justify-content: space-between;">
-            <a href="{{ route('users.create') }}" class="btn btn-sm btn-success">
+            <a href="{{ route('admin.user.create') }}" class="btn btn-sm btn-success">
                 Crear nuevo
             </a>
 

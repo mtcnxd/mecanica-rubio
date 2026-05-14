@@ -44,6 +44,29 @@ class Investment {
         });
     }
 
+    updateInstrumentBalance(data) {
+        console.log(data);
+
+        $.ajax({
+            url: this.rutes.investmentInstrumentUpdate,
+            method: 'POST',
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            success: (response) => {
+                console.log(response);
+                if (!response.success) {
+                    this.showSwalMessage(response.message, 'error');
+                }
+
+                this.showSwalMessage(response.message);
+
+            },
+            error: (response) => {
+                console.log(response);
+            }
+        })
+    }
+
     showSwalMessage(message, type = 'success') {
         return Swal.fire({
             text: message,
@@ -55,6 +78,17 @@ class Investment {
 }
 
 const investment = new Investment(rutes);
+
+$("#update-fiat-balance").on('click', function (event) {
+    event.preventDefault();
+
+    const data = {
+        'instrument': $("#investment_instrument").val(),
+        'amount': $("#investment-amount").val(),
+    };
+
+    investment.updateInstrumentBalance(data);
+});
 
 $("#insert-item").on('click', function (event) {
     event.preventDefault();

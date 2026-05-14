@@ -96,7 +96,7 @@
                 <div class="row">
                     <div class="col-md-12 text-end">
                         <img src="{{ asset('image.gif') }}" width="20px" height="20px" id="loader" style="margin-right: 20px; display:none;">
-                        <a href="{{ route('employees.index') }}" class="btn btn-sm btn-secondary">Atras</a>
+                        <a href="{{ route('admin.employee.index') }}" class="btn btn-sm btn-secondary">Atras</a>
                         <button type="button" class="btn btn-sm btn-danger" id="btn-delete">
                             <x-feathericon-trash-2 class="table-icon" style="margin: -2px 5px 2px"/>
                             Eliminar

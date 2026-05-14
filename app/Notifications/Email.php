@@ -67,6 +67,6 @@ class Email extends Notification
 
         $response = Mail::to('mtc.nxd@gmail.com')->send(new SendEmailInvoice($service, $items));
         
-        return to_route('services.show', $id);
+        return to_route('admin.service.show', $id);
     }
 }

@@ -41,74 +41,76 @@ Route::get('postal-codes', [ClientsController::class, 'getPostalCodes'])->name('
 // Clients
 Route::name('api.')
     ->group(function () {
-        Route::apiResource('clients', ClientsController::class)->only('index', 'show');
+        Route::apiResource('client', ClientsController::class)->only('index', 'show');
 
-        Route::prefix('{client}/cars')->group(function () {
-            Route::get('/', [CarsController::class, 'show'])->name('clients.cars.show');
+        Route::prefix('{client}/car')->group(function () {
+            Route::get('/', [CarsController::class, 'show'])->name('client.car.show');
         });
 
-        Route::prefix('{client}/services')->group(function () {
-            Route::get('/', [ServicesController::class, 'show'])->name('clients.services.show');
+        Route::prefix('{client}/service')->group(function () {
+            Route::get('/', [ServicesController::class, 'show'])->name('client.service.show');
         });
     });
 
 // Cars
 Route::name('api.')
-    ->prefix('cars')
+    ->prefix('car')
     ->group(function () {
-        Route::apiResource('brands', BrandsController::class)->only('index', 'store');
-        Route::apiResource('models', ModelsController::class)->only('index', 'store');
+        Route::name('car.')->group(function(){
+            Route::apiResource('brand', BrandsController::class)->only('index', 'store');
+            Route::apiResource('model', ModelsController::class)->only('index', 'store');
+        });
     });
 
 // Services
 Route::name('api.')
-    ->prefix('services')
+    ->prefix('service')
     ->group(function () {
-        Route::post('{service}/pdf', [ServicesController::class, 'createServicePDF'])->name('services.pdf');
+        Route::get('/{id}', [ServicesController::class, 'show'])->name('service.show');
 
-        Route::apiResource('services', ServicesController::class)->only('update');
+        Route::put('/{id}', [ServicesController::class, 'update'])->name('service.update');
+        
+        Route::post('{service}/pdf', [ServicesController::class, 'createServicePDF'])->name('service.pdf');
 
-        Route::name('services')
-            ->apiResource('items', ServicesItemsController::class)->only('index','store','destroy');
+        Route::prefix('service-item')->name('service.')->group(function(){
+            Route::apiResource('service-item', ServicesItemsController::class)->only('index','store','destroy');
+        });
     });
 
 // Finance
 Route::prefix('finance')
     ->name('api.')
     ->group(function () {
+        Route::post('expense-item/image', [ExpensesItemsController::class, 'getImageAttached'])->name('finance.expense-item.image');
     
         Route::controller(FinanceController::class)->group(function () {
-            Route::post('montly-closing', 'montlyCloseing')->name('finance.monthly-closing');
+            Route::post('monthly-closing', 'monthlyCloseing')->name('finance.monthly-closing');
         });
+        
+        Route::name('finance.')->group(function(){
+            Route::apiResource('expense-item', ExpensesItemsController::class)->only('store','destroy');
+            Route::apiResource('payroll', PayrollController::class)->only('update');
+            Route::apiResource('payroll-item', PayrollItemsController::class)->only('store','update','destroy');
+        });
+    });
 
-        Route::post('expenses-items/image', [ExpensesItemsController::class, 'getImageAttached'])->name('finance.expenses.image');
-        Route::apiResource('expenses-items', ExpensesItemsController::class)->only('store','destroy');
-        Route::apiResource('payrolls', PayrollController::class)->only('update');
-        Route::apiResource('payrolls-items', PayrollItemsController::class)->only('store','update','destroy');
-});
 
 // Employees
 Route::name('api.')
-    ->prefix('employees')
+    ->prefix('employee')
     ->group(function () {
-        Route::apiResource('vacations', EmployeesVacationsController::class)->only('store','destroy');
-        Route::get('/{employee}', [EmployeesController::class, 'searchById'])->name('employees.search');
-        Route::apiResource('employees', EmployeesController::class)->only('index');
+        Route::get('/', [EmployeesController::class, 'index'])->name('employee.index');
+        Route::get('/{employee}', [EmployeesController::class, 'searchById'])->name('employee.search');
+        Route::apiResource('{employee}/vacations', EmployeesVacationsController::class)->only('store','destroy');
     });
 
+
+// Investments
 Route::name('api.')
-    ->prefix('investments')
+    ->prefix('investment')
+    ->controller(InvestmentsController::class)
     ->group(function () {
-        Route::apiResource('bitso', InvestmentsController::class)->only('store','destroy');
-
-        /*
-        Route::get('/', 'allInvestments')->name('investments.all');
-        Route::get('/{id}', 'investmentDetails')->name('investments.details');
-
-        Route::group(['prefix' => 'bitso'], function () {
-            Route::get('trades', 'getActiveTrades')->name('investments.bitso.trades');
-            Route::post('/', 'store')->name('bitso.store');
-            Route::delete('/{id}', 'destroy')->name('bitso.destroy');
-        });
-        */
+        Route::post('crypto', 'store')->name('investment.crypto');
+        Route::delete('crypto/{id}', 'destroy')->name('investment.crypto');
+        Route::post('fiat', 'storeFiat')->name('investment.fiat');
     });

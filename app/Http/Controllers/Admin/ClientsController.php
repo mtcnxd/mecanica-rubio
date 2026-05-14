@@ -39,7 +39,7 @@ class ClientsController extends Controller
             session()->flash('warning', sprintf('Ocurrio un error | %s ', $e->getMessage()));
         }
 
-        return to_route('clients.index');
+        return to_route('admin.client.index');
     }
 
     public function show(string $id)
@@ -65,7 +65,7 @@ class ClientsController extends Controller
             session()->flash('warning', sprintf('Error al actualizar | %s ', $err->getMessage()));
         }
 
-        return to_route('clients.index');
+        return to_route('admin.client.index');
     }
 
     public function destroy(string $id)

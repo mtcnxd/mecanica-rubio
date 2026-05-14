@@ -16,7 +16,7 @@
                                     <span class="input-group-text"> #{{ $client->id }}</span>
                                     <input type="text" class="form-control" name="name" value="{{ isset($client) ? $client->name : '' }}" disabled>
                                     <span class="input-group-text">
-                                        <a href="{{ route('clients.edit', $client->id) }}">
+                                        <a href="{{ route('admin.client.edit', $client->id) }}">
                                             <x-feathericon-edit class="table-icon"/>
                                         </a>
                                     </span>
@@ -105,14 +105,14 @@
                             <th>Año</th>
                             <th>Servicio/Fallo</th>
                             <th></th>
-                            <th class="text-center">Status</th>
+                            <th>Status</th>
                             <th class="text-end">Fecha servicio</th>
                         </thead>
                         <tbody>
                             @foreach ($client->services as $service)
                             <tr>
                                 <td>
-                                    <a href="{{ route('cars.show', $service->car->id) }}">{{ $service->car->carName() }}</a>
+                                    <a href="{{ route('admin.car.show', $service->car->id) }}">{{ $service->car->carName() }}</a>
                                 </td>
                                 <td>{{ $service->car->year }}</td>
                                 <td>{{ $service->fault }}</td>
@@ -121,7 +121,9 @@
                                         <span class="badge text-bg-warning">Cotización</span>
                                     @endif
                                 </td>
-                                <td class="text-center"><span class="badge text-bg-success">{{ $service->status }}</span></td>
+                                <td>
+                                    <x-badge-simple status="{{ $service->status }}"></x-badge-simple>
+                                </td>
                                 <td class="text-end">
                                     <span title="{{ $service->created_at->diffForHumans() }}">
                                         {{ $service->created_at->format('j M Y') }}
@@ -149,7 +151,7 @@
                             <tr>
                                 <td>
                                     <x-feathericon-arrow-right-circle class="table-icon" style="margin: 0 5px 2px"/>
-                                    <a href="{{ route('cars.show', $car->id) }}">{{ $car->brand }} {{ $car->model }}</a>
+                                    <a href="{{ route('admin.car.show', $car->id) }}">{{ $car->brand }} {{ $car->model }}</a>
                                 </td>
                                 <td>{{ $car->year }}</td>
                                 <td>{{ $car->serie }}</td>
@@ -164,7 +166,7 @@
 
         <div class="row">
             <div class="col-md-12 text-end">
-                <a href="{{ route('clients.index') }}" class="btn btn-sm btn-success">Atras</a>
+                <a href="{{ route('admin.client.index') }}" class="btn btn-sm btn-success">Atras</a>
             </div>
         </div>
     </div>

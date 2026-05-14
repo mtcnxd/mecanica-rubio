@@ -3,7 +3,7 @@
 @endif
 
 @if ($status == 'Finalizado')
-    <span class="badge text-bg-success">{{ $status }}</span>
+    <span class="badge text-bg-primary">{{ $status }}</span>
 @endif
 
 @if ($status == 'Entregado')
@@ -15,9 +15,9 @@
 @endif
 
 @if ($status == 'Esperando cliente')
-    <span class="badge text-bg-danger">{{ $status }}</span>
+    <span class="badge text-bg-secondary">{{ $status }}</span>
 @endif
 
 @if ($status == 'Esperando refaccion')
-    <span class="badge text-bg-danger">{{ $status }}</span>
+    <span class="badge text-bg-secondary">{{ $status }}</span>
 @endif

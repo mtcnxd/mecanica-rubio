@@ -61,10 +61,10 @@
                 <tr>
                     <td>{{ $service->id }}</td>
                     <td>
-                        <a href="{{ route('services.show', $service->id) }}">{{ $service->fault }}</a>
+                        <a href="{{ route('admin.service.show', $service->id) }}">{{ $service->fault }}</a>
                     </td>
                     <td>
-                        <a href="{{ route('clients.show', $service->client->id) }}">{{ $service->client->name }}</a>
+                        <a href="{{ route('admin.client.show', $service->client->id) }}">{{ $service->client->name }}</a>
                     </td>
                     <td>{{ $service->car->brand }} {{ $service->car->model }}</td>
                     <td>{{ $service->entry_date->format('d/m/Y') ?? '' }}</td>

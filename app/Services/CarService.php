@@ -12,7 +12,9 @@ class CarService
 
     public function all()
     {
-        return Car::where('status', 'Activo')->get();
+        return Car::where('status', 'Activo')
+            ->with('lastService')
+            ->get();
     }
 
     public function find(string $id)

@@ -39,11 +39,11 @@ class EmployeesController extends Controller
         try {
             $this->employeeService->store($request->all());
 
-            return to_route('employees.index')
+            return to_route('employee.index')
                 ->with('success', 'El registro se creo con exito');
         
             } catch (Exception $e) {
-            return to_route('employees.index')
+            return to_route('employee.index')
                 ->with('warning', 'Error | Message: '. $e->getMessage());
         }
     }
@@ -78,7 +78,7 @@ class EmployeesController extends Controller
             "email" => $request->email,
         ]);
 
-        return to_route('employees.index')
+        return to_route('employee.index')
             ->with('message', 'Los datos se actualizaron correctamente');
     }
 
