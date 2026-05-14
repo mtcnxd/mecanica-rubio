@@ -24,8 +24,9 @@ class InvestmentsController extends Controller
     {
         try {
             $charts = $this->chartsService;
-            $results['crypto'] = $this->cryptoService->allActive();
-            $results['other']  = $this->fiatService->allActive();
+            $results['crypto']      = $this->cryptoService->allActive();
+            $results['other']       = $this->fiatService->allActive();
+            $results['instruments'] = $this->fiatService->allInstruments();
 
             return view('admin.investments.index', compact('results', 'charts'));
         }

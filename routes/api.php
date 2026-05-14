@@ -98,17 +98,9 @@ Route::name('api.')
 
 Route::name('api.')
     ->prefix('investments')
+    ->controller(InvestmentsController::class)
     ->group(function () {
-        Route::apiResource('bitso', InvestmentsController::class)->only('store','destroy');
-
-        /*
-        Route::get('/', 'allInvestments')->name('investments.all');
-        Route::get('/{id}', 'investmentDetails')->name('investments.details');
-
-        Route::group(['prefix' => 'bitso'], function () {
-            Route::get('trades', 'getActiveTrades')->name('investments.bitso.trades');
-            Route::post('/', 'store')->name('bitso.store');
-            Route::delete('/{id}', 'destroy')->name('bitso.destroy');
-        });
-        */
+        Route::post('store-crypto', 'store')->name('store-crypto');
+        Route::delete('destroy-crypto', 'destroy')->name('destroy-crypto');
+        Route::post('store-fiat', 'storeFiat')->name('store-fiat');
     });

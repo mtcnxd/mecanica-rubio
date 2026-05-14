@@ -101,14 +101,14 @@
                 <form action="{{ route('investments.update') }}" method="POST">
                     @csrf
                     <label for="investment_id" class="mb-1">Instrumento de inversion</label>
-                    <select name="investment_id" class="form-select">
-                        @foreach ($results as $investment)
-                            <option value="{{-- $investment->id --}}">{{-- $investment->name --}}</option>
+                    <select id="investment_instrument" class="form-select">
+                        @foreach ($results['instruments'] as $instrument)
+                            <option value="{{ $instrument->id }}">{{ $instrument->name }}</option>
                         @endforeach
                     </select>
                     <label for="amount" class="mt-3 mb-1">Cantidad actual</label>
-                    <input type="text" name="amount" class="form-control">
-                    <button type="submit" class="ps-3 pe-3 btn btn-sm btn-secondary mt-3">Actualizar Saldo</button>
+                    <input type="text" id="investment-amount" class="form-control">
+                    <button id="update-fiat-balance" class="ps-3 pe-3 btn btn-sm btn-secondary mt-3">Actualizar Saldo</button>
                 </form>
             </x-window_main>
         </div>
@@ -166,8 +166,8 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     const rutes = {
-        investmentItemStore : "{{ route('api.bitso.store') }}",
-        investmentItemRemove : "{{ route('api.bitso.destroy', ':id') }}",
+        investmentItemStore : "{{ route('api.store-crypto') }}",
+        investmentItemRemove : "{{ route('api.destroy-crypto', ':id') }}",
     }
 </script>
 <script src="{{ asset('js/investments.js') }}"></script>
