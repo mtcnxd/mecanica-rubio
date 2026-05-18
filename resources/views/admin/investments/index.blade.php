@@ -129,13 +129,13 @@
                         @php
                             $sumDifference = 0;
                         @endphp
-                        @foreach ($results['other'] as $investment)
+                        @foreach ($results['fiat'] as $investment)
                             <tr>
                                 <td><a href="{{ route('admin.investment.show', $investment->id) }}">{{ $investment->name }}</a></td>
-                                <td class="text-end">{{ Number::currency(0) }}</td>
-                                <td class="text-end">{{ Number::currency(0) }}</td>
+                                <td class="text-end">{{ Number::currency($investment->current_amount) }}</td>
+                                <td class="text-end">{{ Number::currency($investment->current_amount - $investment->last_amount) }}</td>
                                 <td class="text-end">{{ Number::percentage(0, 1) }}</td>
-                                <td class="text-end">{{ $investment->date->format('d M Y') }}</td>
+                                <td class="text-end">{{-- $investment->date->format('d M Y') --}}</td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -168,6 +168,7 @@
     const rutes = {
         investmentItemStore : "{{ route('api.investment.crypto') }}",
         investmentItemRemove : "{{ route('api.investment.crypto', ':id') }}",
+        investmentItemFiat: "{{ route('api.investment.fiat') }}"
     }
 </script>
 <script src="{{ asset('js/investments.js') }}"></script>

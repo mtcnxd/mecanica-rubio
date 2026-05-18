@@ -116,6 +116,10 @@ class OrderService
             })->get();
     }
 
+    /**
+     * Unused function, needs to be removed.
+     */
+    /*
     public function servicesThisMonth()
     {
         return Service::select(
@@ -137,6 +141,7 @@ class OrderService
             ->where('quote', false)
             ->get();
     }
+    */
 
     public function servicesSummary()
     {
