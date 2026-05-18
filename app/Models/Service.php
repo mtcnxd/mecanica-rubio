@@ -53,33 +53,15 @@ class Service extends Model
         return $this->hasMany(ServiceItems::class, 'service_id');
     }
 
-    public function getNotesAttribute()
-    {
-        return $this->attributes['notes'] ?? '';
-    }
-
+    /**
+     * Total amount of service
+     */
     public function getTotalAttribute()
     {
-        return $this->attributes['total'] ?? 0;
-    }
+        $total = $this->serviceItems()
+            ->selectRaw('SUM(price * amount) as total')
+            ->value('total');
 
-    public function serviceItemsTotal()
-    {
-        return ServiceItems::where('service_id', $this->id)
-            ->sum(ServiceItems::raw('price * amount'));
-    }
-
-    public function daysElapsed()
-    {
-        if ($this->entry_date)
-        {
-            if ($this->status == 'Entregado'){
-                return $this->entry_date->diffInDays($this->finished_date);
-            }
-
-            return $this->entry_date->diffInDays(now());
-        }
-        
-        return;
+        return $total ?? 0;
     }
 }

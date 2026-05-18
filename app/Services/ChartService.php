@@ -81,19 +81,6 @@ class ChartService
         return 0.0;
     }
 
-    public function getTotalCurrentMonthExpenses()
-    {   
-        $total = $this->select(Expense::raw('SUM(amount * price) as total'))
-            ->whereMonth('expense_date', now()->month)
-            ->first()->total;
-
-        if ($total){
-            return $total;
-        }
-
-        return 0.0;
-    }
-
     public static function convertToPercentage(float $first, float $second) : float
     {
         $difference = ($first - $second);

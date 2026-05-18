@@ -70,7 +70,7 @@
                     <td>{{ $service->entry_date->format('d/m/Y') ?? '' }}</td>
                     <td>{{ $service->finished_date ? $service->finished_date->format('d/m/Y') : '' }}</td>
                     <td><x-badge-simple :status="$service->status"/></td>
-                    <td class="text-end">{{ Number::currency($service->total) }}</td>
+                    <td class="text-end">{{ $service->total ? Number::currency($service->total) : '' }}</td>
                 </tr>
                 @endforeach
             </tbody>

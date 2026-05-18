@@ -13,12 +13,9 @@ class Investment extends Model
 
     protected $fillable = [
         'name',
-        'amount',
+        'last_amount',
+        'current_amount',
         'active',
-    ];
-
-    protected $dates = [
-        'date'
     ];
 
     public function investmentData()

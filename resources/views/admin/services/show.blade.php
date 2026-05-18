@@ -78,9 +78,9 @@
                             <div class="col-md-4">
                                 <label>Días transcurridos</label>
                                 @if ($service->status == 'Entregado')
-                                    <input type="text" class="form-control text-end" name="client" value="{{ $service->daysElapsed() }}" disabled>
+                                    <input type="text" class="form-control text-end" name="client" value="{{ 0 }}" disabled>
                                 @else
-                                    <input type="text" class="form-control text-end {{($service->daysElapsed() >= 5) ? 'is-invalid' : '' }}" name="client" value="{{ $service->daysElapsed() }}" disabled>
+                                    <input type="text" class="form-control text-end {{ 0 }}" name="client" value="{{ 0 }}" disabled>
                                 @endif
                             </div>                            
                         </div>
@@ -128,8 +128,8 @@
                                     </a>
                                 </td>
                                 <td class="text-end fw-bold">
-                                    <input type="hidden" name="total" value="{{ $service->serviceItemsTotal() }}">
-                                    {{ Number::currency($service->serviceItemsTotal()) }}
+                                    <input type="hidden" name="total" value="{{ $service->total }}">
+                                    {{ Number::currency($service->total) }}
                                 </td>
                             </tr>
                         </tfoot>

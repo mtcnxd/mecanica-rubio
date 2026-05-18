@@ -15,17 +15,16 @@ class InvestmentsController extends Controller
     use Messenger;
 
     public function __construct(
-        private ChartService $chartsService,
         private CryptoService $cryptoService,
         private FiatService $fiatService
     ){}
 
-    public function index()
+    public function index(ChartService $chartsService)
     {
         try {
-            $charts = $this->chartsService;
+            $charts = $chartsService;
             $results['crypto']      = $this->cryptoService->allActive();
-            $results['other']       = $this->fiatService->allActive();
+            $results['fiat']       = $this->fiatService->allActive();
             $results['instruments'] = $this->fiatService->allInstruments();
 
             return view('admin.investments.index', compact('results', 'charts'));

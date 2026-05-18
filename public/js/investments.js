@@ -51,7 +51,7 @@ class Investment {
         console.log(data);
 
         $.ajax({
-            url: this.rutes.investmentInstrumentUpdate,
+            url: this.rutes.investmentItemFiat,
             method: 'POST',
             data: JSON.stringify(data),
             contentType: 'application/json',
@@ -61,7 +61,10 @@ class Investment {
                     this.showSwalMessage(response.message, 'error');
                 }
 
-                this.showSwalMessage(response.message);
+                this.showSwalMessage(response.message)
+                    .then(() => {
+                        location.reload();
+                    });
 
             },
             error: (response) => {

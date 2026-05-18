@@ -45,6 +45,27 @@ class InvestmentsController extends Controller
     }
 
     /**
+     * Store a newly created resource in storage.
+     */    
+    public function storeFiat(Request $request)
+    {
+        try {
+            $this->fiatService->dataStore($request->all());
+
+            return response()->json([
+                'success' => true,
+                'message' => "Registro guardado correctamente",
+            ]);
+
+        } catch (\Exception $e){
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    /**
      * Display the specified resource.
      */
     public function show(string $id)

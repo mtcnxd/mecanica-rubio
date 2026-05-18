@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
+use App\Models\Payroll;
 
 class Employee extends Model
 {
@@ -43,17 +43,7 @@ class Employee extends Model
 
     public function salaries()
     {
-        return $this->hasMany(Salary::class, 'user_id');
-    }
-
-    public function getExtraAttribute($value)
-    {
-        return $value ?? 'No tiene';
-    }
-
-    public function test($value)
-    {
-        return $this->depto . ' ' . $value;
+        return $this->hasMany(Payroll::class, 'user_id');
     }
 
     public function vacations()

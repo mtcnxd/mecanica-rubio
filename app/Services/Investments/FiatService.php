@@ -7,18 +7,31 @@ use App\Models\Investment;
 
 class FiatService
 {
-    public function dataStore(array $data)
+    public function allInstruments()
     {
-        InvestmentData::create($data);
+        return Investment::where('active', true)->get();
     }
 
     public function allActive()
     {
-        return InvestmentData::all();
+        return Investment::where('active', true)->get();
     }
 
-    public function allInstruments()
+    public function dataStore(array $data): bool
     {
-        return Investment::where('active', true)->get();
+        $investment = Investment::where('id', $data['instrument'])->first();
+
+        $investment->update([
+            'last_amount'    => $investment->current_amount,
+            'current_amount' => $data['amount'],
+        ]);
+
+        InvestmentData::create([
+            'investment_id' => $data['instrument'],
+            'amount'        => $data['amount'],
+            'date'          => now(),
+        ]);
+
+        return true;
     }
 }
