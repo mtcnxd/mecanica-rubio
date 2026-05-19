@@ -11,7 +11,6 @@ class CryptoService
         private BitsoApi $bitsoApi
     ) {}
 
-
     public function dataStore(array $data)
     {
         $data['purchase_value'] = $data['amount'] * $data['price'];
@@ -21,35 +20,24 @@ class CryptoService
     public function allActive()
     {
         $results = [];
-        $ticker = $this->bitsoApi->getTicker();
         $currencies = BitsoData::where('active', true)->get();
 
         foreach ($currencies as $currency){
-            $results[] = array_filter(
-                array_map(function($subTicker) use ($currency) {
-                    if (in_array($currency->book, (array) $subTicker)){
-                        return [
-                            'id'             => $currency->id,
-                            'amount'         => $currency->amount,
-                            'price'          => $currency->price,
-                            'value'          => $currency->purchase_value,
-                            'book'           => $subTicker->book,
-                            'last'           => $subTicker->last,
-                            'current_value'  => $subTicker->last * $currency->amount,
-                            'purchase_value' => $currency->amount * $currency->price,
-                            'created_at'     => $currency->created_at
-                        ];
-                    }
-                }, $ticker)
-            );
+            $results[] = [
+                'id'             => $currency->id,
+                'amount'         => $currency->amount,
+                'price'          => $currency->price,
+                'value'          => $currency->purchase_value,
+                'book'           => $currency->book,
+                'last'           => $currency->price,
+                'percentage'     => $currency->getDiffPercentageAttribute($currency->book),
+                'current_value'  => $currency->getCurrentValueAttribute($currency->book),
+                'purchase_value' => $currency->purchaseValue,
+                'created_at'     => $currency->created_at
+            ];
         }
 
-        $response = [];
-        foreach ($results as $key => $result) {
-            $response[] = array_values($result)[0];
-        }
-
-        return $response;
+        return $results;
     }
 
     public function destroy(string $id)
