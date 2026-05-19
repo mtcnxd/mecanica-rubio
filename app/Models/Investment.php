@@ -22,4 +22,30 @@ class Investment extends Model
     {
         return $this->hasMany(InvestmentData::class, 'investment_id');
     }
+
+    /**
+     * Accessors
+     */
+
+    public function getTotalInvestedAttribute()
+    {
+        return $this->sum('current_amount');
+    }
+
+    public function getProfitPercentageAttribute()
+    {
+        $totalInvested = $this->getTotalInvestedAttribute();
+        $currentAmount = $this->current_amount;
+
+        return ($currentAmount * 100) / $totalInvested;
+    }
+
+    public function getProfitAttribute()
+    {
+        $sumLastAmount = $this->sum('last_amount');
+        $sumCurrentAmunt = $this->sum('current_amount');
+
+        return $sumCurrentAmunt - $sumLastAmount;
+    }
+
 }
