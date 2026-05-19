@@ -6,7 +6,7 @@
     <h6 class="window-title shadow text-uppercase fw-bold"><span class="ms-3">Empleado</span></h6>
     <div class="window-body shadow p-4">
         <div class="form-container border">
-            <form action="{{ route('employees.update', $employee->id) }}" method="POST">
+            <form action="" method="POST">
                 <p class="fs-5 fw-bold">Detalles empleado</p>
                 @method('PUT')
                 @csrf
@@ -187,12 +187,12 @@
                         <p class="fs-5 fw-bold">Vacaciones</p>
                         <div class="col-md-6">
                             <label>Dias tomados</label> 
-                            <input type="text" value="{{ !is_null($employee->vacations()) ? $employee->vacations()->days_taken : 0 }}" class="form-control" disabled>
+                            <input type="text" value="" class="form-control" disabled>
                         </div>
 
                         <div class="col-md-6">
                             <label>Dias pendientes</label>
-                            <input type="text" value="{{ !is_null($employee->vacations()) ? $employee->vacations()->days_pending : 0 }}" class="form-control" disabled>
+                            <input type="text" value="" class="form-control" disabled>
                         </div>
                     </div>
                     
@@ -213,7 +213,7 @@
         var comment  = $('#comment');
 
         $.ajax({
-            url: "{{ route('api.vacations.store') }}",
+            url: "",
             method: 'POST',
             data:{
                 employee:employee,
@@ -243,7 +243,7 @@
     $(".cancellVacationDate").on('click', function(event){
         event.preventDefault();
         $.ajax({
-            url:"{{ route('api.vacations.destroy', ':id') }}".replace(':id', this.dataset.id),
+            url:"",
             method: 'DELETE',
             data:{
                 id:this.dataset.id

@@ -19,9 +19,9 @@
                     <th class="text-end">Egresos</th>
                 </thead>
                 <tbody>
-                    <tr>
+                    <tr style="background-color: #efefef;">
                         <td colspan="5">
-                            <strong class="text-uppercase">Ingresos</strong>
+                            <strong class="text-uppercase fs-7">Ingresos</strong>
                         </td>
                     </tr>
                     @foreach ($montlyData['services'] as $service)
@@ -38,7 +38,7 @@
                     @endforeach
                     <tr style="background-color: #efefef;">
                         <td colspan="5">
-                            <strong class="text-uppercase">Egresos</strong>
+                            <strong class="text-uppercase fs-7">Egresos</strong>
                         </td>
                     </tr>
                     @foreach ($montlyData['expenses'] as $expense)
@@ -55,7 +55,7 @@
                     @endforeach
                     <tr style="background-color: #efefef;">
                         <td colspan="5">
-                            <strong class="text-uppercase">Nóminas</strong>
+                            <strong class="text-uppercase fs-7">Nóminas</strong>
                         </td>
                     </tr>
                     @foreach ($montlyData['payrolls'] as $payroll)
