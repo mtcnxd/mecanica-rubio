@@ -11,7 +11,6 @@ class CryptoService
         private BitsoApi $bitsoApi
     ) {}
 
-
     public function dataStore(array $data)
     {
         $data['purchase_value'] = $data['amount'] * $data['price'];
@@ -35,6 +34,7 @@ class CryptoService
                             'value'          => $currency->purchase_value,
                             'book'           => $subTicker->book,
                             'last'           => $subTicker->last,
+                            'percentage'     => $currency->getDiffPercentageAttribute($currency->book),
                             'current_value'  => $subTicker->last * $currency->amount,
                             'purchase_value' => $currency->amount * $currency->price,
                             'created_at'     => $currency->created_at

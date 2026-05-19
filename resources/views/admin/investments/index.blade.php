@@ -28,10 +28,10 @@
                         <td class="text-end">{{ Number::currency($crypto['purchase_value']) }}</td>
                         <td class="text-end">{{ Number::currency($crypto['current_value']) }}</td>
                         <td class="text-end">
-                            @if (true)
-                                <span class="badge text-bg-danger rounded-pill">{{ Number::percentage(0, 2) }}</span>
+                            @if ($crypto['percentage'] < 0)
+                                <span class="badge text-bg-danger rounded-pill">{{ Number::percentage($crypto['percentage'], 2) }}</span>
                             @else
-                                <span class="badge text-bg-success rounded-pill">{{ Number::percentage(0, 2) }}</span>
+                                <span class="badge text-bg-success rounded-pill">{{ Number::percentage($crypto['percentage'], 2) }}</span>
                             @endif
                         </td>
                         <td class="text-end">

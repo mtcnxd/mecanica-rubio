@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Services\Investments\BitsoApi;
 
 /**
  * @property string $book
@@ -36,53 +37,34 @@ class BitsoData extends Model
         'active'
     ];
 
-    /*
-    protected $appends = [
-        'current_value'
-    ];
-    */
-    /*
-    public function getCurrentValueAttribute()
-    {
-        $currenBookPrice = $this->getTickerByBook($this->book);
+    /**
+     * Accessors
+     */
 
-        if (is_null($currenBookPrice)){
-            throw new Exception("Error Processing Request");
+    public function getPurchaseValueAttribute()
+    {
+        return ($this->amount * $this->price);
+    }
+
+    public function getCurrentValueAttribute($book)
+    {
+        $api = new BitsoApi();
+        $currentBookPrice = $api->getBookPrice($book);
+
+        if ($currentBookPrice){
+            return ($currentBookPrice->last * $this->amount);
         }
 
-        return $currenBookPrice->last * $this->amount;
+        return 0.0;
     }
 
-    public function currentGainOrLost(string $book)
+    public function getDiffPercentageAttribute($book)
     {
-        $result        = 0.0;
-        $purchasePrice = $this->price;
-        $currentPrice  = $this->currentPrice($book); 
-        $result        = ($currentPrice - $purchasePrice) / $currentPrice;
+        $currentValue = $this->getCurrentValueAttribute($book);
+        $purchaseValue = $this->getPurchaseValueAttribute();
 
-        return $result * 100;
+        $result = ($currentValue - $purchaseValue) / $currentValue;
+
+        return ($result * 100);
     }
-
-    public function getTickerByBook(string $book)
-    {
-        $this->ticker = $this->bitso->getTicker();
-
-        foreach ($this->ticker as $item) {
-            if (in_array($book, (array) $item)){
-                return $item;
-            }
-        }
-    }
-
-    public function currentPrice(string $book)
-    {
-        return $this->getTickerByBook($book)->last;
-    }
-
-    public function currentPurchaseValue(string $book)
-    {
-        $currentPrice = $this->getTickerByBook($book)->last;
-        return ($currentPrice * $this->amount);
-    }
-    */
 }
