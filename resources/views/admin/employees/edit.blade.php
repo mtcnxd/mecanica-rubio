@@ -5,7 +5,7 @@
     <div class="col-md-7">
         <h6 class="window-title shadow text-uppercase fw-bold"><span class="ms-3">Empleados</span></h6>
         <div class="window-body shadow p-4">
-            <form action="{{ route('employees.update', $employee->id) }}" method="POST">
+            <form action="" method="POST">
                 <div class="form-container border">
                     @method('PUT')
                     @csrf
@@ -97,11 +97,6 @@
                     <div class="col-md-12 text-end">
                         <img src="{{ asset('image.gif') }}" width="20px" height="20px" id="loader" style="margin-right: 20px; display:none;">
                         <a href="{{ route('admin.employee.index') }}" class="btn btn-sm btn-secondary">Atras</a>
-                        <button type="button" class="btn btn-sm btn-danger" id="btn-delete">
-                            <x-feathericon-trash-2 class="table-icon" style="margin: -2px 5px 2px"/>
-                            Eliminar
-                        </button>
-
                         <button type="submit" class="btn btn-sm btn-success">
                             <x-feathericon-save class="table-icon" style="margin: -2px 5px 2px"/>
                             Guardar
@@ -124,7 +119,7 @@
 
         $.ajax({
             type: "POST",
-            url:  "{{ route('employees.delete') }}",
+            url:  "",
             data: {
                 user: {{ $employee->id }}
             },
