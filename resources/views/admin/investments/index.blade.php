@@ -134,16 +134,16 @@
                                 <td><a href="{{ route('admin.investment.show', $investment->id) }}">{{ $investment->name }}</a></td>
                                 <td class="text-end">{{ Number::currency($investment->current_amount) }}</td>
                                 <td class="text-end">{{ Number::currency($investment->current_amount - $investment->last_amount) }}</td>
-                                <td class="text-end">{{ Number::percentage(0, 1) }}</td>
-                                <td class="text-end">{{-- $investment->date->format('d M Y') --}}</td>
+                                <td class="text-end">{{ Number::percentage($investment->profitPercentage, 1) }}</td>
+                                <td class="text-end">{{ $investment->updated_at->format('d M Y') }}</td>
                             </tr>
                         @endforeach
                     </tbody>
                     <tfoot>
                         <tr>
                             <td></td>
-                            <td class="text-end fw-bold">{{ 0 }}</td>
-                            <td class="text-end fw-bold">{{ Number::currency($sumDifference) }}</td>
+                            <td class="text-end fw-bold">{{ Number::currency($investment->totalInvested) }}</td>
+                            <td class="text-end fw-bold">{{ Number::currency($investment->profit) }}</td>
                             <td colspan="2"></td>
                         </tr>
                     </tfoot>
