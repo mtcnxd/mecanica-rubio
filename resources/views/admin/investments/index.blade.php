@@ -35,7 +35,7 @@
                             @endif
                         </td>
                         <td class="text-end">
-                            <span title="{{ $crypto['created_at'] }}">{{ $crypto['created_at'] }}</span>
+                            <span title="{{ $crypto['created_at']->diffForHumans() }}">{{ $crypto['created_at']->format('d M Y') }}</span>
                         </td>
                         <td class="text-end">
                             <a href="#" class="cancell-trade" data-id="{{ $crypto['id'] }}">
@@ -207,9 +207,9 @@
     var incomes = new Chart(ctx, {
         type: 'pie',
         data: {
-            labels: @json($charts->getDiversificationChart()['labels']),
+            labels: @json($charts->chartProfitPercentage()['labels']),
             datasets: [{
-                data: @json($charts->getDiversificationChart()['values']),
+                data: @json($charts->chartProfitPercentage()['values']),
                 backgroundColor: [
                     'rgba(75, 192, 192, 0.3)',
                     'rgba(75, 192, 192, 0.6)',

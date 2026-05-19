@@ -161,15 +161,16 @@ class ChartService
         ];
     }
 
-    static function getDiversificationChart()
+    static function chartProfitPercentage()
     {
         $investments = Investment::where('active', true)->orderBy('name')->get();
 
         $labels = [];
         $values = [];
+
         foreach ($investments as $investment) {
             $labels[] = $investment->name;
-            $values[] = [];
+            $values[] = $investment->profitPercentage;
         }
 
         return [
