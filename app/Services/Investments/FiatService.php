@@ -34,4 +34,9 @@ class FiatService
 
         return true;
     }
+
+    public function fiatDetails(int $investmentId)
+    {
+        return Investment::where('id', $investmentId)->first();
+    }
 }

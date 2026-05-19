@@ -54,7 +54,7 @@ class InvestmentsController extends Controller
 
     public function show(int $investmentId)
     {
-        $investment = $this->investmentService->investmentDetails($investmentId);
+        $investment = $this->fiatService->fiatDetails($investmentId);
         
         return view('admin.investments.show', compact('investment'));
     }

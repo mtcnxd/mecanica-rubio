@@ -5,7 +5,7 @@
     <div class="col-md-7">    
         <h6 class="window-title shadow text-uppercase fw-bold"><span class="ms-3">Egreso</span></h6>
         <div class="window-body shadow p-4">
-            <form action="{{ route('expenses.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('admin.finance.expense.store') }}" method="POST" enctype="multipart/form-data">
                 <div class="form-container border">
                     @csrf
                     <div class="row">
@@ -62,7 +62,7 @@
 
                 <div class="row mt-3">
                     <div class="col-md-12 text-end">
-                        <a href="{{ route('expenses.index') }}" class="btn btn-sm btn-secondary">Cancelar</a>
+                        <a href="{{ route('admin.finance.expense.index') }}" class="btn btn-sm btn-secondary">Cancelar</a>
                         <button type="submit" class="btn btn-sm btn-success">
                             <x-feathericon-save class="table-icon" style="margin: -2px 5px 2px"/>
                             Guardar

@@ -73,7 +73,7 @@ class ExpensesController extends Controller
             session()->flash('warning', 'ERROR: '. $err->getMessage());
 		}
 
-        return to_route('expense.index');
+        return to_route('admin.finance.expense.index');
     }
 
     public function update(Request $request, string $id)
@@ -91,7 +91,7 @@ class ExpensesController extends Controller
 
             session()->flash('message', 'Egreso actualizado correctaamente');
 
-            return to_route('expense.index');
+            return to_route('admin.finance.expense.index');
         }
         
         Expense::where('id', $id)->update([
@@ -102,7 +102,7 @@ class ExpensesController extends Controller
 
         session()->flash('message', 'Egreso actualizado correctaamente');
 
-        return to_route('expense.index');
+        return to_route('admin.finance.expense.index');
     }
 
     public function deleteItem(Request $request)
