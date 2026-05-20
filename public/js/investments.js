@@ -130,7 +130,7 @@ $(document).ready(function () {
             amount: parseFloat(row.find("td").eq(1).text() - row.find("td").eq(6).text()).toFixed(8)
         }
 
-        console.log(data);
+        investment.addItem(data);
     });
 
     $("#update-fiat-balance").on('click', function (event) {
