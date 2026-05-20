@@ -57,8 +57,11 @@
         </table>
         
         <div style="display: flex; justify-content:space-between;">
-            <a href="#" class="ms-3 ps-3 pe-3 btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addShopping">Nueva Compra</a>
-            <span class="pe-3">{{ 0 }} Registros encontrados</span>
+            <div>
+                <a href="#" class="ms-3 ps-3 pe-3 btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addShopping">Nueva Compra</a>
+                <a href="#" class="ms-1 ps-3 pe-3 btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#myTrades">Trades</a>
+            </div>
+            <span class="pe-3">{{ count($results['crypto']) }} Registros encontrados</span>
         </div>
     </x-window_main>
 
@@ -156,6 +159,7 @@
 @endsection
 
 @include('admin.investments.modal_create')
+@include('admin.investments.modal_trades')
 
 @section('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
@@ -168,7 +172,8 @@
     const rutes = {
         investmentItemStore : "{{ route('api.investment.crypto') }}",
         investmentItemRemove : "{{ route('api.investment.crypto', ':id') }}",
-        investmentItemFiat: "{{ route('api.investment.fiat') }}"
+        investmentItemFiat: "{{ route('api.investment.fiat') }}",
+        investmentTrades: "{{ route('api.investment.trades') }}",
     }
 </script>
 <script src="{{ asset('js/investments.js') }}"></script>

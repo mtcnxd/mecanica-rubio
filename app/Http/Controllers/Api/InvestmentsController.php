@@ -96,4 +96,22 @@ class InvestmentsController extends Controller
             ]);
         }
     }
+
+    public function trades()
+    {
+        try {
+            $trades = $this->cryptoService->trades();
+
+            return response()->json([
+                'success' => true,
+                'data' => $trades,
+            ]);
+       
+        } catch (\Exception $er){
+            return response()->json([
+                'success' => false,
+                'message' => $er->getMessage(),
+            ]);
+        }
+    }
 }
