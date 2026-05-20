@@ -14,14 +14,14 @@ class Employee extends Model
 
     protected $fillable = [
         'name',
+        'phone',
+        'email',
         'salary',
         'extra',
         'depto',
         'rfc',
         'curp',
         'nss',
-        'email',
-        'phone',
         'comments',
         'periodicity',
         'status',
@@ -48,16 +48,11 @@ class Employee extends Model
 
     public function vacations()
     {
-        return DB::table('vacations_pendings')
-            ->where('employee_id', $this->id)
-            ->first();
+        return [];
     }
 
     public function vacationsDaysTaken()
     {
-        return DB::table('vacations_history')
-            ->where('employee_id', $this->id)
-            ->orderBy('date')
-            ->get();
+        return [];
     }
 }

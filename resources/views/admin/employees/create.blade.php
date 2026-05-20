@@ -6,7 +6,7 @@
     <div class="col-md-7">    
         <h6 class="window-title shadow text-uppercase fw-bold"><span class="ms-3">Nuevo Empleado</span></h6>
         <div class="window-body shadow p-4">
-            <form action="{{ route('employees.store') }}" method="POST">
+            <form action="{{ route('admin.employee.store') }}" method="POST">
                 <div class="form-container border">
                     @method('POST')
                     @csrf

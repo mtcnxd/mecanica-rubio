@@ -8,7 +8,7 @@ use App\Services\Investments\BitsoApi;
 class CryptoService
 {
     public function __construct(
-        private BitsoApi $bitsoApi
+        private BitsoApi $api
     ) {}
 
     public function dataStore(array $data)
@@ -49,5 +49,10 @@ class CryptoService
         BitsoData::where('id', $id)->update([
             'active' => false
         ]);
+    }
+    
+    public function trades()
+    {
+        return $this->api->userTrades(10);
     }
 }

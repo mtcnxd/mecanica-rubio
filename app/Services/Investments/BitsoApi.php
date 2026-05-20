@@ -77,9 +77,9 @@ class BitsoApi
 		return $this->ticker;
 	}
     
-    public function userTrades()
+    public function userTrades($limit = 15)
     {
-        return $this->getBitsoRequest('/v3/user_trades/')->payload;
+        return $this->getBitsoRequest('/v3/user_trades?limit='. $limit)->payload;
     }
 
 	public function getBookPrice(string $book)

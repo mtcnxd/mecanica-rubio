@@ -23,9 +23,15 @@ class EmployeesController extends Controller
 
     public function index()
     {
-        $employees = $this->employeeService->getAll();
-
-        return view('admin.employees.index', compact('employees'));
+        $employees = [];
+        try {
+            $employees = $this->employeeService->getAll();
+            return view('admin.employees.index', compact('employees'));
+        
+        } catch (Exception $e) {
+            return view('admin.employees.index', compact('employees'))
+                ->with('warning', 'Error | Message: '. $e->getMessage());
+        }
     }
 
     public function create()
@@ -39,11 +45,11 @@ class EmployeesController extends Controller
         try {
             $this->employeeService->store($request->all());
 
-            return to_route('employee.index')
+            return to_route('admin.employee.index')
                 ->with('success', 'El registro se creo con exito');
         
             } catch (Exception $e) {
-            return to_route('employee.index')
+            return to_route('admin.employee.index')
                 ->with('warning', 'Error | Message: '. $e->getMessage());
         }
     }

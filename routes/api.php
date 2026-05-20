@@ -110,6 +110,8 @@ Route::name('api.')
     ->prefix('investment')
     ->controller(InvestmentsController::class)
     ->group(function () {
+        Route::get('trades', 'trades')->name('investment.trades');
+
         Route::delete('crypto', 'destroy')->name('investment.crypto');
         Route::post('crypto', 'store')->name('investment.crypto');
         Route::post('fiat', 'storeFiat')->name('investment.fiat');

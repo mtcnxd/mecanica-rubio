@@ -46,7 +46,7 @@
             </a>
 
             <span>
-                {{ $employee->count() }} registros encontrados
+                {{ count($employees) }} registros encontrados
             </span>
         </div>
     </div>
