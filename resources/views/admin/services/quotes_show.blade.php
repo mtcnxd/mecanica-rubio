@@ -99,10 +99,10 @@
 
             <div class="row">
                 <div class="col-md-12 text-end">
-                    <a href="#" class="btn btn-sm btn-secondary" onclick="downloadPDF({{ $service->id }})">
-                        <x-feathericon-printer class="table-icon" style="margin: -2px 5px 2px"/>
-                        Imprimir
-                    </a>
+                    <button class="btn btn-sm btn-secondary" id="getPdf">
+                        <x-feathericon-file-text class="table-icon" style="margin: -2px 5px 2px"/>
+                        Descargar
+                    </button>
                     <button type="button" class="btn btn-sm btn-secondary" id="chgService">
                         Servicio
                     </button>

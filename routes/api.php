@@ -67,9 +67,7 @@ Route::name('api.')
     ->prefix('service')
     ->group(function () {
         Route::get('/{id}', [ServicesController::class, 'show'])->name('service.show');
-
         Route::put('/{id}', [ServicesController::class, 'update'])->name('service.update');
-        
         Route::post('{service}/pdf', [ServicesController::class, 'createServicePDF'])->name('service.pdf');
 
         Route::prefix('service-item')->name('service.')->group(function(){

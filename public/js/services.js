@@ -114,6 +114,10 @@ class ServiceItems {
                 document.body.removeChild(a);
                 window.URL.revokeObjectURL(url);
             },
+            error: function (response) {
+                console.log("An error ocurred when creating PDF");
+                console.log(response);
+            }
         });
     }
 }

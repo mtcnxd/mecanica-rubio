@@ -79,7 +79,7 @@
             <td>&nbsp;</td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
-            <td class="text-end">{{ Number::currency($service->serviceItemsTotal()) }}</td>
+            <td class="text-end">{{ Number::currency($service->total) }}</td>
         </tr>
     </table>
 

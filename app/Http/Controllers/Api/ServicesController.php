@@ -36,6 +36,14 @@ class ServicesController extends Controller
 
     public function createServicePDF(string $id)
     {
-        return $this->orderService->createPDF($id);
+        try {
+            return $this->orderService->createPDF($id);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ]);
+        }
     }
 }
