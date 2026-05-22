@@ -80,8 +80,8 @@
                                 </a>
                             </td>
                             <td class="text-end fw-bold">
-                                {{ Number::currency($service->serviceItemsTotal()) }}
-                                <input type="hidden" name="total" value="{{ $service->serviceItemsTotal() }}">
+                                <input type="hidden" name="total" value="{{ $service->total }}">
+                                {{ Number::currency($service->total) }}
                             </td>
                         </tr>
                     </tfoot>
@@ -175,158 +175,13 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-{{-- TODO: Rutas eliminadas temporalmente
-$("#chgService").on('click', function(event){
-    if (
-        confirm('Desea convertir esta cotizacion en servicio')
-    ) {
-        $.ajax({
-            url: "{{ route('services.change.quote') }}",
-            method: 'GET',
-            data: {
-                id:{{ $service->id }}
-            },
-            success: function (response){
-                if (response.success){
-                    Swal.fire({
-                        text: response.message,
-                        icon: 'success',
-                        confirmButtonText: 'Aceptar'
-                    })
-                    .then(() => {
-                        location.replace("{{ route('admin.service.show', $service->id) }}");
-                    })
-                }
-            }
-        })
+    const rutes = {
+        serviceItemsStore : "{{ route('api.service.service-item.store') }}",
+        serviceItemsIndex : "{{ route('api.service.service-item.index') }}",
+        serviceItemsDestroy : "{{ route('api.service.service-item.destroy', ':id') }}",
+        serviceUpdate : "{{ route('api.service.update', ':id') }}",
+        servicePdf : "{{ route('api.service.pdf', ':id') }}"
     }
-});
---}}
-
-$("#labour").on('change', function(){
-    if ($(this).prop('checked')) {
-        $("#amount").attr('disabled','disabled');
-        $("#item").attr('disabled','disabled');
-        $("#supplier").attr('disabled','disabled');
-    } else {
-        $("#amount").removeAttr('disabled');
-        $("#item").removeAttr('disabled');
-        $("#supplier").removeAttr('disabled');
-    }
-});
-
-{{-- TODO: Rutas eliminadas temporalmente
-$("#item").on('keyup', function(){
-    if (this.value.length >= 3){
-        $.ajax({
-            url: "{{ route('services.itemByCriteria') }}",
-            method: "GET",
-            data: {
-                text:this.value
-            },
-            success:function (response){
-                $("#resultListItems").empty();
-                $("#resultListItems").show();
-                response.data.forEach( (item) => {
-                    $("#resultListItems").append("<li onClick='selectItem(this)'>"+ item +"</li>");
-                })
-            }
-        });
-    }
-});
---}}
-
-{{-- TODO: Rutas eliminadas temporalmente
-$("#addItemInvoice").on('click', function(event){
-    var service  = $("#service").val();
-    var amount   = $("#amount").val();
-    var item     = $("#item").val();
-    var supplier = $("#supplier").val();
-    var price    = $("#price").val();
-    var labour   = $("#labour").prop('checked');
-
-    if (item.length < 3 && !labour) {
-        $("#item").focus();
-        return;
-    }
-
-    $.ajax({
-        url:"{{ route('services.itemCreate') }}",
-        method:'POST',
-        data: {
-            service:service,
-            amount:amount,
-            item:item,
-            supplier:supplier,
-            price:price,
-            labour:labour
-        },
-        success:function(response){
-            if (response.success){
-                $("#createItem").modal('hide');
-                location.reload();
-            }
-        }
-    });
-});
---}}
-
-{{-- TODO: Rutas eliminadas temporalmente
-$(".removeItem").on('click', function (event){
-    event.preventDefault();
-    $.ajax({
-        url:"{{ route('services.itemDestroy', ':id') }}".replace(':id', this.id),
-        method:'DELETE',
-        success:function(response){
-            //console.log(response);
-            showMessageAlert(response.message);
-        }
-    });
-});
---}}
-function selectItem(element){
-    let input = document.getElementById('item');
-    input.value = element.textContent;
-    $("#resultListItems").hide();
-}
-
-function showMessageAlert(message){
-    Swal.fire({
-        text: message,
-        icon: 'success',
-        confirmButtonText: 'Aceptar'
-    }).then(() => {
-        history.go();
-    });
-}
-
-{{-- TODO: Rutas eliminadas temporalmente
-function downloadPDF(serviceid){
-    $.ajax({
-        url: "{{ route('services.createServicePDF') }}",
-        method:'POST',
-        data:{
-            serviceid:serviceid
-        },
-        xhrFields: {
-            responseType: 'blob' // Recibir respuesta como un Blob
-        },
-        success: function (response){
-            console.log(response)
-
-            const blob = new Blob([response], { type: 'application/pdf' });
-            const url = window.URL.createObjectURL(blob);
-
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'invoice.pdf';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);
-        },
-    });
-}
---}}
-</script>    
+</script>
+<script src="{{ asset('js/services.js')}}"></script>
 @endsection

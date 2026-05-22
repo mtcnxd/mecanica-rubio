@@ -55,7 +55,7 @@
                 <tr>
                     <td>{{ $quote->id }}</td>
                     <td>
-                        <a href="{{ route('quotes.show', $quote->id) }}">
+                        <a href="{{ route('admin.service.quote.show', $quote->id) }}">
                             {{ $quote->client->name }}</td>
                         </a>
                     <td>{{ $quote->car->carName() }}
