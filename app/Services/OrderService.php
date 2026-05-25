@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Service;
 use App\Models\ServiceItems;
+use App\Models\Calendar;
 use App\Traits\Messenger;
 use App\Events\ServiceCompletedEvent;
 use Illuminate\Support\Number;
@@ -116,33 +117,6 @@ class OrderService
             })->get();
     }
 
-    /**
-     * Unused function, needs to be removed.
-     */
-    /*
-    public function servicesThisMonth()
-    {
-        return Service::select(
-            'id',
-            // 'client_id',
-            // 'car_id',
-            'service_type',
-            'fault',
-            'status',
-            'entry_date',
-            'finished_date',
-            'total')
-            ->whereBetween(
-                'created_at', [now()->startOfMonth(), now()->endOfMonth()],
-            )
-            // ->with('client:id,name,email,phone')
-            // ->with('car:id,brand,model,year')
-            // ->with('serviceItems:id,service_id,item,price,amount')
-            ->where('quote', false)
-            ->get();
-    }
-    */
-
     public function servicesSummary()
     {
         return Service::select('id', 'service_type', 'fault', 'status', 'entry_date', 'finished_date', 'total')
@@ -169,5 +143,26 @@ class OrderService
         ]);
 
         return $pdf->download('invoice.pdf');
+    }
+
+    public function createCalendarEvent(Service $service) : Calendar
+    {
+        $calendarEvent = Calendar::firstOrCreate([
+            'client_id' => $service->client_id,
+            'car_id'    => $service->car_id
+        ],[
+            'name'          => 'Mantenimiento programado',
+            'description'   => 'Mantenimiento programado',
+            'client_id'     => $service->client_id,
+            'car_id'        => $service->car_id,
+            'event_date'    => now()->addDays(5),
+        ]);
+
+        return $calendarEvent;
+    }
+
+    public function getScheduledEvents()
+    {
+        return Calendar::whereBetween('event_date', [now(), now()->addDays(15)])->get();
     }
 }

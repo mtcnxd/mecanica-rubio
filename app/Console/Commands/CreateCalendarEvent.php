@@ -4,9 +4,10 @@ namespace App\Console\Commands;
 
 use App\Models\Calendar;
 use App\Models\Service;
+use App\Services\OrderService;
 use App\Notifications\Telegram;
-use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class createCalendarEvent extends Command
 {
@@ -29,73 +30,51 @@ class createCalendarEvent extends Command
      */
     public function handle()
     {
+        $orderService = new OrderService();
         $telegram = new Telegram();
 
-        $services = Service::where('created_at','>', Carbon::now()->subDays(10))
-            ->whereIn('service_type',['Mayor','Menor'])
-            ->get();
-
-        $telegram->send(
-            sprintf("Process started at: %s Services found: %s", Carbon::now(), $services->count())
-        );
-
         try {
-            $servicesCreatedCounter = 0;
-            foreach ($services as $service){
-                if ($this->createCalendarEvent($service, $telegram)){
-                    $servicesCreatedCounter +1;
-                }
-            }
-    
-            if ($servicesCreatedCounter > 0){
-                $telegram->send(
-                    sprintf('New %s service scheduled created successfully', $servicesCreatedCounter)
-                );
-            }
-        }
+            $scheduledEvents = $orderService->getScheduledEvents();
 
-        catch (\Exception $e){
+            foreach ($scheduledEvents as $scheduledEvent) {
+                if ($scheduledEvent->notified == 0){
+                    $telegram->send(
+                        sprintf("First alert for scheduled service ID: #%s \n\rClient: %s \n\rCar: %s", 
+                        $scheduledEvent->id,
+                        $scheduledEvent->client->name,
+                        $scheduledEvent->car->carName())
+                    );
+                    $scheduledEvent->notified = 1;
+                
+                } else if ($scheduledEvent->notified == 1){
+                    $telegram->send(
+                        sprintf("Second alert for scheduled service ID: #%s \n\rClient: %s \n\rCar: %s", 
+                        $scheduledEvent->id,
+                        $scheduledEvent->client->name,
+                        $scheduledEvent->car->carName())
+                    );
+                    $scheduledEvent->notified = 2;
+                }
+
+                $scheduledEvent->save();
+            }
+
+            $services = Service::where('created_at','>', now()->subDays(10))
+                ->whereIn('service_type',['Mayor','Menor'])
+                ->get();
+
+            foreach ($services as $service){
+                $calendarEvent = $orderService->createCalendarEvent($service);
+                
+                Log::info('Calendar event created: ' . $calendarEvent);
+            }
+
+        } catch (\Exception $e){
+            Log::error('Error while creating calendar events | Error: ' . $e->getMessage());
+            
             $telegram->send(
                 sprintf('Error while creating calendar events | Error: %s', $e->getMessage())
             );
         }
-
-        /*
-        $events = Calendar::where('status', 'Pendiente')->where('notified', false);
-
-        $events->each(function ($event){
-            echo sprintf(
-                '(%s) => Hola %s, te recordamos que tu %s ya requiere mantenimiento. Nuestro mecanico se pondra en contacto contigo pronto'.PHP_EOL ,
-                $event->client->phone,
-                $event->client->name,
-                $event->service->car->carName()
-            );
-        });
-        */
-    }
-
-    protected function createCalendarEvent($service, $telegram) : bool
-    {
-        $eventFound = Calendar::where('client_id', $service->client_id)
-            ->where('car_id', $service->car_id)
-            ->first();
-        
-        $telegram->send(
-            sprintf("Events found while creating event: \n\rClient: %s \n\rCar: %s", $service->client_id, $service->car_id)
-        );
-
-        if (!$eventFound){
-            Calendar::create([
-                'name'          => 'Mantenimiento programado',
-                'description'   => 'Mantenimiento programado',
-                'client_id'     => $service->client_id,
-                'car_id'        => $service->car_id,
-                'event_date'    => Carbon::parse($service->finished_date)->addMonths(5)
-            ]);
-
-            return true;
-        }
-
-        return false;
     }
 }

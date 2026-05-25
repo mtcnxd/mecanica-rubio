@@ -20,20 +20,13 @@ class Calendar extends Model
         'car_id',
         'event_date',
         'service_id',
-        'date',
         'status',
         'notified',
     ];
 
-    protected $dates = [
-        'date'
+    protected $casts = [
+        'event_date' => 'date'
     ];
-
-    /*
-    protected $with = [
-        'client'
-    ];
-    */
 
     public function client()
     {
