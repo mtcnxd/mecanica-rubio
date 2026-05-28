@@ -7,11 +7,11 @@ use App\Notifications\Telegram;
 
 trait Notificator
 {
-    public function sendNotification(string $message)
+    public function sendNotification(string $message, $parseMode = "MarkdownV2")
     {
         try {
             $telegram = new Telegram();
-            $telegram->sendMessage($message);
+            $telegram->sendMessage($message, $parseMode);
 
         } catch (\Exception $e){
             Log::error("ERROR: ". $e->getMessage());

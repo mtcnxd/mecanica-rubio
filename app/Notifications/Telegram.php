@@ -17,14 +17,14 @@ class Telegram extends Notification
      * Create a new notification instance.
      */
 
-    public function sendMessage(string $text)
+    public function sendMessage(string $text, $parseMode)
     {
         $url = 'https://api.telegram.org/bot' . config('services.telegram.api_key') . '/sendMessage';
         
         $response = Http::post($url, array(
             "chat_id"    => config('services.telegram.chat_id'),
             "text" 	     => $text,
-            "parse_mode" => "MarkdownV2"
+            "parse_mode" => $parseMode
         ));
 
         if ($response->getStatusCode() == 400){

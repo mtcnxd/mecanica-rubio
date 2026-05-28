@@ -68,7 +68,7 @@ class PriceChangeNotificator extends Command
                            "Current price: {$priceFormated}\n\r".
                            "Days before last bought: {$diffDays}";
 
-                $this->sendNotification($message);
+                $this->sendNotification($message, "HTML");
 
                 if ($diffDays < self::DAYS){
                     if ($this->bitsoService->placeOrder($book, $currentPrice)){
