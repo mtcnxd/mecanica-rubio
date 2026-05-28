@@ -87,15 +87,12 @@ class FinanceService
             'close_date' => now(),
         ]);
 
-        $message = $this->escapeMarkdown(
-            "Cierre de mes exitoso\n\r".
-            "Ingresos: ".Number::currency($data['income'])."\n\r".
-            "Egresos: ".Number::currency($data['expense'])."\n\r".
-            "Saldo: ".Number::currency($data['balance'])."\n\r".
-            "Fecha: ".now()->format('d/m/Y')." a las ".now()->format('H:i:s')
-        );
-
-        $this->sendNotification($message);
+        $this->sendNotification(
+            sprintf("<b>Cierre de mes exitoso</b>\n\rIngresos: %s\n\rEgresos: %s\n\rSaldo: %s\n\r",
+                Number::currency($data['income']),
+                Number::currency($data['expense']),
+                Number::currency($data['balance'])
+            ), "HTML");
 
         return true;
     }

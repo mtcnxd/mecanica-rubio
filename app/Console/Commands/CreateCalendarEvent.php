@@ -39,7 +39,7 @@ class createCalendarEvent extends Command
             foreach ($scheduledEvents as $scheduledEvent) {
                 if ($scheduledEvent->notified == 0){
                     $this->sendNotification(
-                        sprintf("First alert for scheduled service ID: #%s \n\rClient: %s \n\rCar: %s", 
+                        sprintf("First alert for scheduled service ID: __%s__ \n\rClient: __%s__ \n\rCar: __%s__", 
                         $scheduledEvent->id,
                         $scheduledEvent->client->name,
                         $scheduledEvent->car->fullName)
@@ -48,7 +48,7 @@ class createCalendarEvent extends Command
                 
                 } else if ($scheduledEvent->notified == 1){
                     $this->sendNotification(
-                        sprintf("Second alert for scheduled service ID: #%s \n\rClient: %s \n\rCar: %s", 
+                        sprintf("Second alert for scheduled service ID: __%s__ \n\rClient: __%s__ \n\rCar: __%s__", 
                         $scheduledEvent->id,
                         $scheduledEvent->client->name,
                         $scheduledEvent->car->fullName)
