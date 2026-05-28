@@ -6,11 +6,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\CarService;
 use App\Services\ClientService;
-use App\Traits\Messenger;
+use App\Traits\Notificator;
 
 class CarsController extends Controller
 {
-    use Messenger;
+    use Notificator;
 
     public function __construct(
         private CarService $carService,
@@ -35,7 +35,12 @@ class CarsController extends Controller
     public function store(Request $request)
     {        
         try {
-            $this->carService->createClientCar($request->all());
+            $car = $this->carService->createClientCar($request->all());
+
+            $this->sendNotification(
+                sprintf("*Car created:* __%s__ \n\r*Car:* __%s__ \n\r*Client:* __%s__", $car->id, $car->fullName, $car->client->name)
+            );
+
             session()->flash('success', 'Los datos se guardaron correctamente');
 
         } catch (\Exception $e){

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Traits\Messenger;
+use App\Traits\Notificator;
 use App\Services\ChartService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Number;
@@ -12,7 +12,7 @@ use App\Services\Investments\FiatService;
 
 class InvestmentsController extends Controller
 {
-    use Messenger;
+    use Notificator;
 
     public function __construct(
         private CryptoService $cryptoService,

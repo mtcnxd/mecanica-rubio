@@ -34,7 +34,7 @@
     <div class="row col-md-12 mt-4">
         @foreach ($servicesByClient as $service)
             <div class="row border p-2 m-1 shadow-sm" style="background-color: var(--gray-100)">
-                <p class="mb-0 fs-6 fw-bold">{{ $service->car->carName() }} {{ $service->car->year }} | Servicio: #{{ $service->id }}</p>
+                <p class="mb-0 fs-6 fw-bold">{{ $service->car->fullName }} {{ $service->car->year }} | Servicio: #{{ $service->id }}</p>
             </div>
             @foreach ($service->serviceItems as $serviceItem)
                 <div class="row p-1 m-1">

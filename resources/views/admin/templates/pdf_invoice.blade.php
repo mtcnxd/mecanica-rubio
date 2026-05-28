@@ -41,7 +41,7 @@
                 <td><b style="font-size:12px">FECHA: </b>{{ Carbon\Carbon::now()->format('d/m/Y') }}</td>
             </tr>
             <tr>
-                <td width="75%"><b style="font-size:12px">AUTOMOVIL:</b> {{ $service->car->carName() }} {{ $service->car->year }}</td>
+                <td width="75%"><b style="font-size:12px">AUTOMOVIL:</b> {{ $service->car->fullName }}</td>
                 <td><b style="font-size:12px">SERVICIO: </b>{{ "#".$service->id }}</td>
             </tr>
         </table>

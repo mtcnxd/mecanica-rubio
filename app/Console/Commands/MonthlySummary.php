@@ -2,14 +2,14 @@
 
 namespace App\Console\Commands;
 
-use App\Traits\Messenger;
+use App\Traits\Notificator;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Number;
 
 class MonthlySummary extends Command
 {
-    use Messenger;
+    use Notificator;
 
     /**
      * The name and signature of the console command.

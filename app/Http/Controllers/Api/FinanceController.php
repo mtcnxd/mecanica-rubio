@@ -19,7 +19,7 @@ class FinanceController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Mes cerrado correctamente',
+                'message' => 'Cierre de mes exitoso',
                 'data' => $response,
             ]);
             

@@ -8,14 +8,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Number;
 use App\Services\OrderService;
 use App\Services\ClientService;
-use App\Traits\Messenger;
+use App\Traits\Notificator;
 use App\Models\Service;
 use App\Models\ServiceItems;
 use App\Events\ServiceCompleted;
 
 class ServicesController extends Controller
 {
-    use Messenger;
+    use Notificator;
 
     public function __construct(
         private OrderService $orderService,

@@ -84,7 +84,7 @@
                     <table class="table table-sm table-striped">
                         @foreach ($charts->servicesCompletedThisMonth() as $service)
                             <tr>
-                                <td>{{ $service->car->carName() }}</td>
+                                <td>{{ $service->car->fullName }}</td>
                                 <td>{{ $service->finished_date->format('j M Y') }}</td>
                                 <td class="text-end">{{ Number::currency($service->total) }}</td>
                                 <td class="text-end">

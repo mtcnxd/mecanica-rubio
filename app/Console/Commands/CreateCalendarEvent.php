@@ -5,12 +5,13 @@ namespace App\Console\Commands;
 use App\Models\Calendar;
 use App\Models\Service;
 use App\Services\OrderService;
-use App\Notifications\Telegram;
+use App\Traits\Notificator;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 
 class createCalendarEvent extends Command
 {
+    use Notificator;
     /**
      * The name and signature of the console command.
      *
@@ -31,27 +32,26 @@ class createCalendarEvent extends Command
     public function handle()
     {
         $orderService = new OrderService();
-        $telegram = new Telegram();
 
         try {
             $scheduledEvents = $orderService->getScheduledEvents();
 
             foreach ($scheduledEvents as $scheduledEvent) {
                 if ($scheduledEvent->notified == 0){
-                    $telegram->send(
+                    $this->sendNotification(
                         sprintf("First alert for scheduled service ID: #%s \n\rClient: %s \n\rCar: %s", 
                         $scheduledEvent->id,
                         $scheduledEvent->client->name,
-                        $scheduledEvent->car->carName())
+                        $scheduledEvent->car->fullName)
                     );
                     $scheduledEvent->notified = 1;
                 
                 } else if ($scheduledEvent->notified == 1){
-                    $telegram->send(
+                    $this->sendNotification(
                         sprintf("Second alert for scheduled service ID: #%s \n\rClient: %s \n\rCar: %s", 
                         $scheduledEvent->id,
                         $scheduledEvent->client->name,
-                        $scheduledEvent->car->carName())
+                        $scheduledEvent->car->fullName)
                     );
                     $scheduledEvent->notified = 2;
                 }
@@ -72,7 +72,7 @@ class createCalendarEvent extends Command
         } catch (\Exception $e){
             Log::error('Error while creating calendar events | Error: ' . $e->getMessage());
             
-            $telegram->send(
+            $this->sendNotification(
                 sprintf('Error while creating calendar events | Error: %s', $e->getMessage())
             );
         }

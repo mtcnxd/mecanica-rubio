@@ -2,17 +2,16 @@
 
 namespace App\Console\Commands;
 
-use App\Traits\Messenger;
+use App\Traits\Notificator;
 use App\Models\Investment;
-use App\Notifications\Telegram;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Number;
 
-class updateInvestmentBalances extends Command
+class UpdateInvestmentBalances extends Command
 {
-    use Messenger;
+    use Notificator;
 
     /**
      * The name and signature of the console command.
@@ -49,13 +48,13 @@ class updateInvestmentBalances extends Command
             $all = Investment::all();
             $currentBalance = Number::currency($all->sum('current_amount'));
     
-            $this->telegram(
+            $this->sendNotification(
                 sprintf("Process finished at: <b>%s</b> \n\rTotal amount today: <b>%s</b>", now()->format('g:i a'), $currentBalance)
             );
         }
 
         catch (\Exception $e){
-            $this->telegram("Error while updating balances | Error: {$e->getMessage()}");
+            $this->sendNotification("Error while updating balances | Error: {$e->getMessage()}");
         }
     }
 }

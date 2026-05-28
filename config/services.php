@@ -40,7 +40,7 @@ return [
 
     // Telegram notifications
     'telegram' => [
-        'api'     => env('TELEGRAM_API'),
+        'api_key' => env('TELEGRAM_API'),
         'chat_id' => env('TELEGRAM_CHAT_ID'),
     ],
 

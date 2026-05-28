@@ -3,11 +3,11 @@
 namespace App\Services;
 
 use App\Models\Employee;
-use App\Traits\Messenger;
+use App\Traits\Notificator;
 
 class EmployeeService
 {
-    use Messenger;
+    use Notificator;
 
     public function getAll()
     {

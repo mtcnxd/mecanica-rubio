@@ -58,7 +58,7 @@
                         <a href="{{ route('admin.service.quote.show', $quote->id) }}">
                             {{ $quote->client->name }}</td>
                         </a>
-                    <td>{{ $quote->car->carName() }}
+                    <td>{{ $quote->car->fullName }}
                     <td>{{ $quote->fault }}
                     <td>{{ $quote->status }}
                     </td>
