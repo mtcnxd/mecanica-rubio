@@ -3,13 +3,10 @@
 namespace App\Services;
 
 use App\Models\Car;
-use App\Traits\Messenger;
 use Illuminate\Support\Facades\DB;
 
 class CarService
 {
-    use Messenger;
-
     public function all()
     {
         return Car::where('status', 'Activo')
@@ -79,13 +76,7 @@ class CarService
     {
         $data['client_id'] = $data['client'];
         
-        $car = Car::create($data);
-
-        $this->telegram(
-            sprintf("<b>New car created:</b> %s \n\r<b>Model:</b> %s", $data['brand'], $data['model'])
-        );
-
-        return $car;
+        return Car::create($data);
     }
 
     public function findByCriteria(array $criteria)

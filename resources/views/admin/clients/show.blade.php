@@ -102,7 +102,6 @@
                     <table class="table table-hover border border-top-0 bg-white" id="table-items">
                         <thead>
                             <th width="300px">Automovil</th>
-                            <th>Año</th>
                             <th>Servicio/Fallo</th>
                             <th></th>
                             <th>Status</th>
@@ -112,9 +111,9 @@
                             @foreach ($client->services as $service)
                             <tr>
                                 <td>
-                                    <a href="{{ route('admin.car.show', $service->car->id) }}">{{ $service->car->carName() }}</a>
+                                    <x-feathericon-arrow-right-circle class="table-icon" style="margin: 0 5px 2px"/>
+                                    <a href="{{ route('admin.car.show', $service->car->id) }}">{{ $service->car->fullName }}</a>
                                 </td>
-                                <td>{{ $service->car->year }}</td>
                                 <td>{{ $service->fault }}</td>
                                 <td>
                                     @if ($service->quote)
@@ -142,7 +141,6 @@
                     <table class="table table-hover border border-top-0 bg-white" id="table-items">
                         <thead>
                             <th width="300px">Automovil</th>
-                            <th>Año</th>
                             <th>VIN <span class="text-muted"> (Vehicle Identification Number)</span></th>
                             <th>Matrícula</th>
                         </thead>
@@ -151,15 +149,18 @@
                             <tr>
                                 <td>
                                     <x-feathericon-arrow-right-circle class="table-icon" style="margin: 0 5px 2px"/>
-                                    <a href="{{ route('admin.car.show', $car->id) }}">{{ $car->brand }} {{ $car->model }}</a>
+                                    <a href="{{ route('admin.car.show', $car->id) }}">{{ $car->fullName }}</a>
                                 </td>
-                                <td>{{ $car->year }}</td>
                                 <td>{{ $car->serie }}</td>
                                 <td>{{ $car->plate }}</td>
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
+                    <p class="pt-2 mb-0">
+                        <x-feathericon-clipboard class="table-icon" style="margin-top:-4px;"/>
+                        Se encontraron {{ $client->cars->count() }} automoviles.
+                    </p>
                 </div>
             </div>
         </div>

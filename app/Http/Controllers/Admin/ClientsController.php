@@ -4,13 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Services\ClientService;
-use App\Traits\Messenger;
+use App\Traits\Notificator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ClientsController extends Controller
 {
-    use Messenger;
+    use Notificator;
 
     public function __construct(
         ClientService $clientService
@@ -34,7 +34,13 @@ class ClientsController extends Controller
     {
         try {
             $client = $this->clientService->create($request->except('_method', '_token'));
+
+            $this->sendNotification(
+                sprintf("*Client created:* __%s__ \n\r*Client:* __%s__ \n\r*Phone:* __%s__", $client->id, $client->name, $client->phone)
+            );
+
             session()->flash('success', sprintf('Se guardó correctamente el cliente: %s', $client->name));
+
         } catch (\Exception $e) {
             session()->flash('warning', sprintf('Ocurrio un error | %s ', $e->getMessage()));
         }
@@ -61,6 +67,7 @@ class ClientsController extends Controller
         try {
             $this->clientService->update($id, $request->except('_method', '_token'));
             session()->flash('success', sprintf('El cliente %s se actualizo correctamente', $request->name));
+
         } catch (\Exception $err) {
             session()->flash('warning', sprintf('Error al actualizar | %s ', $err->getMessage()));
         }

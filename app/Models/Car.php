@@ -19,7 +19,16 @@ class Car extends Model
         'plate',
         'client_id',
         'comments'
-    ];    
+    ];
+
+    /**
+     * Accessor to get the full name of the car.
+     */
+    
+    public function getFullNameAttribute()
+    {
+        return $this->brand .' '.$this->model.' ['.$this->year.']';
+    }
 
     public function findByCriteria(string $criteria)
     {
@@ -42,10 +51,5 @@ class Car extends Model
     public function lastService()
     {
         return $this->hasOne(Service::class, 'car_id')->latest('entry_date');
-    }
-
-    public function carName()
-    {
-        return $this->brand .' '.$this->model;
     }
 }

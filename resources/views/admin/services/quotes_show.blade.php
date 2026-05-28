@@ -30,7 +30,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <label>Automovil</label>
-                                <input type="text" class="form-control" id="car" name="car" value="{{ $service->car->carName() }} - {{ $service->car->year }}" disabled>
+                                <input type="text" class="form-control" id="car" name="car" value="{{ $service->car->fullName }} - {{ $service->car->year }}" disabled>
                             </div>
                             <div class="col-md-6">
                                 <label>Fecha cotizacion</label>    

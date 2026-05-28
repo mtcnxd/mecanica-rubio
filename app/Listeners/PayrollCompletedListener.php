@@ -4,12 +4,12 @@ namespace App\Listeners;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
-use App\Traits\Messenger;
+use App\Traits\Notificator;
 use Illuminate\Support\Facades\Log;
 
 class PayrollCompletedListener
 {
-    use Messenger;
+    use Notificator;
 
     /**
      * Create the event listener.

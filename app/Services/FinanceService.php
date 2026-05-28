@@ -11,11 +11,11 @@ use App\Models\ServiceItems;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Number;
-use App\Traits\Messenger;
+use App\Traits\Notificator;
 
 class FinanceService
 {
-    use Messenger;
+    use Notificator;
 
     public function updatePayroll(string $id, array $data) : bool
     {
@@ -87,13 +87,15 @@ class FinanceService
             'close_date' => now(),
         ]);
 
-        $this->sendNotification(
-            sprintf("Cierre de mes completado con exito!\n\rIngresos: %s\n\rEgresos: %s\n\r<b>Saldo: %s</b>", 
-                Number::currency($data['income']), 
-                Number::currency($data['expense']), 
-                Number::currency($data['balance'])
-            )
+        $message = $this->escapeMarkdown(
+            "Cierre de mes exitoso\n\r".
+            "Ingresos: ".Number::currency($data['income'])."\n\r".
+            "Egresos: ".Number::currency($data['expense'])."\n\r".
+            "Saldo: ".Number::currency($data['balance'])."\n\r".
+            "Fecha: ".now()->format('d/m/Y')." a las ".now()->format('H:i:s')
         );
+
+        $this->sendNotification($message);
 
         return true;
     }

@@ -5,14 +5,14 @@ namespace App\Services;
 use App\Models\Service;
 use App\Models\ServiceItems;
 use App\Models\Calendar;
-use App\Traits\Messenger;
 use App\Events\ServiceCompletedEvent;
 use Illuminate\Support\Number;
+use App\Traits\Notificator;
 use PDF;
 
 class OrderService
 {
-    use Messenger;
+    use Notificator;
 
     public function all()
     {
@@ -39,12 +39,12 @@ class OrderService
 
         $service = Service::create($data);
 
-        if (! $isQuote) {
+        if (!$isQuote) {
             $this->sendNotification(
-                sprintf("<b>Service created:</b> #%s\n\r<b>Client:</b> %s\n\r<b>Car model:</b> %s\n\r<b>Fault:</b> %s",
+                sprintf("*Service created:* __%s__\n\r*Client:* __%s__\n\r*Car model:* __%s__\n\r*Fault:* %s",
                     $service->id,
                     $service->client->name,
-                    $service->car->carName(),
+                    $service->car->fullName,
                     $service->fault
                 )
             );
@@ -65,9 +65,9 @@ class OrderService
         event(new ServiceCompletedEvent($service));
 
         $this->sendNotification(
-            sprintf("<b>Service completed:</b> #%s\n\r<b>Car model:</b> %s\n\r<b>Client:</b> %s\n\r<b>Fault:</b> %s\n\r", 
+            sprintf("*Service completed:* __%s__\n\r*Car:* __%s__\n\r*Client:* __%s__\n\r*Fault:* %s", 
                 $service->id,
-                $service->car->brand ." ". $service->car->model,
+                $service->car->fullName,
                 $service->client->name,
                 $service->fault
             )

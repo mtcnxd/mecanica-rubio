@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Exception;
-use App\Traits\Messenger;
+use App\Traits\Notificator;
 use Illuminate\Support\Number;
 use Illuminate\Console\Command;
 // use App\Services\Bitso\BitsoService;
@@ -11,14 +11,14 @@ use App\Http\Helpers;
 
 class PriceChangeNotificator extends Command
 {
-    use Messenger;
+    use Notificator;
 
     protected $bitsoService;
 
     public const MIN_PRICE_CHANGE = -5;
     public const MAX_PRICE_CHANGE = 10;
     public const DAYS = 15;
-    public const BOOK = "btc_mxn";
+    public const BOOK = "btc_usdt";
 
     public function __construct()
     {
@@ -63,22 +63,22 @@ class PriceChangeNotificator extends Command
             if ($percentage < self::MIN_PRICE_CHANGE){
                 $diffDays = now()->diffInDays($lastPurchased->created_at);
 
-                $message = "The Bitcoin price has already changed <b>{$percentageFormated}</b>\n\r".
-                            "Last bought: <b>{$lastBoughtFormated}</b>\n\r".
-                            "Current price: <b>{$priceFormated}</b>\n\r".
-                            "Days before last bought: <b>{$diffDays}</b>";
+                $message = "The Bitcoin price has already changed {$percentageFormated}\n\r".
+                           "Last bought: {$lastBoughtFormated}\n\r".
+                           "Current price: {$priceFormated}\n\r".
+                           "Days before last bought: {$diffDays}";
 
-                $this->telegram($message);
+                $this->sendNotification($message);
 
                 if ($diffDays < self::DAYS){
                     if ($this->bitsoService->placeOrder($book, $currentPrice)){
-                        $this->telegram("Order placed successfully");
+                        $this->sendNotification("Order placed successfully");
                     }
                 }
             }
 
         } catch (Exception $err){
-            $this->telegram("Error while placing order | <b>{$err->getMessage()}</b>");
+            $this->sendNotification("*Error while placing order:* {$err->getMessage()}");
         }
     }
 }

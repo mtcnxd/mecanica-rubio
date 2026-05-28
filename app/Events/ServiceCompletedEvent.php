@@ -10,11 +10,11 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use App\Models\Service;
-use App\Traits\Messenger;
+use App\Traits\Notificator;
 
 class ServiceCompletedEvent
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels, Messenger;
+    use Dispatchable, InteractsWithSockets, SerializesModels, Notificator;
 
     public $service;
 
@@ -23,7 +23,7 @@ class ServiceCompletedEvent
      */
     public function __construct(Service $service)
     {
-        $this->telegram("Hola desde el event");
+        $this->sendNotification("In this section we will send email/whatsapp notification to client");
     }
 
     /**
