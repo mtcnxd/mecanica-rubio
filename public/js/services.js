@@ -42,7 +42,6 @@ class ServiceItems {
                     .then(() => {
                         location.reload()
                     });
-
             }
         });
     }

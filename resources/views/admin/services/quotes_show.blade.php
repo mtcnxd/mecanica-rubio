@@ -64,7 +64,7 @@
                             <td class="text-end">{{ Number::currency($item->price) }}</td>
                             <td class="text-end">{{ Number::currency($item->amount * $item->price) }}</td>
                             <td>
-                                <a href="#" class="removeItem" id="{{ $item->id }}">
+                                <a href="#" class="removeItem" data-id="{{ $item->id }}">
                                     <x-feathericon-trash-2 class="table-icon"/>
                                 </a>
                             </td>
