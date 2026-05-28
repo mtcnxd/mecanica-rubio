@@ -67,7 +67,7 @@ class ServicesItemsController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Item eliminado correctamente',
+                'message' => "Item {$id} eliminado correctamente",
             ]);
 
         } catch (\Exception $e) {
