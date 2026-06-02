@@ -18,7 +18,7 @@
                     $total = 0;
                 @endphp
 
-                @foreach ($list as $row)
+                @foreach ($income as $row)
                     @php
                         $total += $row->serviceItems->where('item','Servicio (mano de obra)')->first()->price;
                     @endphp
@@ -38,7 +38,7 @@
                 <tr>
                     <td colspan="4"></td>
                     <td class="text-end fw-bold">{{ Number::currency($total) }}</td>
-                    <td class="text-end fw-bold">{{ Number::currency($list->sum('total')) }}</td>
+                    <td class="text-end fw-bold">{{ Number::currency($income->sum('total')) }}</td>
                 </tr>
             </tfoot>
         </table>
