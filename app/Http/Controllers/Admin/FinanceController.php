@@ -18,11 +18,11 @@ class FinanceController extends Controller
 
     public function index(Service $service)
     {
-        $list = $service->where('status', 'Entregado')
-            ->whereMonth('finished_date', now()->month)
+        $income = $service->where('status', 'Entregado')
+            ->whereMonth('finished_date', now()->startOfMonth())
             ->get();
 
-        return view('admin.reports.services', compact('list'));
+        return view('admin.reports.services', compact('income'));
     }
 
     public function show($client, Service $service)
