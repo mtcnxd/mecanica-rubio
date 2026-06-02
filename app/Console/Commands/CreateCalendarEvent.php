@@ -37,9 +37,11 @@ class createCalendarEvent extends Command
             $scheduledEvents = $orderService->getScheduledEvents();
 
             foreach ($scheduledEvents as $scheduledEvent) {
+                // TODO: Implement first and second notifications by days in settings
+
                 if ($scheduledEvent->notified == 0){
                     $this->sendNotification(
-                        sprintf("First alert for scheduled service ID: __%s__ \n\rClient: __%s__ \n\rCar: __%s__", 
+                        sprintf("*First alert for scheduled event:* __%s__ \n\rClient: __%s__ \n\rCar: __%s__", 
                         $scheduledEvent->id,
                         $scheduledEvent->client->name,
                         $scheduledEvent->car->fullName)
@@ -48,7 +50,7 @@ class createCalendarEvent extends Command
                 
                 } else if ($scheduledEvent->notified == 1){
                     $this->sendNotification(
-                        sprintf("Second alert for scheduled service ID: __%s__ \n\rClient: __%s__ \n\rCar: __%s__", 
+                        sprintf("*Second alert for scheduled event:* __%s__ \n\rClient: __%s__ \n\rCar: __%s__", 
                         $scheduledEvent->id,
                         $scheduledEvent->client->name,
                         $scheduledEvent->car->fullName)
@@ -59,9 +61,13 @@ class createCalendarEvent extends Command
                 $scheduledEvent->save();
             }
 
-            $services = Service::where('created_at','>', now()->subDays(10))
+            $services = Service::where('entry_date','>', now()->subDays(10))
                 ->whereIn('service_type',['Mayor','Menor'])
                 ->get();
+
+            $this->sendNotification(
+                sprintf('*Services found for calendarization:* __%s__', $services->count())
+            );
 
             foreach ($services as $service){
                 $calendarEvent = $orderService->createCalendarEvent($service);
