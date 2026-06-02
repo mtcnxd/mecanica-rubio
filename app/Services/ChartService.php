@@ -40,7 +40,7 @@ class ChartService
     {
         $carsCompleted = [];
         $carsCompleted = Service::where('status','Entregado')
-            ->whereBetween('finished_date', [now()->startOfMonth(), now()])
+            ->whereBetween('finished_date', [$this->lastCutDate, now()])
             ->get();
 
         return $carsCompleted;
@@ -49,7 +49,7 @@ class ChartService
     public function labourThisMonth()
     {
         $servicesCompleted = Service::where('status','Entregado')
-            ->whereBetween('finished_date', [now()->startOfMonth(), now()])
+            ->whereBetween('finished_date', [$this->lastCutDate, now()])
             ->get()
             ->sum(function($services){
                 return $services->serviceItems->where('labour', true)->sum('price');
@@ -60,7 +60,7 @@ class ChartService
 
     public function expensesThisMonth()
     {
-        $expenses = Expense::whereBetween('expense_date', [now()->startOfMonth(), now()])
+        $expenses = Expense::whereBetween('expense_date', [$this->lastCutDate, now()])
             ->get()
             ->sum(function($expense){
                 return ($expense->price * $expense->amount);
