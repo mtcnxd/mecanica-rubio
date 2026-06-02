@@ -65,12 +65,12 @@ class OrderService
         event(new ServiceCompletedEvent($service));
 
         $this->sendNotification(
-            sprintf("*Service completed:* __%s__\n\r*Car:* __%s__\n\r*Client:* __%s__\n\r*Fault:* %s", 
+            sprintf("<b>Service completed:</b> <u>%s</u>\n<b>Car:</b> <u>%s</u>\n<b>Client:</b> <u>%s</u>\n<b>Fault:</b> %s", 
                 $service->id,
                 $service->car->fullName,
                 $service->client->name,
                 $service->fault
-            )
+        ), 'HTML'
         );
     }
 
