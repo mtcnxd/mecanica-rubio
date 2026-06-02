@@ -6,7 +6,8 @@ use Exception;
 use App\Traits\Notificator;
 use Illuminate\Support\Number;
 use Illuminate\Console\Command;
-// use App\Services\Bitso\BitsoService;
+use App\Services\Investments\CryptoService as BitsoService;
+use App\Services\Investments\BitsoApi;
 use App\Http\Helpers;
 
 class PriceChangeNotificator extends Command
@@ -23,7 +24,7 @@ class PriceChangeNotificator extends Command
     public function __construct()
     {
         parent::__construct();
-        // $this->bitsoService = new BitsoService();
+        $this->bitsoService = new BitsoService(new BitsoApi());
     }
 
     /**
@@ -45,15 +46,20 @@ class PriceChangeNotificator extends Command
      */
     public function handle()
     {
-        $book = self::BOOK;
-        $lastPurchased = $this->bitsoService->lastPurchasedPrice($book);
+        /**
+         * TODO:: Implement to get last price
+         */
+
+        return;
+
+        $lastPurchased = $this->bitsoService->lastPurchasedPrice(self::BOOK);
 
         if (is_null($lastPurchased) || empty($lastPurchased)){
             return;
         }
 
         try {
-            $currentPrice = $this->bitsoService->getBookPrice($book);
+            $currentPrice = $this->bitsoService->getBookPrice(self::BOOK);
             $percentage = Helpers::convertToPercentage($currentPrice, $lastPurchased->price);
 
             $priceFormated = Number::currency($currentPrice);
@@ -71,7 +77,7 @@ class PriceChangeNotificator extends Command
                 $this->sendNotification($message, "HTML");
 
                 if ($diffDays < self::DAYS){
-                    if ($this->bitsoService->placeOrder($book, $currentPrice)){
+                    if ($this->bitsoService->placeOrder(self::BOOK, $currentPrice)){
                         $this->sendNotification("Order placed successfully");
                     }
                 }
