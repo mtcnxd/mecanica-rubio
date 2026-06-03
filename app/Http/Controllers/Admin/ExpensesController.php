@@ -3,22 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Notifications\Telegram;
+use Illuminate\Http\Request;
+use App\Traits\Notificator;
 use App\Models\Expense;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Carbon\Carbon;
-use DB;
 
 class ExpensesController extends Controller
 {
+    use Notificator;
+    
     public function index()
     {
-        $startDate = Carbon::now()->subDays(45);
-        $endDate   = Carbon::now();
-
-        $expenses = DB::table('expenses')
-            ->whereBetween('created_at', [$startDate, $endDate])
+        $expenses = Expense::whereBetween('created_at', [now()->subDays(45), now()])
             ->orderBy('created_at', 'asc')
             ->get();
 
@@ -34,10 +30,7 @@ class ExpensesController extends Controller
 
     public function edit(string $id)
     {
-        $expense = DB::table('expenses')
-            ->select('expenses.*', 'users.name', DB::raw('expenses.name as concept'))
-            ->join('users', 'expenses.responsible','users.id')
-            ->where('expenses.id', $id)
+        $expense = Expense::where('expenses.id', $id)
             ->first();
 
         return view('admin.expenses.edit', compact('expense'));
@@ -45,31 +38,30 @@ class ExpensesController extends Controller
 
     public function store(Request $request)
     {
-        if($request->hasFile('attach')){
-            $newFilename = time() .'.'. $request->attach->extension();
-            $request->attach->move(public_path('uploads/expenses'), $newFilename);
-        }
-
-        DB::table('expenses')->insert([
-            'name'         => $request->name,
-            'description'  => $request->description,
-            'status'       => $request->status,
-            'amount'       => $request->amount,
-            'price'        => $request->price,
-            'responsible'  => $request->responsible,
-            'attach'       => isset($newFilename) ? $newFilename : '',
-            'expense_date' => Carbon::now(),
-            'created_at'   => Carbon::now(),
-            'updated_at'   => Carbon::now()
-        ]);
-
         try {
-            $telegram = new Telegram();
-            $telegram->send(
-                sprintf("<b>New expense created:</b> %s <b>Total:</b> $%s", $request->name, $request->price)
+            if($request->hasFile('attach')){
+                $newFilename = time() .'.'. $request->attach->extension();
+                $request->attach->move(public_path('uploads/expenses'), $newFilename);
+            }
+
+            Expense::create([
+                'name'         => $request->name,
+                'description'  => $request->description,
+                'status'       => $request->status,
+                'amount'       => $request->amount,
+                'price'        => $request->price,
+                'responsible'  => $request->responsible,
+                'attach'       => isset($newFilename) ? $newFilename : '',
+                'expense_date' => now()
+            ]);
+
+            $this->sendNotification(
+                sprintf("*Expense created:* __%s__ \n*Total:* __%s__", $request->name, $request->price)
             );
-        }
-        catch (\Exception $err){
+
+            session()->flash('message', 'Egreso creado correctamente');
+        
+        } catch (\Exception $err){
             session()->flash('warning', 'ERROR: '. $err->getMessage());
 		}
 
@@ -78,29 +70,32 @@ class ExpensesController extends Controller
 
     public function update(Request $request, string $id)
     {
-        if ($request->hasFile('attach')){
-            $newFilename = time() .'.'. $request->attach->extension();
-            $request->attach->move(public_path('uploads/expenses'), $newFilename);
-
+        try {
+            if ($request->hasFile('attach')){
+                $newFilename = time() .'.'. $request->attach->extension();
+                $request->attach->move(public_path('uploads/expenses'), $newFilename);
+    
+                Expense::where('id', $id)->update([
+                    "attach"       => isset($newFilename) ? $newFilename : '',
+                    "expense_date" => $request->expense_date,
+                    "status"       => $request->status
+                ]);
+    
+                session()->flash('message', 'Egreso actualizado correctaamente');
+    
+                return to_route('admin.finance.expense.index');
+            }
+            
             Expense::where('id', $id)->update([
-                "attach"       => isset($newFilename) ? $newFilename : '',
                 "expense_date" => $request->expense_date,
-                "status"       => $request->status,
-                "updated_at"   => Carbon::now()
+                "status"       => $request->status
             ]);
-
+    
             session()->flash('message', 'Egreso actualizado correctaamente');
-
-            return to_route('admin.finance.expense.index');
-        }
         
-        Expense::where('id', $id)->update([
-            "expense_date" => $request->expense_date,
-            "status"       => $request->status,
-            "updated_at"   => Carbon::now()
-        ]);
-
-        session()->flash('message', 'Egreso actualizado correctaamente');
+        } catch (\Exception $err){
+            session()->flash('warning', 'ERROR: '. $err->getMessage());
+		}
 
         return to_route('admin.finance.expense.index');
     }
@@ -119,8 +114,6 @@ class ExpensesController extends Controller
 
     public function getImageAttached(Request $request)
     {
-        return DB::table('expenses')
-            ->where('id', $request->id)
-            ->first();
+        return Expense::where('id', $request->id)->first();
     }
 }
