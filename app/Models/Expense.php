@@ -27,8 +27,18 @@ class Expense extends Model
         'expense_date' => 'date',
     ];
 
+    public function employee()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function getAttachAttribute($value)
     {
         return asset('storage/' . $value);
+    }
+
+    public function getTotalAttribute()
+    {
+        return $this->amount * $this->price;
     }
 }

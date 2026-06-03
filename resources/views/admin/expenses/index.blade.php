@@ -58,10 +58,14 @@
                         </td>
                         <td>{{ Str::limit($expense->description, 60) }}</td>
                         <td>
-                            <span class="badge text-bg-success">{{ $expense->status }}</span>
+                            @if ($expense->status == 'Pagado')
+                                <span class="badge text-bg-success">{{ $expense->status }}</span>
+                            @else
+                                <span class="badge text-bg-warning">{{ $expense->status }}</span>
+                            @endif
                         </td>
-                        <td>{{ Carbon\Carbon::parse($expense->expense_date)->format('d-m-Y') }}</td>
-                        <td class="text-end">{{ "$".number_format($expense->amount * $expense->price, 2) }}</td>
+                        <td>{{ $expense->expense_date->format('d-m-Y') }}</td>
+                        <td class="text-end">{{ Number::currency($expense->total) }}</td>
                         <td>
                             <button class="btn" id="{{ $expense->id }}" onclick="removeItemExpense(this.id)">
                                 <x-feathericon-trash-2 class="table-icon" style="margin: -2px 5px 0 0"/>

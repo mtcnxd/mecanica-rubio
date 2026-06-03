@@ -5,7 +5,7 @@
     <div class="col-md-7">
         <h6 class="window-title shadow text-uppercase fw-bold"><span class="ms-3">Egreso</span></h6>
         <div class="window-body shadow p-4">
-            <form action="{{ route('expenses.update', $expense->id) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('admin.finance.expense.update', $expense->id) }}" method="POST" enctype="multipart/form-data">
                 <div class="form-container border">
                     @csrf
                     @method('PATCH')
@@ -13,7 +13,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <label>Concepto</label>
-                            <input type="text" class="form-control" value="{{ $expense->concept }}" disabled>
+                            <input type="text" class="form-control" value="{{ $expense->name }}" disabled>
                         </div>
                     </div>
 
@@ -31,7 +31,7 @@
                     <div class="row mt-3">
                         <div class="col-md-6">
                             <label>Responsable</label>
-                            <input type="text" class="form-control" value="{{ $expense->name }}" disabled>
+                            <input type="text" class="form-control" value="{{ $expense->employee->name }}" disabled>
                         </div>
                         <div class="col-md-6">
                             <label>Status</label>
@@ -52,7 +52,7 @@
 
                     <div class="row pt-3">
                         <div class="col-md-4">
-                            <input type="date" class="form-control" name="expense_date" value="{{ $expense->expense_date }}">
+                            <input type="date" class="form-control" name="expense_date" value="{{ $expense->expense_date->format('Y-m-d') }}">
                         </div>
                         <div class="col-md-8">
                             <input type="file" class="form-control" name="attach">
@@ -74,7 +74,7 @@
 
                 <div class="row">
                     <div class="col-md-12 text-end">
-                        <a href="{{ route('expenses.index') }}" class="btn btn-sm btn-secondary">Atras</a>
+                        <a href="{{ route('admin.finance.expense.index') }}" class="btn btn-sm btn-secondary">Atras</a>
                         <button type="submit" class="btn btn-sm btn-success">
                             <x-feathericon-save class="table-icon" style="margin: -2px 5px 2px"/>
                             Guardar
