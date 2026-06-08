@@ -47,8 +47,9 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td></td>
-                    <td colspan="2"></td>
+                    <td>&nbsp;</td>
+                    <td class="text-end fw-bold">{{ 0 }}</td>
+                    <td>&nbsp;</td>
                     <td class="text-end fw-bold">{{ Number::currency(0) }}</td>
                     <td class="text-end fw-bold">{{ Number::currency(0) }}</td>
                     <td colspan="3"></td>

@@ -38,7 +38,7 @@
                     <div class="row mt-3">
                         <div class="col-md-12">
                             <label>Responsable</label>
-                            <select class="form-select" name="responsible" required>
+                            <select class="form-select" name="employee_id" required>
                                 @foreach ($employees as $employee)
                                     <option value="{{ $employee->id }}">{{ $employee->name }}</option>
                                 @endforeach

@@ -41,6 +41,11 @@ class BitsoData extends Model
      * Accessors
      */
 
+    public function getCryptoActiveAttribute()
+    {
+        return $this;
+    }
+
     public function getPurchaseValueAttribute()
     {
         return ($this->amount * $this->price);
