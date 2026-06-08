@@ -50,7 +50,7 @@ class ExpensesController extends Controller
                 'status'       => $request->status,
                 'amount'       => $request->amount,
                 'price'        => $request->price,
-                'responsible'  => $request->responsible,
+                'employee_id'  => $request->employee_id,
                 'attach'       => isset($newFilename) ? $newFilename : '',
                 'expense_date' => now()
             ]);

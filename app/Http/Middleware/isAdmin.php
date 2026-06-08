@@ -14,9 +14,17 @@ class isAdmin
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    
+
     public function handle(Request $request, Closure $next): Response
     {
-        return $next($request);
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+        if (Auth::user()->role === 'admin' || Auth::user()->role === 'owner') {
+            return $next($request);
+        }
+
+        return redirect()->route('login')->with('error', 'No tienes permiso para acceder a esta sección.');
     }
 }
