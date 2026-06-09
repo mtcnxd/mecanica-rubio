@@ -28,5 +28,7 @@ class isAdmin
 
         return redirect()->route('login')->with('error', 'No tienes permiso para acceder a esta sección.');
         */
+
+        return $next($request);
     }
 }
