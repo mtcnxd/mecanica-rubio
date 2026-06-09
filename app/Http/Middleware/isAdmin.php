@@ -17,6 +17,7 @@ class isAdmin
 
     public function handle(Request $request, Closure $next): Response
     {
+        /*
         if (!Auth::check()) {
             return redirect()->route('login');
         }
@@ -26,5 +27,6 @@ class isAdmin
         }
 
         return redirect()->route('login')->with('error', 'No tienes permiso para acceder a esta sección.');
+        */
     }
 }
