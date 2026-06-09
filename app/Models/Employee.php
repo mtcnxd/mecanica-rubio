@@ -41,9 +41,14 @@ class Employee extends Model
         return $this->hasOne(User::class, 'id');
     }
 
-    public function salaries()
+    public function payrolls()
     {
-        return $this->hasMany(Payroll::class, 'user_id');
+        return $this->hasMany(Payroll::class, 'employee_id');
+    }
+
+    public function payrollItems()
+    {
+        return $this->hasMany(PayrollItems::class, 'employee_id');
     }
 
     public function vacations()

@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="window-container">
-    @include('includes.alert')
+    @include('includes.warnings')
     <div class="col-md-7">
         <h6 class="window-title shadow text-uppercase fw-bold"><span class="ms-3">Buscar cliente</span></h6>
         <div class="window-body shadow p-4">
@@ -13,7 +13,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <label>Nombre</label>
-                            <input type="text" class="form-control" name="name" value="{{ isset($client) ? $client->name : '' }}" required>
+                            <input type="text" class="form-control" name="name" value="{{ isset($client) ? $client->name : '' }}">
                         </div>
                     </div>
 
@@ -27,7 +27,7 @@
                     <div class="row mt-3">
                         <div class="col-md-6">
                             <label>Teléfono</label>
-                            <input type="number" class="form-control" name="phone" value="{{ isset($client) ? $client->phone : '' }}" required>
+                            <input type="number" class="form-control" name="phone" value="{{ isset($client) ? $client->phone : '' }}">
                         </div>
                         <div class="col-md-6">
                             <label>Código Postal</label>

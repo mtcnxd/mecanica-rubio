@@ -54,5 +54,4 @@ class PayrollsService
     {
         return PayrollItems::where('salary_id', $id)->get();
     }
-
 }

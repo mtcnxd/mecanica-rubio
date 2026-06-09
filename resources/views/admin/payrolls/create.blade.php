@@ -14,7 +14,7 @@
                                 <label>Empleado</label>
                                 <div class="input-group mb-3">
                                     <select class="form-select" name="employee" id="employee" required>
-                                        <option value="0"> - Seleccione empleado - </option>
+                                        <option value="" disabled selected> - Seleccione empleado - </option>
                                         @foreach ($employees as $employee)
                                             <option value="{{ $employee->id }}">{{ $employee->name }}</option>
                                         @endforeach
@@ -165,87 +165,15 @@
 
 @section('js')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-$("#employee").on('change', function(){
-    $.ajax({
-        url: "{{ route('api.employee.search', ':id') }}".replace(':id', this.value),
-        method: 'GET',
-        success: function(response){
-            console.log(response);
-            $("#salary").val(response.data.salary);
-            $("#email").val(response.data.email);
-        }
-    })
-});
-
-$("#openModal").on('click', function(btn){
-    btn.preventDefault();
-    $('#popup').fadeIn();
-    $('#overlay').fadeIn();
-});
-
-$(".removeButton").on('click', function(event) {
-    event.preventDefault();
-
-    $.ajax({
-        url: "{{ route('api.finance.payroll-item.destroy', ':id') }}".replace(':id', this.id),
-        method:'DELETE',
-        success: function (response) {
-            console.log(response)
-        }
-    })
-});
-
-$('#acceptButton').click(function() {
-    const data = {
-        concept: $("#concept").val(),
-        amount: $("#amount").val()
-    };
-
-    $.ajax({
-        url: "{{ route('api.finance.payroll-item.store') }}",
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(data),
-        success: function(response){
-            console.log(response);
-            
-            $("#table-body").empty();
-
-            if (response.data) {
-                $.each (response.data, function(i, item){
-                    $("#table-body").append(
-                        '<tr>'+
-                            '<td>'+ (i + 1) +'</td>'+
-                            '<td>'+ item.concept +'</td>'+
-                            '<td class="text-end">'+ numeral(item.amount).format('$0,000.00') +'</td>'+
-                            '<td><a href="#" class="removeButton" id=""><x-feathericon-trash-2 class="table-icon"/></a></td>'+
-                        '</tr>'
-                    );
-                });
-            }
-        }
-    })
-    .then(() => {
-        history.go();
-    });
-
-    closePopup();
-});
-
-$("#closeButton").on('click', function(){
-    closePopup();
-});
-
-$('#overlay').click(function() {
-    closePopup();
-});
-
-function closePopup(){
-    $('#popup').fadeOut();
-    $('#overlay').fadeOut();
+const routes = {
+    'employeeSearch': "{{ route('api.employee.search', ':id') }}",
+    'itemStore': "{{ route('api.finance.payroll-item.store') }}",
+    'itemDestroy': "{{ route('api.finance.payroll-item.destroy', ':id') }}",
 }
 </script>
+<script src="/js/payrolls.js"></script>
 @endsection
 
 @section('css')

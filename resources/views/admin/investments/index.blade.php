@@ -163,14 +163,14 @@
 @include('admin.investments.modal_trades')
 
 @section('css')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
 @endsection
 
 @section('js')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const rutes = {
+    const routes = {
         investmentItemStore : "{{ route('api.investment.crypto') }}",
         investmentItemRemove : "{{ route('api.investment.crypto', ':id') }}",
         investmentItemFiat: "{{ route('api.investment.fiat') }}",

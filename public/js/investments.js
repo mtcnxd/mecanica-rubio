@@ -114,7 +114,7 @@ class Investment {
 }
 
 $(document).ready(function () {
-    const investment = new Investment(rutes);
+    const investment = new Investment(routes);
     const table = $("#trades tbody")
 
     investment.getTrades(table);

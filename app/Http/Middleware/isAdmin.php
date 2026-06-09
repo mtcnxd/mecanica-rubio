@@ -21,10 +21,14 @@ class isAdmin
             return redirect()->route('login');
         }
 
+        return $next($request);
+
+        /*
         if (Auth::user()->rol == 'Admin') {
             return $next($request);
         }
+        */
 
-        return redirect()->route('login')->with('error', 'No tienes permiso para acceder a esta sección.');
+        // return redirect()->route('login')->with('error', 'No tienes permiso para acceder a esta sección.');
     }
 }

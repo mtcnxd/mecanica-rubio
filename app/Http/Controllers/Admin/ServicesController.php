@@ -12,6 +12,8 @@ use App\Traits\Notificator;
 use App\Models\Service;
 use App\Models\ServiceItems;
 use App\Events\ServiceCompleted;
+use App\Exceptions\StoreServiceException;
+use App\Exceptions\ServiceNotFoundException;
 
 class ServicesController extends Controller
 {
@@ -44,7 +46,7 @@ class ServicesController extends Controller
             return to_route('admin.service.index')
                 ->with('success', "Servicio creado correctamente | Folio: #{$service->id}");
 
-        } catch(\Exception $err){
+        } catch(StoreServiceException $err){
             return to_route('admin.service.index')
                 ->with('warning', "Error al crear servicio | Message: {$err->getMessage()}");
         }
@@ -54,6 +56,10 @@ class ServicesController extends Controller
     {
         $service = $this->orderService->find($id);
 
+        if (!$service){
+            throw new ServiceNotFoundException("El servicio folio #{$id}: no fue encontrado");
+        }
+
         return view('admin.services.show', compact('service'));
     }
 
@@ -61,6 +67,10 @@ class ServicesController extends Controller
     {
         $finishedDate = now();
         $service = $this->orderService->find($id);
+
+        if (!$service){
+            throw new ServiceNotFoundException("El servicio folio #{$id}: no fue encontrado");
+        }
 
         if ($request->status == 'Entregado'){
             $finishedDate = $request->finished_date ? $request->finished_date : now();

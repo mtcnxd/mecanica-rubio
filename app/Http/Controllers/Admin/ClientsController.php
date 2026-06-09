@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ClientRequest;
 use App\Services\ClientService;
 use App\Traits\Notificator;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ClientsController extends Controller
@@ -30,16 +30,16 @@ class ClientsController extends Controller
         return view('admin.clients.create');
     }
 
-    public function store(Request $request)
+    public function store(ClientRequest $request)
     {
         try {
-            $client = $this->clientService->create($request->except('_method', '_token'));
+            $client = $this->clientService->create($request->validated());
 
             $this->sendNotification(
                 sprintf("*Client created:* __%s__ \n\r*Client:* __%s__ \n\r*Phone:* __%s__", $client->id, $client->name, $client->phone)
             );
 
-            session()->flash('success', sprintf('Se guardó correctamente el cliente: %s', $client->name));
+            session()->flash('success', sprintf('El cliente %s se guardó correctamente', $client->name));
 
         } catch (\Exception $e) {
             session()->flash('warning', sprintf('Ocurrio un error | %s ', $e->getMessage()));
@@ -62,10 +62,10 @@ class ClientsController extends Controller
         return view('admin.clients.edit', compact('client'));
     }
 
-    public function update(Request $request, string $id)
+    public function update(ClientRequest $request, string $id)
     {
         try {
-            $this->clientService->update($id, $request->except('_method', '_token'));
+            $this->clientService->update($id, $request->validated());
             session()->flash('success', sprintf('El cliente %s se actualizo correctamente', $request->name));
 
         } catch (\Exception $err) {
