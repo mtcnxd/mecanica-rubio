@@ -1,8 +1,8 @@
 @extends('includes.body')
 
 @section('content')
-@include('includes.alert')
 <div class="window-container">
+    @include('includes.warnings')
     <div class="col-md-7">
         <h6 class="window-title shadow text-uppercase fw-bold"><span class="ms-3">Cliente</span></h6>
         <div class="window-body shadow p-4">
@@ -13,20 +13,20 @@
                     <div class="row">
                         <div class="col-md-12">
                             <label for="name">Nombre</label>
-                            <input type="text" class="form-control" name="name" id="name" required autocomplete="off">
+                            <input type="text" class="form-control" name="name" id="name" autocomplete="off" value="{{old('name')}}">
                             <ul id="resultClientsList" style="display: none;" class="float-suggestions"></ul>
                         </div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-md-12">
                             <label for="email">Correo</label>
-                            <input type="text" class="form-control" name="email" id="email">
+                            <input type="text" class="form-control" name="email" id="email" value="{{old('email')}}">
                         </div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-md-6">
                             <label for="phone">Teléfono</label>
-                            <input type="number" class="form-control" name="phone" id="phone" required maxlength="10">
+                            <input type="number" class="form-control" name="phone" id="phone" maxlength="10" value="{{old('phone')}}">
                         </div>
                         <div class="col-md-6">
                             <label for="postcode">Código Postal</label>

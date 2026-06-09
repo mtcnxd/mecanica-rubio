@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="window-container">
-    @include('includes.alert')
+    @include('includes.warnings')
     <div class="col-md-7">
         <h6 class="window-title shadow text-uppercase fw-bold"><span class="ms-3">Buscar cliente</span></h6>
         <div class="window-body shadow p-4">
