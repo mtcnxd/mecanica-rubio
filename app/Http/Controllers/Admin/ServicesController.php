@@ -24,7 +24,6 @@ class ServicesController extends Controller
 
     public function index()
     {
-        $services = [];
         $services = $this->orderService->all();
 
         return view('admin.services.index', compact('services'));

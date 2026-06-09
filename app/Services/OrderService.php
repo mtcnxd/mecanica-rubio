@@ -17,6 +17,7 @@ class OrderService
     public function all()
     {
         return Service::whereBetween('created_at', [now()->subMonths(4), now()->endOfMonth()])
+            ->whereNotIn('status',['Cancelado'])
             ->where('quote', false)
             ->get();
     }

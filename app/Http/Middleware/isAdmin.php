@@ -17,18 +17,14 @@ class isAdmin
 
     public function handle(Request $request, Closure $next): Response
     {
-        /*
         if (!Auth::check()) {
             return redirect()->route('login');
         }
 
-        if (Auth::user()->role === 'admin' || Auth::user()->role === 'owner') {
+        if (Auth::user()->rol == 'Admin') {
             return $next($request);
         }
 
         return redirect()->route('login')->with('error', 'No tienes permiso para acceder a esta sección.');
-        */
-
-        return $next($request);
     }
 }
