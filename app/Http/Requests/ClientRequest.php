@@ -24,6 +24,7 @@ class ClientRequest extends FormRequest
         return [
             'name'  => 'required|string|min:10|max:255',
             'phone' => 'required|string|min:10|max:10',
+            'email' => 'nullable|email',
         ];
     }
 
@@ -34,6 +35,7 @@ class ClientRequest extends FormRequest
             'name.min'       => 'El nombre debe tener al menos 10 caracteres',
             'phone.required' => 'El teléfono es requerido',
             'phone.min'      => 'El teléfono debe tener al menos 10 caracteres',
+            'email.email'    => 'El correo no tiene un formato valido'
         ];
     }
 }

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Services\CarService;
 use App\Services\ClientService;
 use App\Traits\Notificator;
+use App\Http\Requests\CarRequest;
 
 class CarsController extends Controller
 {
@@ -32,10 +33,10 @@ class CarsController extends Controller
         return view('admin.cars.create', compact('brands','clients'));
     }
 
-    public function store(Request $request)
+    public function store(CarRequest $request)
     {        
         try {
-            $car = $this->carService->createClientCar($request->all());
+            $car = $this->carService->createClientCar($request->validated());
 
             $this->sendNotification(
                 sprintf("*Car created:* __%s__ \n\r*Car:* __%s__ \n\r*Client:* __%s__", $car->id, $car->fullName, $car->client->name)
@@ -71,18 +72,25 @@ class CarsController extends Controller
         return view('admin.cars.edit', compact('brands','clients','auto'));
     }
 
-    public function update(Request $request, string $id)
+    public function update(CarRequest $request, string $id)
     {
-        DB::table('autos')->where('id', $id)->update([
-            "brand"    => $request->brand,
-            "model"    => $request->model,
-            "year"     => $request->year,
-            "plate"    => $request->plate,
-            "serie"    => $request->serie,
-            "comments" => $request->comments,
-        ]);
+        try {
+            DB::table('autos')->where('id', $id)->update([
+                "brand"    => $request->brand,
+                "model"    => $request->model,
+                "year"     => $request->year,
+                "plate"    => $request->plate,
+                "serie"    => $request->serie,
+                "comments" => $request->comments,
+            ]);
 
-        return to_route('car.index')->with('message', 'Los datos se guardaron correctamente');
+            return to_route('car.index')->with('message', 'Los datos se guardaron correctamente');
+
+        } catch (\Exception $e){
+            session()->flash('warning', "ERROR | MESSAGE: {$e->getMessage()}");
+            return to_route('admin.car.index');
+
+        }
     }
 
     public function loadModels(Request $request)
