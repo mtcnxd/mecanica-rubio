@@ -103,6 +103,7 @@ class OrderService
         return ServiceItems::destroy($id);
     }
 
+    /*
     public function findByCriteria(array $criteria)
     {
         return Service::select('client_id', 'car_id', 'service_type', 'fault', 'status', 'entry_date', 'finished_date', 'total')
@@ -117,6 +118,7 @@ class OrderService
                 }
             })->get();
     }
+    */
 
     public function servicesSummary()
     {
