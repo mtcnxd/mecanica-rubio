@@ -13,18 +13,16 @@ class PayrollItems extends Model
 
     protected $fillable = [
         'salary_id',
+        'user_id',
         'concept',
         'amount',
-    ];
-
-    protected $hidden = [
-        'number',
+        'handed'
     ];
 
     public $timestamps = false;
 
-    public function salary()
+    public function payroll()
     {
-        $this->belongsTo(Salary::class, 'salary_id');
+        return $this->belongsTo(Payroll::class, 'salary_id');
     }
 }

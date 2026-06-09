@@ -92,6 +92,9 @@ Route::prefix('admin')
         Route::resource('setting', SettingsController::class)->only('index','store');
         Route::resource('profile', ProfileController::class)->only('index');
 
+        // Route::resource('vacations', VacationsController::class);
+        // Route::resource('payroll',)
+
         Route::name('finance.')->prefix('finance')->group(function(){
             Route::get('income', [FinanceController::class, 'index'])->name('income');
             Route::get('monthly-closing', [FinanceController::class, 'monthlyClosing'])->name('monthly-closing');

@@ -22,9 +22,9 @@ class OrderService
             ->get();
     }
 
-    public function find(string $id): Service
+    public function find(string $id): ?Service
     {
-        return Service::findOrFail($id);
+        return Service::find($id);
     }
 
     public function createOrder(array $data): Service

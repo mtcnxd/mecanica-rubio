@@ -4,13 +4,8 @@ namespace App\Exceptions;
 
 use Exception;
 
-class InvalidOrderStatusException extends Exception
+class ServiceNotFoundException extends Exception
 {
-    public function report()
-    {
-        \Log::info($this->getMessage());
-    }
-
     public function render()
     {
         return response()->view('error-template', [
