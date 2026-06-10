@@ -3,34 +3,20 @@
 @section('content')
 <div class="window-container">
     @include('includes.alert')
-    <h6 class="window-title shadow text-uppercase fw-bold"><span class="ms-3">Listado de nominas</span></h6>
+    <h6 class="window-title shadow text-uppercase fw-bold"><span class="ms-3">Nominas</span></h6>
     <div class="window-body shadow py-4">
-        <form action="{{ route('admin.finance.payroll.index') }}" method="POST">
-            @csrf
-            @method('GET')
-
+        <form action="{{ route('admin.finance.payroll.index') }}" method="GET">
             <div class="row m-1 mb-3 pb-3">
-                <div class="col-md-2">
-                    <label class="fw-bold">Inicio</label>
-                    <input type="date" class="form-control" name="startDate" id="startDate" value="{{ $currentMonth['startDate'] }}">
-                </div>
-
-                <div class="col-md-2">
-                    <label class="fw-bold">Final</label>
-                    <input type="date" class="form-control" name="endDate" id="endDate" value="{{ $currentMonth['endDate'] }}">
-                </div>
-
-                <div class="col-md-2">
-                    <label class="fw-bold">Responsable</label>
+                <div class="col-md-3">
                     <select class="form-select" name="employee" id="employee">
-                        <option value="0"> - Filtrar por responsable - </option>
-                        <option value="1">Alexander Xix Ortiz</option>
-                        <option value="3">Javier Rubio Magaña</option>
-                        <option value="2">Marcos Tzuc Cen</option>
+                        <option disabled selected>Filtrar por nombre</option>
+                        @foreach (\App\Models\Employee::all() as $employee)
+                            <option value="{{ $employee->id }}">{{ $employee->name }} </option>    
+                        @endforeach
                     </select>
                 </div>
 
-                <div class="col-md-2 mt-4">
+                <div class="col-md-2">
                     <button class="btn btn-success" id="applyFilter">
                         <x-feathericon-search class="table-icon" style="margin: -2px 5px 2px"/>
                         Buscar
@@ -53,52 +39,52 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($currentMonth['data'] as $salary)
+                @foreach ($payrolls as $payroll)
                 <tr>
-                    <td>{{ $salary->id }}</td>
+                    <td>{{ $payroll->id }}</td>
                     <td>
                         <span class="material-symbols-outlined" style="position:relative; top:5px; margin-right:6px;">badge</span>
-                        <a href="{{ route('admin.finance.payroll.show', $salary->id) }}">
-                            {{ $salary->employee->name }}
+                        <a href="{{ route('admin.finance.payroll.show', $payroll->id) }}">
+                            {{ $payroll->employee->name }}
                         </a>
                     </td>
                     <td>
-                        {{ $salary->type }}
+                        {{ $payroll->type }}
                     </td>
                     <td>
                         <span class="badge text-bg-secondary">
-                            {{ Carbon\Carbon::parse($salary->start_date)->format('d-m-Y') }}
+                            {{ Carbon\Carbon::parse($payroll->start_date)->format('d-m-Y') }}
                         </span>
                         |
                         <span class="badge text-bg-secondary">
-                            {{ Carbon\Carbon::parse($salary->end_date)->format('d-m-Y') }}
+                            {{ Carbon\Carbon::parse($payroll->end_date)->format('d-m-Y') }}
                         </span>
                     </td>
                     <td>
-                        {{ isset($salary->paid_date) ? \Carbon\Carbon::parse($salary->paid_date)->format('d-m-Y') : null }}
+                        {{ isset($payroll->paid_date) ? \Carbon\Carbon::parse($payroll->paid_date)->format('d-m-Y') : null }}
                     </td>
                     <td>
-                        @if ($salary->status == 'Pagado')
-                            <span class="badge rounded-pill text-bg-success">{{ $salary->status }}</span>
+                        @if ($payroll->status == 'Pagado')
+                            <span class="badge rounded-pill text-bg-success">{{ $payroll->status }}</span>
                         @else
-                            @if ($salary->status == 'Cancelado')
-                                <span class="badge rounded-pill text-bg-secondary">{{ $salary->status }}</span>    
+                            @if ($payroll->status == 'Cancelado')
+                                <span class="badge rounded-pill text-bg-secondary">{{ $payroll->status }}</span>    
                             @else
-                                <span class="badge rounded-pill text-bg-warning">{{ $salary->status }}</span>
+                                <span class="badge rounded-pill text-bg-warning">{{ $payroll->status }}</span>
                             @endif
                         @endif
                     </td>
-                    <td class="text-end">{{ Number::currency($salary->total) }}</td>
+                    <td class="text-end">{{ Number::currency($payroll->total) }}</td>
                     <td>
                         <div class="dropdown">
-                            @if ($salary->status != 'Pagado')
+                            @if ($payroll->status != 'Pagado')
                             <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" style="margin-top:-3px;">
                                 <x-feathericon-more-vertical style="height:20px;"/>
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#" data-action="Pagado" data-id="{{ $salary->id }}">Pagar</a></li>
-                                <li><a class="dropdown-item" href="#" data-action="Cancelado" data-id="{{ $salary->id }}">Cancelar</a></li>
-                                <li><a class="dropdown-item" href="#" data-action="Borrado" data-id="{{ $salary->id }}">Eliminar</a></li>
+                                <li><a class="dropdown-item" href="#" data-action="Pagado" data-id="{{ $payroll->id }}">Pagar</a></li>
+                                <li><a class="dropdown-item" href="#" data-action="Cancelado" data-id="{{ $payroll->id }}">Cancelar</a></li>
+                                <li><a class="dropdown-item" href="#" data-action="Borrado" data-id="{{ $payroll->id }}">Eliminar</a></li>
                             </ul>
                             @endif
                         </div>

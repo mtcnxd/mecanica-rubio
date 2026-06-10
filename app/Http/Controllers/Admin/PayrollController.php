@@ -16,14 +16,19 @@ class PayrollController extends Controller
     public function __construct(
         private EmployeeService $employeeService,
         private PayrollService $payrollService
-    ) {
-    
-    }
+    ) { }
 
     public function index(Request $request)
     {
-        $currentMonth = $this->payrollService->getCurrentMonth();
-        return view('admin.payrolls.index', compact('currentMonth'));
+        $employee = null;
+
+        if ($request->employee){
+            $employee = $request->employee;
+        }
+
+        $payrolls = $this->payrollService->getCurrentMonth($employee);
+
+        return view('admin.payrolls.index', compact('payrolls'));
     }
 
     public function create()

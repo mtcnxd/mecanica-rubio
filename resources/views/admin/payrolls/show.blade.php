@@ -17,7 +17,9 @@
                                 <div class="input-group mb-3">
                                     <input type="text" class="form-control" value="{{ $payroll->employee->name }}" disabled>
                                     <span class="input-group-text" id="basic-addon2">
-                                        <x-feathericon-user class="table-icon" style="margin: -2px 5px 2px"/>
+                                        <a href="{{ route('admin.employee.show', $payroll->employee) }}">
+                                            <x-feathericon-user class="table-icon" style="margin: -2px 5px 2px"/>
+                                        </a>
                                     </span>
                                 </div>
                             </div>
@@ -28,8 +30,8 @@
                                 <input type="text" class="form-control" value="{{ $payroll->type }}" disabled>
                             </div>
                             <div class="col-md-6">
-                                <label class="text-uppercase fs-8 fw-bold">Fecha de dispersión</label>
-                                <input type="date" class="form-control" value="{{ ($payroll->paid_date) ? \Carbon\Carbon::parse($payroll->paid_date)->format('Y-m-d') : null }}" disabled>
+                                <label class="text-uppercase fs-8 fw-bold">Fecha de Pago</label>
+                                <input type="date" class="form-control" value="{{ ($payroll->paid_date) ? $payroll->paid_date->format('Y-m-d') : null }}" disabled>
                             </div>
                         </div>
                     </div>
@@ -55,11 +57,11 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <label class="text-uppercase fs-8 fw-bold">Inicio</label>
-                                <input type="date" name="start_date" class="form-control" value="{{ $payroll->start_date }}" disabled>
+                                <input type="date" name="start_date" class="form-control" value="{{ $payroll->start_date->format('Y-m-d') }}" disabled>
                             </div>
                             <div class="col-md-6">
                                 <label class="text-uppercase fs-8 fw-bold">Final</label>
-                                <input type="date" name="end_date" class="form-control" value="{{ $payroll->end_date }}" disabled>
+                                <input type="date" name="end_date" class="form-control" value="{{ $payroll->end_date->format('Y-m-d') }}" disabled>
                             </div>
                         </div>
                     </div>
@@ -83,22 +85,23 @@
                             <td>{{ $item->concept }}</td>
                             <td class="text-end">{{ Number::currency($item->amount) }}</td>
                             <td>
-                                <a href="#" class="removeItem" id="{{ $item->id }}">
-                                    <x-feathericon-trash-2 class="table-icon"/>
-                                </a>
+                                @if ($payroll->status != 'Pagado')
+                                    <a href="#" class="removeItem" id="{{ $item->id }}">
+                                        <x-feathericon-trash-2 class="table-icon"/>
+                                    </a>
+                                @endif
                             </td>
                         </tr>
                         @endforeach
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td></td>
-                            <td>
-                                @if (!$payroll->blocked)
-                                <a href="#" id="addConcept">
-                                    Agregar
-                                    <x-feathericon-plus-circle class="table-icon" style="margin: 0 0 2px 5px"/>
-                                </a>
+                            <td colspan="2">
+                                @if ($payroll->status != 'Pagado')
+                                    <a href="#" id="addConcept">
+                                        Agregar
+                                        <x-feathericon-plus-circle class="table-icon" style="margin: 0 0 2px 5px"/>
+                                    </a>
                                 @endif
                             </td>
                             <td class="text-end">
@@ -111,12 +114,15 @@
             </div>
 
             <div class="col-md-12 text-end">
-                <a href="{{ route('admin.finance.payroll.index') }}" class="btn btn-sm btn-secondary">Atras</a>
+                <button type="button" onclick="location.href='{{ route('admin.finance.payroll.index') }}'" class="btn btn-sm btn-secondary">
+                    <x-feathericon-arrow-left class="table-icon" style="margin: -2px 5px 2px"/>
+                    Atras
+                </button>
                 <button type="button" onclick="print()" class="btn btn-sm btn-secondary">
                     Imprimir
                     <x-feathericon-printer class="table-icon" style="margin: -2px 5px 2px"/>
                 </button>
-                @if (!$payroll->blocked)
+                @if ($payroll->status != 'Pagado')
                     <button type="submit" class="btn btn-sm btn-success">
                         Pagar
                         <x-feathericon-dollar-sign class="table-icon" style="margin: -2px 5px 2px"/>
