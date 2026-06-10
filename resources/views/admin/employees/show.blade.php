@@ -203,16 +203,31 @@
                 <p class="fs-5 fw-bold">Caja de ahorro</p>
                 <div class="row">
                     <table class="table table-hover">
-                        @foreach ($employee->payrollItems as $payrollItem)
+                        <thead>
                             <tr>
-                                <td>{{ $payrollItem->salary_id }}</td>
-                                <td>{{ $payrollItem->concept }}</td>
-                                <td class="text-end">{{ Number::currency($payrollItem->amount) }}</td>
+                                <td>Nomina</td>
+                                <td>Fecha de pago</td>
+                                <td>Concepto</td>
+                                <td class="text-end">Monto</td>
                             </tr>
-                        @endforeach
+                        </thead>
+                        <tbody>
+                            @foreach ($employee->payrollItems as $payrollItem)
+                                <tr>
+                                    <td>
+                                        <a href="{{ route('admin.finance.payroll.show', $payrollItem->salary_id) }}">Nomina #{{ $payrollItem->salary_id }}</a>
+                                    </td>
+                                    <td>{{ $payrollItem->payroll->paid_date->format('d-m-Y') }}</td>
+                                    <td>{{ $payrollItem->concept }}</td>
+                                    <td class="text-end">{{ Number::currency($payrollItem->amount) }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
                         <tfoot>
-                            <td colspan="2">&nbsp;</td>
-                            <td class="text-end">{{ Number::currency($employee->payrollItems()->sum('amount')) }}</td>
+                            <tr style="border-bottom-color: #fff;">
+                                <td colspan="3">&nbsp;</td>
+                                <td class="text-end">{{ Number::currency($employee->payrollItems()->sum('amount')) }}</td>
+                            </tr>
                         </tfoot>
                     </table>
                 </div>
