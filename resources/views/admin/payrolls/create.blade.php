@@ -16,7 +16,7 @@
                                     <select class="form-select" name="employee" id="employee" required>
                                         <option value="" disabled selected> - Seleccione empleado - </option>
                                         @foreach ($employees as $employee)
-                                            @if ($employeeCookie != null && $employeeCookie == $employee->id)
+                                            @if ($cookieEmployee != null && $cookieEmployee == $employee->id)
                                                 <option value="{{ $employee->id }}" selected>{{ $employee->name }}</option>
                                             @else 
                                                 <option value="{{ $employee->id }}">{{ $employee->name }}</option>
@@ -33,12 +33,12 @@
                             <div class="col-md-6">
                                 <label>Movimiento</label>
                                 <select class="form-select" name="type" id="type">
-                                    <option disabled @if(empty($typeCookie)) selected @endif> - Seleccione movimiento - </option>
+                                    <option disabled @if(empty($cookieType)) selected @endif> - Seleccione movimiento - </option>
                                     @php
                                         $options = ['Nomina', 'Aguinaldo', 'Finiquito', 'Liquidacion', 'Otras percepciones'];
                                     @endphp
                                     @foreach($options as $option)
-                                        <option value="{{ $option }}" @if(!empty($typeCookie) && $typeCookie == $option) selected @endif>{{ $option }}</option>
+                                        <option value="{{ $option }}" @if(!empty($cookieType) && $cookieType == $option) selected @endif>{{ $option }}</option>
                                     @endforeach
                                 </select>
                             </div> 

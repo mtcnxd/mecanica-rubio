@@ -29,9 +29,11 @@ class EventServiceProvider extends ServiceProvider
             SendEmailServiceNotification::class,
         ],
 
+        /*
         PayrollCompletedEvent::class => [
             PayrollCompletedListener::class,
         ],
+        */
     ];
 
     /**

@@ -88,7 +88,7 @@
                             @endif
                         @endif
                     </td>
-                    <td class="text-end">{{ "$".number_format($salary->total, 2) }}</td>
+                    <td class="text-end">{{ Number::currency($salary->total) }}</td>
                     <td>
                         <div class="dropdown">
                             @if ($salary->status != 'Pagado')
@@ -138,16 +138,23 @@ $(".dropdown-item").on('click', function(){
         data: JSON.stringify(data),
         success: function(response){
             console.log(response);
-            showMessageAlert(response.message);
-            location.reload();
+
+            if (!response.success){
+                showMessageAlert(response.message, 'error');
+                return false;
+            }
+
+            showMessageAlert(response.message).then(() => {
+                location.reload();
+            });
         }
     });
 });
 
-function showMessageAlert(message){
-    Swal.fire({
+function showMessageAlert(message, type = 'success'){
+    return Swal.fire({
         text: message,
-        icon: 'success',
+        icon: type,
         confirmButtonText: 'Aceptar'
     });
 }

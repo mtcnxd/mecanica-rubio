@@ -28,23 +28,18 @@ class PayrollController extends Controller
 
     public function create()
     {
-        /* We plus one because current salarie is still not saved */
-        $employees = [];
-        $cookies   = null;
-
         try {
-            $id        = Payroll::max('id') + 1;
-            $items     = PayrollItems::where('salary_id', $id)->get();
             $employees = $this->employeeService->getAll();
+            $items     = $this->payrollService->getFormDataCreatePayroll();
 
-            $employeeCookie = Cookie::get('employee');
-            $typeCookie     = Cookie::get('type');
+            $cookieEmployee = Cookie::get('employee');
+            $cookieType     = Cookie::get('type');
         
         } catch (\Exception $e){
             session()->flash('warning', 'Error | Message: '. $e->getMessage());
         }
 
-        return view('admin.payrolls.create', compact('employees','items','employeeCookie','typeCookie'));
+        return view('admin.payrolls.create', compact('employees', 'items', 'cookieEmployee', 'cookieType'));
     }
 
     public function store(Request $request)

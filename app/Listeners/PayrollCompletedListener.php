@@ -24,8 +24,8 @@ class PayrollCompletedListener
      */
     public function handle(object $event): void
     {
-        Log::info("Nomina pagada - ". json_encode($event));
+        // Log::info("Nomina pagada - ". json_encode($event));
 
-        $this->telegram("Nomina pagada - {$event->payroll->start_date} a {$event->payroll->end_date}");
+        // $this->telegram("Nomina pagada - {$event->payroll->start_date} a {$event->payroll->end_date}");
     }
 }

@@ -14,7 +14,7 @@ trait Notificator
             $telegram->sendMessage($message, $parseMode);
 
         } catch (\Exception $e){
-            Log::error("ERROR: ". $e->getMessage());
+            Log::error(sprintf("ERROR: %s | MESSAGE: %s ", $e->getMessage(), $message));
 
             throw new \Exception("Error al enviar notificación: {$e->getMessage()}");
         }
@@ -23,10 +23,5 @@ trait Notificator
     public function sendMail()
     {
         // TODO: Implement
-    }
-
-    public function escapeMarkdown($message)
-    {
-        return preg_replace('/([_*\[\]()~`>#+\-=|{}.!])/', '\\\\$1', $message);
     }
 }
