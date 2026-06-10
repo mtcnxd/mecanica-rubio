@@ -20,10 +20,22 @@ class PayrollItemsController extends Controller
     {
         $this->payrollService->createItem($request->validated());
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Item agregado correctamente'
+        $cookies = [
+            cookie('employee', $request->employee, 60),
+            cookie('type', $request->type, 60)
+        ];
+
+        $response = response()->json([
+            'success'  => true,
+            'message'  => 'Item agregado correctamente',
+            'data'     => $request->all()
         ]);
+
+        foreach ($cookies as $cookie) {
+            $response->cookie($cookie);
+        }
+
+        return $response;
     }
 
     /**

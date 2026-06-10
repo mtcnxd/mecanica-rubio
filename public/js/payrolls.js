@@ -21,11 +21,12 @@ class Payrolls {
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(data),
-            success: function (response) {
+            success: (response) => {
                 console.log(response);
 
                 $("#table-body").empty();
 
+                /*
                 if (response.data) {
                     $.each(response.data, function (i, item) {
                         $("#table-body").append(
@@ -38,6 +39,7 @@ class Payrolls {
                         );
                     });
                 }
+                */
             },
             error: (response) => {
                 console.log(response.responseJSON);
@@ -48,6 +50,8 @@ class Payrolls {
                     this.showSwalMessage(error.toString(), 'error');
                 });
             }
+        }).then(() => {
+            location.reload();
         });
     }
 
@@ -55,9 +59,12 @@ class Payrolls {
         $.ajax({
             url: this.routes.itemDestroy.replace(':id', id),
             method: 'DELETE',
-            success: function (response) {
-                console.log(response)
+            success: (response) => {
+                console.log(response);
+                this.showSwalMessage(response.message, 'success');
             }
+        }).then(() => {
+            location.reload();
         });
     }
 
@@ -94,7 +101,8 @@ $(document).ready(function () {
         const data = {
             concept: $("#concept").val(),
             amount: $("#amount").val(),
-            employee: $("#employee").val()
+            employee: $("#employee").val(),
+            type: $("#type").val()
         };
 
         payrolls.addItem(data);

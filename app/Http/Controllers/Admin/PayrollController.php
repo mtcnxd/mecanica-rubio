@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Support\MailController;
 use App\Services\PayrollsService as PayrollService;
 use App\Services\EmployeeService;
+use Illuminate\Support\Facades\Cookie;
 
 class PayrollController extends Controller
 {
@@ -29,18 +30,21 @@ class PayrollController extends Controller
     {
         /* We plus one because current salarie is still not saved */
         $employees = [];
+        $cookies   = null;
 
         try {
-            $id    = Payroll::max('id') + 1;
-            $items = PayrollItems::where('salary_id', $id)->get();
-            
+            $id        = Payroll::max('id') + 1;
+            $items     = PayrollItems::where('salary_id', $id)->get();
             $employees = $this->employeeService->getAll();
+
+            $employeeCookie = Cookie::get('employee');
+            $typeCookie     = Cookie::get('type');
         
         } catch (\Exception $e){
             session()->flash('warning', 'Error | Message: '. $e->getMessage());
         }
 
-        return view('admin.payrolls.create', compact('employees','items'));
+        return view('admin.payrolls.create', compact('employees','items','employeeCookie','typeCookie'));
     }
 
     public function store(Request $request)

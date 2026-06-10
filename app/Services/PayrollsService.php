@@ -34,12 +34,13 @@ class PayrollsService
         $id = Payroll::max('id') +1;
 
         PayrollItems::updateOrCreate([
-            'salary_id' => $id,
-            'concept'   => $data['concept'],
+            'salary_id'   => $id,
+            'concept'     => $data['concept'],
         ],[
-            'salary_id' => $id,
-            'concept'   => $data['concept'],
-            'amount'    => $data['amount'],
+            'salary_id'   => $id,
+            'concept'     => $data['concept'],
+            'amount'      => $data['amount'],
+            'employee_id' => $data['employee']
         ]);
 
         return true;
