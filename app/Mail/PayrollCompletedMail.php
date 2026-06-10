@@ -11,7 +11,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class PayrollDispersed extends Mailable
+class PayrollCompletedMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -30,7 +30,7 @@ class PayrollDispersed extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address("notifications@mecanicarubio.com"),
+            from: new Address("notifications@mecanicarubio.com", "Mecanica Rubio"),
             subject: 'Pago de Nomina',
         );
     }

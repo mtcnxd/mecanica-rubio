@@ -203,36 +203,17 @@
                 <p class="fs-5 fw-bold">Caja de ahorro</p>
                 <div class="row">
                     <table class="table table-hover">
-                    @foreach ($employee->vacationsDaysTaken() as $row => $vacation)
-                        <tr>
-                            <td>{{ $row + 1 }}</td>
-                            <td>{{ $vacation->type }}</td>
-                            <td>{{ $vacation->comment }}</td>
-                            <td class="text-center">{{ $vacation->date }}</td>
-                            <td class="text-end">
-                                @switch($vacation->status)
-                                    @case('Pendiente')
-                                        <span class="badge rounded-pill text-bg-warning">{{ $vacation->status }}</span>    
-                                        @break
-                                    @case('Autorizado')
-                                        <span class="badge rounded-pill text-bg-success">{{ $vacation->status }}</span>    
-                                        @break
-                                    @case('Cancelado')
-                                        <span class="badge rounded-pill text-bg-secondary">{{ $vacation->status }}</span>    
-                                        @break
-                                @endswitch
-                            </td>
-                            <td class="text-end">
-                                @if ($vacation->status == 'Pendiente')
-                                    <a href="#" data-id="{{ $vacation->id }}" class="btn btn-sm cancellVacationDate">Autorizar</a>
-                                @endif
-
-                                @if ($vacation->status != 'Cancelado')
-                                    <a href="#" data-id="{{ $vacation->id }}" class="btn btn-sm cancellVacationDate">Cancelar</a>
-                                @endif
-                            </td>
-                        </tr>
-                    @endforeach
+                        @foreach ($employee->payrollItems as $payrollItem)
+                            <tr>
+                                <td>{{ $payrollItem->salary_id }}</td>
+                                <td>{{ $payrollItem->concept }}</td>
+                                <td class="text-end">{{ Number::currency($payrollItem->amount) }}</td>
+                            </tr>
+                        @endforeach
+                        <tfoot>
+                            <td colspan="2">&nbsp;</td>
+                            <td class="text-end">{{ Number::currency($employee->payrollItems()->sum('amount')) }}</td>
+                        </tfoot>
                     </table>
                 </div>
             </form>

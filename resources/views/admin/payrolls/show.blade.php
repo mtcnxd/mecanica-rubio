@@ -6,7 +6,7 @@
     <h6 class="window-title shadow text-uppercase fw-bold"><span class="ms-3">Nominas</span></h6>
     <div class="window-body shadow p-4">
         <div class="form-container border mb-0">
-            <form action="{{ route('payroll.update', $payroll->id) }}" method="POST">
+            <form action="{{ route('admin.finance.payroll.update', $payroll->id) }}" method="POST">
                 @method('PATCH')
                 @csrf
                 <div class="row pt-0 pb-0">
@@ -81,7 +81,7 @@
                         <tr>
                             <td>{{ $count +1 }}</td>
                             <td>{{ $item->concept }}</td>
-                            <td class="text-end">{{ "$".number_format($item->amount, 2) }}</td>
+                            <td class="text-end">{{ Number::currency($item->amount) }}</td>
                             <td>
                                 <a href="#" class="removeItem" id="{{ $item->id }}">
                                     <x-feathericon-trash-2 class="table-icon"/>
@@ -102,7 +102,7 @@
                                 @endif
                             </td>
                             <td class="text-end">
-                                {{ '$'.number_format($payroll->payrollItems->sum('amount'), 2) }}
+                                {{ Number::currency($payroll->payrollItems->sum('amount')) }}
                                 <input type="hidden" name="total" value="{{ $payroll->payrollItems->sum('amount') }}" id="total">
                             </td>
                         </tr>
@@ -117,10 +117,10 @@
                     <x-feathericon-printer class="table-icon" style="margin: -2px 5px 2px"/>
                 </button>
                 @if (!$payroll->blocked)
-                <button type="submit" class="btn btn-sm btn-success">
-                    Pagar
-                    <x-feathericon-dollar-sign class="table-icon" style="margin: -2px 5px 2px"/>
-                </button>
+                    <button type="submit" class="btn btn-sm btn-success">
+                        Pagar
+                        <x-feathericon-dollar-sign class="table-icon" style="margin: -2px 5px 2px"/>
+                    </button>
                 @endif
             </div>
         </form>

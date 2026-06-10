@@ -13,7 +13,7 @@ class PayrollItems extends Model
 
     protected $fillable = [
         'salary_id',
-        'user_id',
+        'employee_id',
         'concept',
         'amount',
         'handed'

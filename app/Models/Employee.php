@@ -48,7 +48,7 @@ class Employee extends Model
 
     public function payrollItems()
     {
-        return $this->hasMany(PayrollItems::class, 'employee_id');
+        return $this->hasMany(PayrollItems::class, 'employee_id')->where('handed', false);
     }
 
     public function vacations()

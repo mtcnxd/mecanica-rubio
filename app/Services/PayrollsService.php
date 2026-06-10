@@ -4,9 +4,20 @@ namespace App\Services;
 
 use App\Models\Payroll;
 use App\Models\PayrollItems;
+use App\Events\PayrollCompletedEvent;
 
 class PayrollsService 
 {
+    public function getFormDataCreatePayroll()
+    {
+        /* We plus one because current salarie is still not saved */
+
+        $id    = Payroll::max('id') + 1;
+        $items = PayrollItems::where('salary_id', $id)->get();
+
+        return $items;
+    }
+
     public function getCurrentMonth()
     {
         $startDate = now()->subMonths(2)->startofMonth()->format('Y-m-d');
@@ -34,12 +45,13 @@ class PayrollsService
         $id = Payroll::max('id') +1;
 
         PayrollItems::updateOrCreate([
-            'salary_id' => $id,
-            'concept'   => $data['concept'],
+            'salary_id'   => $id,
+            'concept'     => $data['concept'],
         ],[
-            'salary_id' => $id,
-            'concept'   => $data['concept'],
-            'amount'    => $data['amount'],
+            'salary_id'   => $id,
+            'concept'     => $data['concept'],
+            'amount'      => $data['amount'],
+            'employee_id' => $data['employee']
         ]);
 
         return true;
@@ -53,5 +65,19 @@ class PayrollsService
     public function getPayrollItems(Int $id)
     {
         return PayrollItems::where('salary_id', $id)->get();
+    }
+
+    public function markAsPaid(string $id, array $data) : bool
+    {
+        $payroll = Payroll::find($id);
+        
+        $payroll->update([
+            'status' => $data['action'],
+            'paid_date' => now(),
+        ]);
+
+        event(new PayrollCompletedEvent($payroll));
+        
+        return true;
     }
 }
