@@ -18,20 +18,17 @@ class PayrollsService
         return $items;
     }
 
-    public function getCurrentMonth()
+    public function getCurrentMonth($employee = null)
     {
-        $startDate = now()->subMonths(2)->startofMonth()->format('Y-m-d');
-        $endDate   = now()->addDay()->format('Y-m-d');
-
-        $data = Payroll::whereBetween('created_at', [$startDate, $endDate])
+        return Payroll::when($employee, function ($query) use ($employee) {
+                $query->where('employee_id', $employee);
+            })
+            ->whereBetween('created_at', [
+                now()->subMonths(3)->startofMonth(),
+                now()->addDay()
+            ])
             ->orderBy('created_at', 'desc')
             ->get();
-
-        return [
-            'startDate' => $startDate,
-            'endDate' => $endDate,
-            'data' => $data,
-        ];
     }
 
     public function createPayroll(array $data)

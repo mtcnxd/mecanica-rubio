@@ -213,6 +213,7 @@
                         </thead>
                         <tbody>
                             @foreach ($employee->payrollItems as $payrollItem)
+                                @if ($payrollItem->payroll->status == 'Pagado')
                                 <tr>
                                     <td>
                                         <a href="{{ route('admin.finance.payroll.show', $payrollItem->salary_id) }}">Nomina #{{ $payrollItem->salary_id }}</a>
@@ -221,6 +222,7 @@
                                     <td>{{ $payrollItem->concept }}</td>
                                     <td class="text-end">{{ Number::currency($payrollItem->amount) }}</td>
                                 </tr>
+                                @endif
                             @endforeach
                         </tbody>
                         <tfoot>
