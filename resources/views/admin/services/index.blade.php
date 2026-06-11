@@ -5,43 +5,45 @@
     @include('includes.alert')
     <h6 class="window-title shadow text-uppercase fw-bold"><span class="ms-3">Buscar</span></h6>
     <div class="window-body shadow py-4">
-        <div class="row m-1 mb-3 pb-3" id="filters">
-            <div class="col-md-3">
-                <label for="endDate" class="fw-bold">Cliente</label>
-                <select class="form-select" id="client">
-                    <option>Todos</option>
-                    @foreach (App\Models\Client::where('status','Activo')->orderBy('name')->get() as $client)
-                        <option value="{{ $client->id }}">{{ $client->name }}</option>
-                    @endforeach
-                </select>
+        <form action="{{ route('admin.service.index') }}" method="GET">
+            <div class="row m-1 mb-3 pb-3" id="filters">
+                <div class="col-md-3">
+                    <label for="endDate" class="fw-bold">Cliente</label>
+                    <select class="form-select" name="client" id="client">
+                        <option value="" disabled selected>Filtrar por cliente</option>
+                        @foreach (App\Models\Client::where('status','Activo')->orderBy('name')->get() as $client)
+                            <option value="{{ $client->id }}">{{ $client->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="endDate" class="fw-bold">Estatus</label>
+                    <select class="form-select" name="status" id="status">
+                        <option value="" disabled selected>Filtrar por estatus</option>
+                        <option>Cancelado</option>
+                        <option>Pendiente</option>
+                        <option>Esperando cliente</option>
+                        <option>Esperando refaccion</option>
+                        <option>Finalizado</option>
+                        <option>Entregado</option>
+                    </select>
+                </div>
+                <div class="col-md-1">
+                    <label for="folio" class="fw-bold">Folio</label>
+                    <input type="text" class="form-control" name="id" id="id">
+                </div>
+                <div class="col-md-4 mt-4">
+                    <button type="submit" class="btn btn-success">
+                        <x-feathericon-search class="table-icon" style="margin: -2px 5px 2px"/>
+                        Buscar
+                    </button>
+                </div>
+                <div class="col-md-2">
+                    <label for="searchBox" class="fw-bold">Automovil</label>
+                    <input type="text" class="form-control" id="searchBox">
+                </div>
             </div>
-            <div class="col-md-2">
-                <label for="endDate" class="fw-bold">Estatus</label>
-                <select class="form-select" id="status">
-                    <option>Todos</option>
-                    <option>Cancelado</option>
-                    <option>Pendiente</option>
-                    <option>Esperando cliente</option>
-                    <option>Esperando refaccion</option>
-                    <option>Finalizado</option>
-                    <option>Entregado</option>
-                </select>
-            </div>
-            <div class="col-md-1">
-                <label for="folio" class="fw-bold">Folio</label>
-                <input type="text" class="form-control" id="folio">
-            </div>
-            <div class="col-md-4 mt-4">
-                <button class="btn btn-success" id="applyFilter">
-                    <x-feathericon-search class="table-icon" style="margin: -2px 5px 2px"/>
-                    Buscar
-                </button>
-            </div>
-            <div class="col-md-2">
-                <label for="searchBox" class="fw-bold">Automovil</label>
-                <input type="text" class="form-control" id="searchBox">
-            </div>
-        </div>
+        </form>
 
         <table class="table table-hover table-borderless bg-white mb-4" id="services" style="width:100%;">
             <thead>
