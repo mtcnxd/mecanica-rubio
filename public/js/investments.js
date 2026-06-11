@@ -1,14 +1,13 @@
 class Investment {
-
-    constructor(rutes) {
-        this.rutes = rutes;
+    constructor(routes) {
+        this.routes = routes;
     }
 
     addItem(data) {
         console.log(data);
 
         $.ajax({
-            url: this.rutes.investmentItemStore,
+            url: this.routes.investmentItemStore,
             method: 'POST',
             data: JSON.stringify(data),
             contentType: 'application/json',
@@ -32,7 +31,7 @@ class Investment {
 
     removeItem(id) {
         $.ajax({
-            url: this.rutes.investmentItemRemove.replace(':id', id),
+            url: this.routes.investmentItemRemove.replace(':id', id),
             method: 'DELETE',
             contentType: 'application/json',
             data: JSON.stringify({ id: id }),
@@ -51,7 +50,7 @@ class Investment {
         console.log(data);
 
         $.ajax({
-            url: this.rutes.investmentItemFiat,
+            url: this.routes.investmentItemFiat,
             method: 'POST',
             data: JSON.stringify(data),
             contentType: 'application/json',
@@ -75,7 +74,7 @@ class Investment {
 
     getTrades(table) {
         $.ajax({
-            url: this.rutes.investmentTrades,
+            url: this.routes.investmentTrades,
             method: 'GET',
             success: (response) => {
                 if (!response.success) {
@@ -91,6 +90,7 @@ class Investment {
                         "<td>" + trade.minor_currency + "</td>" +
                         "<td>" + trade.price + "</td>" +
                         "<td>" + trade.fees_amount + "</td>" +
+                        "<td>" + trade.created_at + "</td>" +
                         "<td>" +
                         "<button class='add-trade btn btn-primary btn-sm'>Save</button>" +
                         "</td>" +

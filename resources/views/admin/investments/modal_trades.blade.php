@@ -16,7 +16,7 @@
                             <th>Minor currency</th>
                             <th>Price</th>
                             <th>Fees amount</th>
-                            <th></th>
+                            <th>Date</th>
                         </thead>
                         <tbody>
                         </tbody>
