@@ -17,7 +17,7 @@
                             <th>Price</th>
                             <th>Fees amount</th>
                             <th>Date</th>
-                            <th>nbsp;<\th>
+                            <th class="text-center"> - <\th>
                         </thead>
                         <tbody>
                         </tbody>
