@@ -17,6 +17,7 @@
                             <th>Price</th>
                             <th>Fees amount</th>
                             <th>Date</th>
+                            <th>nbsp;<\th>
                         </thead>
                         <tbody>
                         </tbody>
