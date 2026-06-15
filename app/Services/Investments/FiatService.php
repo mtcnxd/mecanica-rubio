@@ -9,7 +9,7 @@ class FiatService
 {
     public function allInstruments()
     {
-        return Investment::where('active', true)->orderBy('name','desc')->get();
+        return Investment::where('active', true)->orderBy('name','asc')->get();
     }
 
     public function allActive()
