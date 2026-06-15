@@ -107,6 +107,7 @@
                     <label for="investment_id" class="mb-1">Instrumento de inversion</label>
                     <select id="investment_instrument" class="form-select">
                         @foreach ($results['instruments'] as $instrument)
+                            <option disabled selected>Seleccione una opcion</option>
                             <option value="{{ $instrument->id }}">{{ $instrument->name }}</option>
                         @endforeach
                     </select>
