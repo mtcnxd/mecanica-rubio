@@ -170,7 +170,7 @@ class ChartService
 
         foreach ($investments as $investment) {
             $labels[] = $investment->name;
-            $values[] = $investment->profitPercentage;
+            $values[] = round($investment->profitPercentage, 1);
         }
 
         return [

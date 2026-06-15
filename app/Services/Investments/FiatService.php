@@ -14,7 +14,7 @@ class FiatService
 
     public function allActive()
     {
-        return Investment::where('active', true)->get();
+        return $this->allInstruments();
     }
 
     public function dataStore(array $data): bool
