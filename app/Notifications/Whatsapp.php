@@ -19,25 +19,19 @@ class Whatsapp extends Notification
         //
     }
 
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @return array<int, string>
-     */
-    public function via(object $notifiable): array
+    public function sendMessage(string $message) : void
     {
-        return ['mail'];
-    }
-
-    /**
-     * Get the mail representation of the notification.
-     */
-    public function toMail(object $notifiable): MailMessage
-    {
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+        /*
+         * 
+         
+        $url = 'https://api.whatsapp.com/send';
+            Http::post($url, [
+                'phone' => $this->phone,
+                'message' => $message
+            ]);
+            
+         * 
+         */
     }
 
     /**

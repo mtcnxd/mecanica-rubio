@@ -6,6 +6,13 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
+use App\Events\PayrollCompletedEvent;
+use App\Events\ServiceCompletedEvent;
+use App\Events\SuccessLoginEvent;
+use App\Listeners\PayrollCompletedListener;
+use App\Listeners\ServiceCompletedListener;
+use App\Listeners\SuccessLoginListener;
+
 class EventServiceProvider extends ServiceProvider
 {
     /**
@@ -16,7 +23,19 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
-        ]
+        ],
+
+        SuccessLoginEvent::class => [
+            SuccessLoginListener::class,
+        ],  
+
+        PayrollCompletedEvent::class => [
+            PayrollCompletedListener::class,
+        ],
+
+        ServiceCompletedEvent::class => [
+            ServiceCompletedListener::class,
+        ],
     ];
 
     /**
@@ -37,6 +56,6 @@ class EventServiceProvider extends ServiceProvider
          * and the event should be added manually (this is the best)
          */
 
-        return true;
+        return false;
     }
 }

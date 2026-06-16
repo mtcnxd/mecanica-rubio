@@ -19,9 +19,4 @@ trait Notificator
             throw new \Exception("Error al enviar notificación: {$e->getMessage()}");
         }
     }
-
-    public function sendMail()
-    {
-        // TODO: Implement
-    }
 }

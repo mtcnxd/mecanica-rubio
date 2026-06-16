@@ -19,12 +19,31 @@ class PayrollCompletedListener
      */
     public function handle(PayrollCompletedEvent $event): void
     {
-        $employeeEmail = $event->payroll->employee->email;
-        
-        Mail::to($employeeEmail)->send(new PayrollCompletedMail($event->payroll));
-        
-        Log::info("Nomina pagada - ". json_encode($event->payroll));
+        if (!$event->payroll->employee?->email){
+            Log::info("PAYROLL COMPLETED LISTENER ERROR | MESSAGE: Employee email not found");
 
-        $this->sendNotification("Payroll notification sent successfully to: ". $employeeEmail, 'HTML');
+            return;
+        }
+
+        $employeeEmail = $event->payroll->employee->email;
+
+        try {            
+            Mail::to($employeeEmail)
+                ->send(new PayrollCompletedMail($event->payroll));
+            
+            Log::info("Nomina pagada - ". json_encode($event->payroll));
+    
+            $this->sendNotification("Payroll notification sent successfully to: ". $employeeEmail, 'HTML');
+
+        } catch (\Exception $e){
+
+            Log::error("Failed to send payroll email", [
+                'payroll_id' => $event->payroll->id,
+                'error' => $e->getMessage()
+            ]);
+
+            return;
+
+        }
     }
 }
