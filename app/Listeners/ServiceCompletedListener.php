@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 use App\Events\ServiceCompletedEvent;
 use App\Traits\Notificator;
+use Illuminate\Support\Facades\Log;
 
 class ServiceCompletedListener
 {
@@ -21,16 +22,25 @@ class ServiceCompletedListener
      */
     public function handle(ServiceCompletedEvent $event): void
     {
-        $phoneNumber = null;
-
-        if (isset($event->service->client->phone)){
-            $phoneNumber = $event->service->client->phone;
-        }
+        $phoneNumber = $event->service->client->phone ?? null;
 
         if (is_null($phoneNumber)){
-            throw new \Exception("Client phone number not found");
+            Log::info("Client phone number not found for service: " . $event->service->id);
+
+            return;
         }
 
-        $this->sendNotification('Service completed notification sent: ' . $phoneNumber, 'HTML');
+        try {
+            $this->sendNotification('Service completed notification sent: ' . $phoneNumber, 'HTML');
+
+            /**
+             * TODO: Send message to whatsapp phone number not implemented yet
+             */
+
+        } catch (\Exception $e){
+            Log::info("SERVICE COMPLETED LISTENER ERROR | MESSAGE: {$e->getMessage()}");
+            
+            return;
+        }
     }
 }
