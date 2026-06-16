@@ -22,12 +22,14 @@ class PayrollCompletedListener
     /**
      * Handle the event.
      */
-    public function handle(object $event): void
+    public function handle(PayrollCompletedEvent $payrollCompletedEvent): void
     {
-        Mail::to($this->payroll->employee->email)->send(new PayrollCompletedMail($this->payroll));
-
-        $this->sendNotification('Payroll email successfully sent to: ' . $payroll->employee->email, 'HTML');
+        $employeeEmail = $this->payroll->employee->email;
+        
+        Mail::to($employeeEmail)->send(new PayrollCompletedMail($this->payroll));
         
         Log::info("Nomina pagada - ". json_encode($event));
+
+        $this->sendNotification('Payroll email successfully sent to: ' . $payroll->employee->email, 'HTML');
     }
 }
