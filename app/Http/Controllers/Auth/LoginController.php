@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Client;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Events\SuccessLoginEvent;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -53,10 +54,14 @@ class LoginController extends Controller
             switch (Auth::user()->rol){
                 case 'Admin':
                     $request->session()->regenerate();
+
+                    SuccessLoginEvent::dispatch(Auth::user());
                     return redirect()->route('admin.service.index');
 
                 case 'Limit':
                     $request->session()->regenerate();
+                    
+                    SuccessLoginEvent::dispatch(Auth::user());
                     return redirect()->route('admin.service.index');
                 
                 case 'Client':

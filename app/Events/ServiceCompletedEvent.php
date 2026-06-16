@@ -10,11 +10,10 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use App\Models\Service;
-use App\Traits\Notificator;
 
 class ServiceCompletedEvent
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels, Notificator;
+    use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $service;
 
@@ -23,7 +22,7 @@ class ServiceCompletedEvent
      */
     public function __construct(Service $service)
     {
-        $this->sendNotification("In this section we will send email/whatsapp notification to client");
+        $this->service = $service;
     }
 
     /**

@@ -32,6 +32,11 @@ class EventServiceProvider extends ServiceProvider
      */
     public function shouldDiscoverEvents(): bool
     {
-        return false;
+        /*
+         * When false, the event are not auto discoverable
+         * and the event should be added manually (this is the best)
+         */
+
+        return true;
     }
 }
