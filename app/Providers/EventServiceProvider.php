@@ -5,13 +5,6 @@ namespace App\Providers;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
-
-use App\Events\ServiceCompleted;
-use App\Listeners\SendEmailServiceNotification;
-
-use App\Events\PayrollCompletedEvent;
-use App\Listeners\PayrollCompletedListener;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -23,17 +16,7 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
-        ],
-
-        ServiceCompleted::class => [
-            SendEmailServiceNotification::class,
-        ],
-
-        /*
-        PayrollCompletedEvent::class => [
-            PayrollCompletedListener::class,
-        ],
-        */
+        ]
     ];
 
     /**

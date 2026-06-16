@@ -12,24 +12,16 @@ class PayrollCompletedListener
     use Notificator;
 
     /**
-     * Create the event listener.
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
      * Handle the event.
      */
     public function handle(PayrollCompletedEvent $payrollCompletedEvent): void
     {
-        $employeeEmail = $this->payroll->employee->email;
+        $employeeEmail = $payrollCompletedEvent->payroll->employee->email;
         
-        Mail::to($employeeEmail)->send(new PayrollCompletedMail($this->payroll));
+        Mail::to($employeeEmail)->send(new PayrollCompletedMail($payrollCompletedEvent->payroll));
         
-        Log::info("Nomina pagada - ". json_encode($event));
+        Log::info("Nomina pagada - ". json_encode($payrollCompletedEvent->payroll));
 
-        $this->sendNotification('Payroll email successfully sent to: ' . $payroll->employee->email, 'HTML');
+        $this->sendNotification("Payroll notification sent successfully to: ". $payroll->employee->email, 'HTML');
     }
 }

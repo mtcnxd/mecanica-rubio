@@ -62,8 +62,6 @@ class OrderService
             'status' => 'Entregado',
             'finished_date' => now(),
         ]);
-
-        //event(new ServiceCompletedEvent($service));
         
         ServiceCompletedEvent::dispatch($service);
 
