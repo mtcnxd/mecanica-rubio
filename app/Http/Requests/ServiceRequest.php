@@ -11,7 +11,7 @@ class ServiceRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,11 @@ class ServiceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'car'  => '',
+            'mileage' => '',
+            'service_date' => '',
+            'service_type' => '',
+            'description' => '',
         ];
     }
 }
