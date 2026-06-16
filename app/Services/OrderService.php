@@ -62,8 +62,8 @@ class OrderService
             'status' => 'Entregado',
             'finished_date' => now(),
         ]);
-
-        event(new ServiceCompletedEvent($service));
+        
+        ServiceCompletedEvent::dispatch($service);
 
         $this->sendNotification(
             sprintf("<b>Service completed:</b> <u>%s</u>\n<b>Car:</b> <u>%s</u>\n<b>Client:</b> <u>%s</u>\n<b>Fault:</b> %s", 

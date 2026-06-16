@@ -4,28 +4,24 @@ namespace App\Listeners;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
-use App\Traits\Notificator;
 use Illuminate\Support\Facades\Log;
+use App\Traits\Notificator;
 
 class PayrollCompletedListener
 {
     use Notificator;
 
     /**
-     * Create the event listener.
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
      * Handle the event.
      */
-    public function handle(object $event): void
+    public function handle(PayrollCompletedEvent $payrollCompletedEvent): void
     {
-        // Log::info("Nomina pagada - ". json_encode($event));
+        $employeeEmail = $payrollCompletedEvent->payroll->employee->email;
+        
+        Mail::to($employeeEmail)->send(new PayrollCompletedMail($payrollCompletedEvent->payroll));
+        
+        Log::info("Nomina pagada - ". json_encode($payrollCompletedEvent->payroll));
 
-        // $this->telegram("Nomina pagada - {$event->payroll->start_date} a {$event->payroll->end_date}");
+        $this->sendNotification("Payroll notification sent successfully to: ". $payroll->employee->email, 'HTML');
     }
 }
