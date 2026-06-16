@@ -29,6 +29,7 @@ class User extends Authenticatable
         'rol',
         'token',
         'comments',
+        'last_login_at'
     ];
 
     /**
@@ -49,5 +50,6 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'last_login_at' => 'datetime'
     ];
 }
