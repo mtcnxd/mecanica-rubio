@@ -49,7 +49,7 @@ class UpdateInvestmentBalances extends Command
             $currentBalance = Number::currency($all->sum('current_amount'));
     
             $this->sendNotification(
-                sprintf("Process finished at: <b>%s</b> \n\rTotal amount today: <b>%s</b>", now()->format('g:i a'), $currentBalance)
+                sprintf("Process finished at: <b>%s</b> \n\rTotal amount today: <b>%s</b>", now()->format('g:i a'), $currentBalance), "HTML"
             );
         }
 
