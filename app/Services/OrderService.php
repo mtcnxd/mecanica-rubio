@@ -42,12 +42,12 @@ class OrderService
 
         if (!$isQuote) {
             $this->sendNotification(
-                sprintf("*Service created:* __%s__\n\r*Client:* __%s__\n\r*Car model:* __%s__\n\r*Fault:* %s",
+                sprintf("<b>Service created:</b> <u>%s</u>\n\r<b>Client:</b> <u>%s</u>\n\r<b>Car model:</b> <u>%s</u>\n\r<b>Fault:</b> %s",
                     $service->id,
                     $service->client->name,
                     $service->car->fullName,
                     $service->fault
-                )
+                ), "HTML"
             );
         }
 
