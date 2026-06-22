@@ -69,11 +69,11 @@
                         <div class="row mt-3">
                             <div class="col-md-4">
                                 <label>Entrada</label>
-                                <input type="date" class="form-control" name="entry_date" value="{{ $service->entry_date->format('Y-m-d') }}" {{ $disabled }} />
+                                <input type="date" class="form-control" name="entry_date" value="{{ $service->entry_date?->format('Y-m-d') ?? null }}" {{ $disabled }} />
                             </div>
                             <div class="col-md-4">
                                 <label>Salida</label>    
-                                <input type="date" class="form-control" name="client" value="{{ isset($service->finished_date) ? $service->finished_date->format('Y-m-d') : '' }}" {{ $disabled }} />
+                                <input type="date" class="form-control" name="client" value="{{ $service->finished_date?->format('Y-m-d') ?? null }}" {{ $disabled }} />
                             </div>
                             <div class="col-md-4">
                                 <label>Días transcurridos</label>

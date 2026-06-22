@@ -69,7 +69,7 @@
                         <a href="{{ route('admin.client.show', $service->client->id) }}">{{ $service->client->name }}</a>
                     </td>
                     <td>{{ $service->car->brand }} {{ $service->car->model }}</td>
-                    <td>{{ $service->entry_date->format('d/m/Y') ?? '' }}</td>
+                    <td>{{ $service->entry_date?->format('d/m/Y') ?? '' }}</td>
                     <td>{{ $service->finished_date ? $service->finished_date->format('d/m/Y') : '' }}</td>
                     <td><x-badge-simple :status="$service->status"/></td>
                     <td class="text-end">{{ $service->total ? Number::currency($service->total) : '' }}</td>
