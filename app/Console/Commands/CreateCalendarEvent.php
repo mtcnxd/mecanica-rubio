@@ -41,19 +41,19 @@ class createCalendarEvent extends Command
 
                 if ($scheduledEvent->notified == 0){
                     $this->sendNotification(
-                        sprintf("*First alert for scheduled event:* __%s__ \n\rClient: __%s__ \n\rCar: __%s__", 
+                        sprintf("<b>First alert for scheduled event:</b><u>%s</u>\n<b>Client:</b><u>%s</u>\n<b>Car:</b><u>%s</u>",
                         $scheduledEvent->id,
                         $scheduledEvent->client->name,
-                        $scheduledEvent->car->fullName)
+                        $scheduledEvent->car->fullName, "HTML")
                     );
                     $scheduledEvent->notified = 1;
                 
                 } else if ($scheduledEvent->notified == 1){
                     $this->sendNotification(
-                        sprintf("*Second alert for scheduled event:* __%s__ \n\rClient: __%s__ \n\rCar: __%s__", 
+                        sprintf("<b>Second alert for scheduled event:</b><u>%s</u>\n<b>Client:</b><u>%s</u>\n<b>Car:</b><u>%s</u>",
                         $scheduledEvent->id,
                         $scheduledEvent->client->name,
-                        $scheduledEvent->car->fullName)
+                        $scheduledEvent->car->fullName, "HTML")
                     );
                     $scheduledEvent->notified = 2;
                 }
