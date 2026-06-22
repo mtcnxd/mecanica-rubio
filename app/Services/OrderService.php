@@ -42,11 +42,12 @@ class OrderService
 
         if (!$isQuote) {
             $this->sendNotification(
-                sprintf("<b>Service created:</b> <u>%s</u>\n\r<b>Client:</b> <u>%s</u>\n\r<b>Car model:</b> <u>%s</u>\n\r<b>Fault:</b> %s",
+                sprintf("<b>Service created:</b><u>%s</u>\n<b>Client:</b><u>%s</u>\n<b>Car model:</b><u>%s</u>\n<b>Fault:</b>%s\n<a href='https://mecanicarubio.com/admin/service/214/%s'>Ver Detalles</a>",
                     $service->id,
                     $service->client->name,
                     $service->car->fullName,
-                    $service->fault
+                    $service->fault,
+                    $service->id
                 ), "HTML"
             );
         }
