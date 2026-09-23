@@ -26,7 +26,13 @@ class ServicesController extends Controller
 
     public function index()
     {
-        $services = $this->orderService->all();
+        $services = [];
+
+        if ($_GET) {
+            $services = $this->orderService->findByCriteria($_GET);
+        } else {
+            $services = $this->orderService->all();
+        }
 
         return view('admin.services.index', compact('services'));
     }
