@@ -18,10 +18,8 @@ class FinanceController extends Controller
 
     public function index()
     {
-        dd(now()->startOfMonth());
-
         $income = Service::where('status', 'Entregado')
-            ->whereMonth('finished_date', now()->startOfMonth())
+            ->where('finished_date', '>=', now()->startOfMonth())
             ->get();
 
         return view('admin.reports.services', compact('income'));
@@ -97,7 +95,7 @@ class FinanceController extends Controller
 
         } catch (\Exception $err) {
             session()->flash('error', 'ERROR: '. $err->getMessage());
-            
+
             return view('admin.reports.balance', compact('montlyData'));   
         }
     }
