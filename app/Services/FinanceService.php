@@ -26,17 +26,17 @@ class FinanceService
 
     public function montlyClosing() : array
     {
-        $startDate = now()->startOfMonth();
-
         $latestCloseDate = \DB::table('montly_balances')
             ->orderBy('close_date', 'desc')
             ->first();
+
+        $startDate = now()->startOfMonth();
 
         if (!is_null($latestCloseDate)) {
             $startDate = $latestCloseDate->close_date;
         }
 
-        $services = Service::whereBetween('finished_date', [$startDate, now()])
+        $services = Service::where('finished_date', '>=', [$startDate])
             ->whereHas('serviceItems', function ($query){
                 $query->where('labour', true);
             })
