@@ -88,6 +88,17 @@
         <div class="col-md-3">
             <div class="card">
                 <div class="card-header fs-6">
+                    <strong>Fecha cierre anterior</strong>
+                </div>
+                <div class="card-body">
+                    {{ $closeDate }}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header fs-6">
                     <strong>Saldo anterior</strong>
                 </div>
                 <div class="card-body">
