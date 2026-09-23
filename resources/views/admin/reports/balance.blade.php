@@ -91,7 +91,7 @@
                     <strong>Fecha cierre anterior</strong>
                 </div>
                 <div class="card-body">
-                    {{ $closeDate }}
+                    {{ $montlyData->closeDate }}
                 </div>
             </div>
         </div>
