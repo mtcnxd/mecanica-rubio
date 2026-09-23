@@ -40,6 +40,8 @@ class FinanceService
             ->where('finished_date', '>=', $startDate)
             ->get();
 
+        \Log::info('SERVICIOS', [$services]);
+
         $expenses = Expense::where('expense_date', '>=', $startDate)->get();
 
         $payrolls = Payroll::where('paid_date', '>=', $startDate)->get();

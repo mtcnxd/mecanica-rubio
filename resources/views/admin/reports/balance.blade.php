@@ -26,13 +26,13 @@
                     </tr>
                     @foreach ($montlyData['services'] as $service)
                         @php
-                            $income += $service->serviceItems->sum('price');
+                            $income += $service->serviceItems->where('labour', true)->first()->price ?? 0;
                         @endphp
                         <tr>
                             <td>{{ sprintf('#%s', $service->id) }}</td>
                             <td><strong>Ingreso: </strong> {{ $service->car->brand }} {{ $service->car->model }} [{{ $service->car->year }}]</td>
                             <td>{{ $service->finished_date->format('d/m/Y') }}</td>
-                            <td class="text-end">{{ Number::currency($service->serviceItems->where('labour', true)->first()->price) }}</td>
+                            <td class="text-end">{{ Number::currency($service->serviceItems->where('labour', true)->first()->price ?? 0) }}</td>
                             <td class="text-end"> - </td>
                         </tr>
                     @endforeach
