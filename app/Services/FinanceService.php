@@ -33,7 +33,7 @@ class FinanceService
         $startDate = now()->startOfMonth();
 
         if (!is_null($latestCloseDate)) {
-            $startDate = $latestCloseDate->close_date;
+            $startDate = Carbon::parse($latestCloseDate->close_date);
         }
 
         $services = Service::where('status', 'Entregado')
@@ -45,7 +45,7 @@ class FinanceService
         $payrolls = Payroll::where('paid_date', '>=', $startDate)->get();
 
         return [
-            'closeDate' => $latestCloseDate,
+            'closeDate' => Carbon::parse($latestCloseDate->close_date)->format('d/m/Y h:i A'),
             'services'  => $services, 
             'expenses'  => $expenses, 
             'payrolls'  => $payrolls,
