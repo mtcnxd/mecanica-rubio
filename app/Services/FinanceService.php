@@ -36,18 +36,13 @@ class FinanceService
             $startDate = $latestCloseDate->close_date;
         }
 
-        $services = Service::where('finished_date', '>=', [$startDate])
-            ->whereHas('serviceItems', function ($query){
-                $query->where('labour', true);
-            })
-            ->with(['serviceItems' => function ($query) {
-                $query->where('labour', true);
-            }])
+        $services = Service::where('status', 'Entregado')
+            ->where('finished_date', '>=', $startDate)
             ->get();
 
-        $expenses = Expense::whereBetween('expense_date', [$startDate, now()])->get();
+        $expenses = Expense::where('expense_date', '>=', $startDate)->get();
 
-        $payrolls = Payroll::whereBetween('paid_date', [$startDate, now()])->get();
+        $payrolls = Payroll::where('paid_date', '>=', $startDate)->get();
 
         return [
             'services' => $services, 
