@@ -16,13 +16,13 @@ class OrderService
 
     public function all()
     {
-        return Service::whereBetween('created_at', [now()->subMonths(5), now()->endOfMonth()])
+        return Service::whereBetween('created_at', [now()->subMonths(6), now()->endOfMonth()])
             ->whereNotIn('status',['Cancelado'])
             ->where('quote', false)
             ->get();
     }
 
-    public function find(string $id): ?Service
+    public function find(int $id): ?Service
     {
         return Service::find($id);
     }
@@ -104,22 +104,25 @@ class OrderService
         return ServiceItems::destroy($id);
     }
 
-    /*
     public function findByCriteria(array $criteria)
     {
-        return Service::select('client_id', 'car_id', 'service_type', 'fault', 'status', 'entry_date', 'finished_date', 'total')
+        return Service::select('id', 'client_id', 'car_id', 'service_type', 'fault', 'status', 'entry_date', 'finished_date', 'total')
             ->with('client:id,name,email,phone')
             ->with('car:id,brand,model,year')
             ->where(function ($query) use ($criteria) {
+                if (isset($criteria['client'])) {
+                    $query->where('client_id', $criteria['client']);
+                }
+
                 if (isset($criteria['status'])) {
                     $query->where('status', $criteria['status']);
                 }
+
                 if (isset($criteria['id'])) {
                     $query->where('id', $criteria['id']);
                 }
             })->get();
     }
-    */
 
     public function servicesSummary()
     {

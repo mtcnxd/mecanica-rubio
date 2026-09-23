@@ -74,7 +74,7 @@
                     <td><x-badge-simple :status="$service->status"/></td>
                     <td class="text-end">{{ $service->total ? Number::currency($service->total) : '' }}</td>
                 </tr>
-                @endforeach
+                @endforeach 
             </tbody>
         </table>
 
