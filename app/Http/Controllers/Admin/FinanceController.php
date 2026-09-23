@@ -16,9 +16,11 @@ class FinanceController extends Controller
         private FinanceService $financeService
     ) {}
 
-    public function index(Service $service)
+    public function index()
     {
-        $income = $service->where('status', 'Entregado')
+        dd(now()->startOfMonth());
+
+        $income = Service::where('status', 'Entregado')
             ->whereMonth('finished_date', now()->startOfMonth())
             ->get();
 
@@ -43,22 +45,21 @@ class FinanceController extends Controller
                 "comments"   => 'Comentarios del cierre de mes',
                 "created_at" => Carbon::now()
             ]);
-        }
+
+            sleep(4);
+
+            return Response()->json([
+                "success"  => true,
+                "message" => 'El mes actual se ha cerrado correctamente',
+            ]);
         
-        catch (\Exception $err){
+        } catch (\Exception $err){
             return Response()->json([
                 "success"  => false,
                 "messsage" => sprintf('Error: %s', $err->getMessage()) ,
                 "data"     => $request->all()
             ]);
         }
-
-        sleep(5);
-
-        return Response()->json([
-            "success"  => true,
-            "message" => 'El mes actual se ha cerrado correctamente',
-        ]);
     }
 
     public function createBalancePDF(Request $request)
@@ -88,15 +89,15 @@ class FinanceController extends Controller
 
     public function monthlyClosing()
     {
-        $montlyData = [];
-
         try {
+            $montlyData = [];
             $montlyData = $this->financeService->montlyClosing();
 
             return view('admin.reports.balance', compact('montlyData'));   
 
         } catch (\Exception $err) {
             session()->flash('error', 'ERROR: '. $err->getMessage());
+            
             return view('admin.reports.balance', compact('montlyData'));   
         }
     }
