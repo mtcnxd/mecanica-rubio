@@ -2,98 +2,113 @@
 
 @section('content')
 <div class="window-container">
-    @include('includes.alert')    
-    <h6 class="window-title shadow text-uppercase fw-bold"><span class="ms-3">Cliente</span></h6>
+    @include('includes.alert')
+    <h6 class="window-title shadow text-uppercase fw-bold d-flex justify-content-between align-items-center">
+        <span class="ms-3">Cliente</span>
+        <a href="{{ route('admin.client.edit', $client->id) }}" class="btn btn-sm btn-outline-secondary me-2">
+            <x-feathericon-edit class="table-icon" style="margin: -2px 3px 0"/>
+            Editar
+        </a>
+    </h6>
     <div class="window-body shadow p-4">
-        <div class="form-container border">
-            <form method="POST">
-                <div class="row pt-0 pb-0">
-                    <div class="col-md-6">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <label>Nombre</label>
-                                <div class="input-group">
-                                    <span class="input-group-text"> #{{ $client->id }}</span>
-                                    <input type="text" class="form-control" name="name" value="{{ isset($client) ? $client->name : '' }}" disabled>
-                                    <span class="input-group-text">
-                                        <a href="{{ route('admin.client.edit', $client->id) }}">
-                                            <x-feathericon-edit class="table-icon"/>
-                                        </a>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-md-12">
-                                <label>Correo</label>
-                                <input type="text" class="form-control" name="email" value="{{ isset($client) ? $client->email : '' }}" disabled>
-                            </div>                
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-md-6">
-                                <label>Telefono</label>
-                                <input type="text" class="form-control" name="phone" value="{{ isset($client) ? $client->phone : '' }}" disabled>
-                            </div>
-                            <div class="col-md-6">
-                                <label>RFC</label>
-                                <input type="text" class="form-control" name="rfc" value="{{ isset($client) ? $client->rfc : '' }}" disabled>
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-md-12">
-                                <label>Comentarios</label>
-                                <textarea class="form-control" rows="3" name="comments" disabled>{{ isset($client) ? $client->comments : '' }}</textarea>
-                            </div>
-                        </div>                        
-                    </div>
-                    <div class="col-md-6">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <label>Dirección</label>
-                                <input type="text" class="form-control" name="street" value="{{ isset($client) ? $client->street : '' }}" disabled>
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-md-6">
-                                <label>Colónia</label>
-                                <select class="form-select" id="address" name="address" disabled>
-                                    @if ( isset($client) )
-                                        <option>{{ $client->address }}</option>
-                                    @endif
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label>Codigo Postal</label>
-                                <input type="text" class="form-control" id="postcode" name="postcode" value="{{ isset($client) ? $client->postcode : '' }}" disabled>
-                            </div>                            
-                        </div>
-                        <div class="row mt-3"> 
-                            <div class="col-md-6">
-                                <label>Ciudad</label>
-                                <input type="text" class="form-control" id="city" name="city" value="{{ isset($client) ? $client->city : '' }}" disabled>
-                            </div>
-                            <div class="col-md-6">
-                                <label>Estado</label>
-                                <input type="text" class="form-control" id="state" name="state" value="{{ isset($client) ? $client->state : '' }}" disabled>
-                            </div>
-                        </div>
-                    </div>                
+
+        {{-- Client profile header --}}
+        <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
+            <span class="client-avatar me-3">{{ Str::limit($client->name, 1, null) }}</span>
+            <div>
+                <h5 class="mb-1 fw-bold">{{ $client->name }}</h5>
+                <div class="text-muted fs-7">
+                    @if($client->email)
+                        <x-feathericon-mail class="table-icon me-1" style="margin-top:-2px; color: var(--blue-gray-500)"/>
+                        {{ $client->email }}
+                        &nbsp;&nbsp;
+                    @endif
+                    @if($client->phone)
+                        <x-feathericon-phone-call class="table-icon me-1" style="margin-top:-2px; color: var(--amber-700)"/>
+                        {{ $client->phone }}
+                    @endif
                 </div>
-            </form>
+                @if($client->created_at)
+                <div class="text-muted fs-8 mt-1">
+                    Cliente desde {{ $client->created_at->format('j M Y') }}
+                    <span class="text-muted"> · #{{ $client->id }}</span>
+                </div>
+                @endif
+            </div>
         </div>
 
+        {{-- Client info --}}
+        <div class="form-container border">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label text-muted fs-8 text-uppercase fw-bold mb-1">Teléfono</label>
+                            <p class="mb-3">{{ $client->phone ?: '—' }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted fs-8 text-uppercase fw-bold mb-1">RFC</label>
+                            <p class="mb-3">{{ $client->rfc ?: '—' }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="form-label text-muted fs-8 text-uppercase fw-bold mb-1">Correo</label>
+                            <p class="mb-3">{{ $client->email ?: '—' }}</p>
+                        </div>
+                    </div>
+                    @if($client->comments)
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="form-label text-muted fs-8 text-uppercase fw-bold mb-1">Comentarios</label>
+                            <p class="mb-0">{{ $client->comments }}</p>
+                        </div>
+                    </div>
+                    @endif
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label text-muted fs-8 text-uppercase fw-bold mb-1">Dirección</label>
+                    <p class="mb-3">{{ $client->street ?: '—' }}</p>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label text-muted fs-8 text-uppercase fw-bold mb-1">Colónia</label>
+                            <p class="mb-3">{{ $client->address ?: '—' }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted fs-8 text-uppercase fw-bold mb-1">Código Postal</label>
+                            <p class="mb-3">{{ $client->postcode ?: '—' }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label text-muted fs-8 text-uppercase fw-bold mb-1">Ciudad</label>
+                            <p class="mb-0">{{ $client->city ?: '—' }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted fs-8 text-uppercase fw-bold mb-1">Estado</label>
+                            <p class="mb-0">{{ $client->state ?: '—' }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Tabs: Services & Cars --}}
         <div class="mt-4 mb-4">
             <ul class="nav nav-tabs">
                 <li class="nav-item">
                     <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" aria-selected="true">
                         <x-feathericon-tool class="table-icon" style="margin: 0 0 2px 5px"/>
                         Servicios
+                        <span class="badge bg-secondary ms-1">{{ $client->services->count() }}</span>
                     </button>
                 </li>
                 <li class="nav-item">
                     <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" aria-selected="false">
                         <x-feathericon-key class="table-icon" style="margin: 0 0 2px 5px"/>
                         Autos
+                        <span class="badge bg-secondary ms-1">{{ $client->cars->count() }}</span>
                     </button>
                 </li>
             </ul>
@@ -114,7 +129,9 @@
                                     <x-feathericon-arrow-right-circle class="table-icon" style="margin: 0 5px 2px"/>
                                     <a href="{{ route('admin.car.show', $service->car->id) }}">{{ $service->car->fullName }}</a>
                                 </td>
-                                <td>{{ $service->fault }}</td>
+                                <td>
+                                    <a href="{{ route('admin.service.show', $service->id) }}">{{ $service->fault }}</a>
+                                </td>
                                 <td>
                                     @if ($service->quote)
                                         <span class="badge text-bg-warning">Cotización</span>
@@ -132,16 +149,12 @@
                             @endforeach
                         </tbody>
                     </table>
-                    <p class="pt-2 mb-0">
-                        <x-feathericon-clipboard class="table-icon" style="margin-top:-4px;"/>
-                        Se encontraron {{ $client->services->count() }} servicios.
-                    </p>
                 </div>
                 <div class="tab-pane fade" id="profile-tab-pane" aria-labelledby="profile-tab">
-                    <table class="table table-hover border border-top-0 bg-white" id="table-items">
+                    <table class="table table-hover border border-top-0 bg-white">
                         <thead>
                             <th width="300px">Automovil</th>
-                            <th>VIN <span class="text-muted"> (Vehicle Identification Number)</span></th>
+                            <th>VIN <span class="text-muted">(Vehicle Identification Number)</span></th>
                             <th>Matrícula</th>
                         </thead>
                         <tbody>
@@ -157,10 +170,6 @@
                             @endforeach
                         </tbody>
                     </table>
-                    <p class="pt-2 mb-0">
-                        <x-feathericon-clipboard class="table-icon" style="margin-top:-4px;"/>
-                        Se encontraron {{ $client->cars->count() }} automoviles.
-                    </p>
                 </div>
             </div>
         </div>

@@ -76,6 +76,20 @@ a:hover {
     padding-top: 5px;
 }
 
+.client-avatar {
+    background-color: var(--amber-700);
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.4rem;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
 .table-icon-square {
     background-color: var(--amber-700);
     width: 40px;
