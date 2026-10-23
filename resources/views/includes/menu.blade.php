@@ -1,163 +1,155 @@
-<div class="menu-container shadow" style="display: flex; justify-content: space-around;">
-	<ul class="dropdown p-0">
-		<li>
-			<a href="#clients">
-				<h5 class="menu-title">
-					<x-feathericon-users class="table-icon" style="margin-top:-4px;"/>
-					Clientes
-				</h5>
-			</a>
-			<ul class="menu-dropdown">
-				<li>
-					<a class="a-item" href="{{ route('admin.client.index') }}">Clientes</a>
-					<ul class="submenu">
-						<li><a class="a-item" href="{{ route('admin.client.create') }}">Crear nuevo</a></li>
-						<li><a class="a-item" href="{{ route('admin.client.index') }}">Buscar</a></li>
-					</ul>
-				</li>
-				<li>
-					<a class="a-item" href="{{ route('admin.car.index') }}">Automoviles</a>
-					<ul class="submenu">
-						<li><a class="a-item" href="{{ route('admin.car.create') }}">Crear nuevo</a></li>
-						<li><a class="a-item" href="{{ route('admin.car.index') }}">Buscar</a></li>
-					</ul>
-				</li>
-			</ul>
-		</li>
-		<li>
-			<a href="#services">
-				<h5 class="menu-title">
-					<x-feathericon-tool class="table-icon" style="margin-top:-4px;"/>
-					Servicios
-				</h5>
-			</a>
-			<ul class="menu-dropdown">
-				<li>
-					<a class="a-item" href="{{ route('admin.service.index') }}">Servicios</a>
-					<ul class="submenu">
-						<li><a class="a-item" href="{{ route('admin.service.create') }}">Nueva cotización</a></li>
-						<li><a class="a-item" href="{{ route('admin.service.quote.index') }}">Cotizaciones</a></li>
-						<li><a class="a-item" href="{{ route('admin.service.create') }}">Nuevo Servicio</a></li>
-						<li><a class="a-item" href="{{ route('admin.service.index') }}">Servicios</a></li>
-					</ul>
-				</li>
-				<li>
-					<a class="a-item" href="{{ route('admin.service.calendar.index') }}">
-						Calendario
-						<!--
-						<span class="top-0 badge rounded-pill bg-danger">
-							2
-						</span>
-						-->
-					</a>
-				</li>
-			</ul>
-		</li>
-		<li>
-			<a href="#finance">
-				<h5 class="menu-title">
-					<x-feathericon-dollar-sign class="table-icon" style="margin-top:-4px;"/>
-					Finanzas
-				</h5>
-			</a>
-			<ul class="menu-dropdown">
-				<li>
-					<a class="a-item" href="{{ route('admin.finance.income') }}">Ingresos</a>
-				</li>
-				<li>
-					<a class="a-item" href="{{ route('admin.finance.payroll.index') }}">Nominas</a>
-					<ul class="submenu">
-						<li><a class="a-item" href="{{ route('admin.finance.payroll.create') }}">Crear nuevo</a></li>
-						<li><a class="a-item" href="{{ route('admin.finance.payroll.index') }}">Buscar</a></li>
-					</ul>
-				</li>
-				<li>
-					<a class="a-item" href="{{ route('admin.finance.expense.index') }}">Egresos</a>
-					<ul class="submenu">
-						<li><a class="a-item" href="{{ route('admin.finance.expense.create') }}">Crear nuevo</a></li>
-						<li><a class="a-item" href="{{ route('admin.finance.expense.index') }}">Buscar</a></li>
-					</ul>
-				</li>
-			</ul>
-		</li>
-		<li>
-			<a href="#reports">
-				<h5 class="menu-title">
-					<x-feathericon-settings class="table-icon" style="margin-top:-4px;"/>
-					Reportes
-				</h5>
-			</a>
-			<ul class="menu-dropdown">
-				<li><a class="a-item" href="{{ route('admin.dashboard.index') }}">Resumen</a></li>
-				<li>
-					<a class="a-item" href="#">Reportes</a>
-					<ul class="submenu">
-						<li><a class="a-item" href="#">Autos</a></li>
-						<li>
-							<a class="a-item" href="#">Servicios</a>
-							<ul class="menu-dropdown">
-								<li>
-									<a class="a-item" href="#">Por cliente</a>
-								</li>
-							</ul>
-						</li>
-						<li><a class="a-item" href="#">Empleados</a></li>
-					</ul>
-				</li>
-				<li><a class="a-item" href="{{ route('admin.finance.monthly-closing') }}">Cierre de mes</a></li>
-			</ul>
-		</li>
-		<li>
-			<a href="#settings">
-				<h5 class="menu-title">
-					<x-feathericon-settings class="table-icon" style="margin-top:-4px;"/>
-					Configuracion
-				</h5>
-			</a>
-			<ul class="menu-dropdown">
-				<li>
-					<a class="a-item" href="{{ route('admin.user.index') }}">Usuarios</a>
-					<ul class="submenu">
-						<li><a class="a-item" href="{{ route('admin.user.create') }}">Crear nuevo</a></li>
-						<li><a class="a-item" href="{{ route('admin.user.index') }}">Buscar</a></li>
-					</ul>
-				</li>
-				<li>
-					<a class="a-item" href="{{ route('admin.employee.index') }}">Empleados</a>
-					<ul class="submenu">
-						<li><a class="a-item" href="{{ route('admin.employee.create') }}">Crear nuevo</a></li>
-						<li><a class="a-item" href="{{ route('admin.employee.index') }}">Buscar</a></li>
-					</ul>
-				</li>
-				<li><a class="a-item" href="{{ route('admin.setting.index') }}">Configuración</a></li>
-			</ul>
-		</li>
-	</ul>
-	
-	<ul class="dropdown p-0">
-		<li>
-			<a href="#clients">
-				<h5 class="menu-title">
-					<x-feathericon-user class="table-icon" style="margin-top:-4px;"/>
-					{{ Auth::user()->name }}
-				</h5>
-			</a>
-			<ul class="menu-dropdown">
-				<li>
-					<a class="a-item" href="{{ route('admin.profile.index') }}">Perfil</a>
-				</li>
-				@if (Auth::user()->id == 1)
-					<li>
-						<a class="a-item" href="{{ route('admin.investment.index') }}">Inversiones</a>
-					</li>
-				@endif
-				<li>
-					<form action="{{ route('admin.logout') }}" method="POST">
-						@csrf
-						<button class="btn btn-logout a-item" type="submit">Cerrar sesion</button>
-					</form>
-				</li>
-			</ul>
-		</li>
-	</ul>
-</div>
+<aside class="sidebar" id="sidebar">
+
+    {{-- Brand --}}
+    <div class="sidebar-brand">
+        <div class="sidebar-brand-name">IMR</div>
+        <div class="sidebar-brand-sub">Ingeniería Mecánica Rubio</div>
+    </div>
+
+    {{-- Navigation --}}
+    <nav class="sidebar-nav">
+
+        {{-- Clientes --}}
+        <div class="sidebar-section-label">Clientes</div>
+
+        <a class="sidebar-nav-link" data-bs-toggle="collapse" href="#nav-clientes" role="button" aria-expanded="false">
+            <x-feathericon-users/>
+            <span>Clientes</span>
+            <x-feathericon-chevron-right class="sidebar-chevron"/>
+        </a>
+        <div class="collapse sidebar-sub-nav" id="nav-clientes">
+            <a class="sidebar-nav-link" href="{{ route('admin.client.create') }}">Nuevo cliente</a>
+            <a class="sidebar-nav-link" href="{{ route('admin.client.index') }}">Lista de clientes</a>
+        </div>
+
+        <a class="sidebar-nav-link" data-bs-toggle="collapse" href="#nav-autos" role="button" aria-expanded="false">
+            <x-feathericon-truck/>
+            <span>Automóviles</span>
+            <x-feathericon-chevron-right class="sidebar-chevron"/>
+        </a>
+        <div class="collapse sidebar-sub-nav" id="nav-autos">
+            <a class="sidebar-nav-link" href="{{ route('admin.car.create') }}">Nuevo automóvil</a>
+            <a class="sidebar-nav-link" href="{{ route('admin.car.index') }}">Lista de autos</a>
+        </div>
+
+        {{-- Servicios --}}
+        <div class="sidebar-section-label">Servicios</div>
+
+        <a class="sidebar-nav-link" data-bs-toggle="collapse" href="#nav-servicios" role="button" aria-expanded="false">
+            <x-feathericon-tool/>
+            <span>Servicios</span>
+            <x-feathericon-chevron-right class="sidebar-chevron"/>
+        </a>
+        <div class="collapse sidebar-sub-nav" id="nav-servicios">
+            <a class="sidebar-nav-link" href="{{ route('admin.service.quote.index') }}">Cotizaciones</a>
+            <a class="sidebar-nav-link" href="{{ route('admin.service.create') }}">Nuevo servicio</a>
+            <a class="sidebar-nav-link" href="{{ route('admin.service.index') }}">Lista de servicios</a>
+        </div>
+
+        <a class="sidebar-nav-link" href="{{ route('admin.service.calendar.index') }}">
+            <x-feathericon-calendar/>
+            <span>Calendario</span>
+        </a>
+
+        {{-- Finanzas --}}
+        <div class="sidebar-section-label">Finanzas</div>
+
+        <a class="sidebar-nav-link" href="{{ route('admin.finance.income') }}">
+            <x-feathericon-trending-up/>
+            <span>Ingresos</span>
+        </a>
+
+        <a class="sidebar-nav-link" data-bs-toggle="collapse" href="#nav-nominas" role="button" aria-expanded="false">
+            <x-feathericon-dollar-sign/>
+            <span>Nóminas</span>
+            <x-feathericon-chevron-right class="sidebar-chevron"/>
+        </a>
+        <div class="collapse sidebar-sub-nav" id="nav-nominas">
+            <a class="sidebar-nav-link" href="{{ route('admin.finance.payroll.create') }}">Nueva nómina</a>
+            <a class="sidebar-nav-link" href="{{ route('admin.finance.payroll.index') }}">Lista de nóminas</a>
+        </div>
+
+        <a class="sidebar-nav-link" data-bs-toggle="collapse" href="#nav-egresos" role="button" aria-expanded="false">
+            <x-feathericon-trending-down/>
+            <span>Egresos</span>
+            <x-feathericon-chevron-right class="sidebar-chevron"/>
+        </a>
+        <div class="collapse sidebar-sub-nav" id="nav-egresos">
+            <a class="sidebar-nav-link" href="{{ route('admin.finance.expense.create') }}">Nuevo egreso</a>
+            <a class="sidebar-nav-link" href="{{ route('admin.finance.expense.index') }}">Lista de egresos</a>
+        </div>
+
+        {{-- Reportes --}}
+        <div class="sidebar-section-label">Reportes</div>
+
+        <a class="sidebar-nav-link" href="{{ route('admin.dashboard.index') }}">
+            <x-feathericon-bar-chart-2/>
+            <span>Resumen</span>
+        </a>
+
+        <a class="sidebar-nav-link" href="{{ route('admin.finance.monthly-closing') }}">
+            <x-feathericon-calendar/>
+            <span>Cierre de mes</span>
+        </a>
+
+        {{-- Configuración --}}
+        <div class="sidebar-section-label">Configuración</div>
+
+        <a class="sidebar-nav-link" data-bs-toggle="collapse" href="#nav-usuarios" role="button" aria-expanded="false">
+            <x-feathericon-users/>
+            <span>Usuarios</span>
+            <x-feathericon-chevron-right class="sidebar-chevron"/>
+        </a>
+        <div class="collapse sidebar-sub-nav" id="nav-usuarios">
+            <a class="sidebar-nav-link" href="{{ route('admin.user.create') }}">Nuevo usuario</a>
+            <a class="sidebar-nav-link" href="{{ route('admin.user.index') }}">Lista de usuarios</a>
+        </div>
+
+        <a class="sidebar-nav-link" data-bs-toggle="collapse" href="#nav-empleados" role="button" aria-expanded="false">
+            <x-feathericon-briefcase/>
+            <span>Empleados</span>
+            <x-feathericon-chevron-right class="sidebar-chevron"/>
+        </a>
+        <div class="collapse sidebar-sub-nav" id="nav-empleados">
+            <a class="sidebar-nav-link" href="{{ route('admin.employee.create') }}">Nuevo empleado</a>
+            <a class="sidebar-nav-link" href="{{ route('admin.employee.index') }}">Lista de empleados</a>
+        </div>
+
+        <a class="sidebar-nav-link" href="{{ route('admin.setting.index') }}">
+            <x-feathericon-settings/>
+            <span>Configuración</span>
+        </a>
+
+        @if (Auth::user()->id == 1)
+        <div class="sidebar-section-label">Admin</div>
+        <a class="sidebar-nav-link" href="{{ route('admin.investment.index') }}">
+            <x-feathericon-activity/>
+            <span>Inversiones</span>
+        </a>
+        @endif
+
+    </nav>
+
+    {{-- User footer --}}
+    <div class="sidebar-footer">
+        <div class="sidebar-user">
+            <div class="sidebar-user-avatar">
+                {{ Str::upper(Str::limit(Auth::user()->name, 1, '')) }}
+            </div>
+            <div style="min-width:0;">
+                <div class="sidebar-user-name">{{ Auth::user()->name }}</div>
+                <div class="sidebar-user-role">Administrador</div>
+            </div>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{{ route('admin.profile.index') }}" class="btn btn-sm btn-outline-secondary flex-fill">
+                Perfil
+            </a>
+            <form action="{{ route('admin.logout') }}" method="POST" class="flex-fill">
+                @csrf
+                <button class="btn btn-sm btn-danger w-100" type="submit">Salir</button>
+            </form>
+        </div>
+    </div>
+
+</aside>

@@ -4,7 +4,7 @@
 <div class="window-container">
     @include('includes.warnings')
     <div class="col-md-7">
-        <h6 class="window-title shadow text-uppercase fw-bold"><span class="ms-3">Buscar cliente</span></h6>
+        <h6 class="window-title shadow text-uppercase fw-bold"><span class="ms-3">Editar cliente</span></h6>
         <div class="window-body shadow p-4">
             <form action="{{ route('admin.client.update', $client->id) }}" method="POST">
                 <div class="form-container border">

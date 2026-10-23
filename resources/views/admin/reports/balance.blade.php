@@ -99,7 +99,7 @@
         <div class="col-md-3">
             <div class="card">
                 <div class="card-header fs-6">
-                    <strong>Saldo anterior</strong>
+                    <strong>Saldo cierre anterior</strong>
                 </div>
                 <div class="card-body">
                     {{ Number::currency($montlyData['balance']) }}
@@ -124,7 +124,7 @@
         <div class="col-md-3">
             <div class="card">
                 <div class="card-header fs-6">
-                    <strong>Saldo nuevo</strong>
+                    <strong>Balance actual</strong>
                 </div>
                 <div class="card-body">
                     {{ Number::currency($montlyData['balance'] + $income - $expenses) }}
