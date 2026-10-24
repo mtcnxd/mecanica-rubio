@@ -213,12 +213,12 @@
                         </thead>
                         <tbody>
                             @foreach ($employee->payrollItems as $payrollItem)
-                                @if ($payrollItem->payroll->status == 'Pagado')
+                                @if ($payrollItem->payroll?->status == 'Pagado')
                                 <tr>
                                     <td>
                                         <a href="{{ route('admin.finance.payroll.show', $payrollItem->salary_id) }}">Nomina #{{ $payrollItem->salary_id }}</a>
                                     </td>
-                                    <td>{{ $payrollItem->payroll->paid_date->format('d-m-Y') }}</td>
+                                    <td>{{ $payrollItem->payroll?->paid_date->format('d-m-Y') }}</td>
                                     <td>{{ $payrollItem->concept }}</td>
                                     <td class="text-end">{{ Number::currency($payrollItem->amount) }}</td>
                                 </tr>
