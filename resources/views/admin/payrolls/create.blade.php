@@ -5,9 +5,9 @@
     @include('includes.alert')
     <x-window_main title="Nominas" class="p-4">
         <form action="{{ route('admin.finance.payroll.store') }}" method="POST">
-            <div class="form-container border mb-0">
+            <div class="form-container">
                 @csrf
-                <div class="row pt-0 p-4 pb-0">
+                <div class="row pt-0 pb-0">
                     <div class="col-md-6">
                         <div class="row">
                             <div class="col-md-12">
@@ -77,55 +77,55 @@
                 </div>
             </div>
 
-            <div class="col-md-12 bg-white border" style="height: 300px; overflow-y: scroll">
-                <table class="table table-hover table-borderless dataTable no-footer">
-                    <thead>
-                        <tr>
-                            <th width="30px">#</th>
-                            <th>Concepto</th>
-                            <th class="text-end">Importe</th>
-                            <th width="30px"></th>
-                        </tr>
-                    </thead>
-                    <tbody id="table-body">
-                        @foreach ($items as $count => $item)
-                        <tr>
-                            <td>{{ $count +1 }}</td>
-                            <td>{{ $item->concept }}</td>
-                            <td class="text-end">{{ Number::currency($item->amount) }}</td>
-                            <td>
-                                <a href="#" class="removeButton" id="{{ $item->id }}">
-                                    <x-feathericon-trash-2 class="table-icon"/>
-                                </a>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                    <tfoot class="border-top">
-                        <tr>
-                            <td colspan="2">
-                                <a href="#" id="openModal">
-                                    Agregar
-                                    <x-feathericon-plus-circle class="table-icon" style="margin: 0 0 2px 5px"/>
-                                </a>
-                            </td>
-                            <td class="text-end fw-bold">
-                                {{ Number::currency($items->sum('amount')) }}
-                                <input type="hidden" name="total" value="{{ $items->sum('amount') }}" id="total">
-                            </td>
-                        </tr>
-                    </tfoot>
-                </table>
+            <div class="form-container">
+                <div class="col-md-12 bg-white border" style="height: 300px; overflow-y: scroll">
+                    <table class="table table-hover table-borderless dataTable no-footer">
+                        <thead>
+                            <tr>
+                                <th width="30px">#</th>
+                                <th>Concepto</th>
+                                <th class="text-end">Importe</th>
+                                <th width="30px"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body">
+                            @foreach ($items as $count => $item)
+                            <tr>
+                                <td>{{ $count +1 }}</td>
+                                <td>{{ $item->concept }}</td>
+                                <td class="text-end">{{ Number::currency($item->amount) }}</td>
+                                <td>
+                                    <a href="#" class="removeButton" id="{{ $item->id }}">
+                                        <x-feathericon-trash-2 class="table-icon"/>
+                                    </a>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                        <tfoot class="border-top">
+                            <tr>
+                                <td colspan="2">
+                                    <a href="#" id="openModal">
+                                        Agregar
+                                        <x-feathericon-plus-circle class="table-icon" style="margin: 0 0 2px 5px"/>
+                                    </a>
+                                </td>
+                                <td class="text-end fw-bold">
+                                    {{ Number::currency($items->sum('amount')) }}
+                                    <input type="hidden" name="total" value="{{ $items->sum('amount') }}" id="total">
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
             </div>
             
-            <div class="row mt-3">
-                <div class="col-md-12 text-end">
-                    <a href="{{ route('admin.finance.payroll.index') }}" class="btn btn-sm btn-secondary">Cancelar</a>
-                    <button type="submit" class="btn btn-sm btn-success">
-                        <x-feathericon-save class="table-icon" style="margin: -2px 5px 2px"/>
-                        Guardar
-                    </button>
-                </div>
+            <div class="form-container">
+                <a href="{{ route('admin.finance.payroll.index') }}" class="btn btn-sm btn-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-sm btn-success">
+                    <x-feathericon-save class="table-icon" style="margin: -2px 5px 2px"/>
+                    Guardar
+                </button>
             </div>
 
         </form>

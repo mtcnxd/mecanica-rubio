@@ -32,7 +32,8 @@
 }
 
 .sidebar-brand-sub {
-    color: #475569;
+    /* color: #475569; */
+    color: var(--bs-light);
     font-size: 10.5px;
     text-transform: uppercase;
     letter-spacing: 0.07em;
@@ -63,7 +64,8 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: #475569;
+    /* color: #475569; */
+    color: var(--bs-light);
     pointer-events: none;
 }
 
@@ -184,15 +186,15 @@
 }
 
 .sidebar-footer .btn-outline-secondary {
-    border-color: rgba(255,255,255,0.15);
+    border-color: rgba(255, 255, 255, 0.15);
     color: #94a3b8;
     font-size: 12px;
     padding: 0.3rem 0.6rem;
 }
 
 .sidebar-footer .btn-outline-secondary:hover {
-    background: rgba(255,255,255,0.08);
-    border-color: rgba(255,255,255,0.25);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.25);
     color: #e2e8f0;
 }
 

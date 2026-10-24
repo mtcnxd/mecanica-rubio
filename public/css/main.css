@@ -54,9 +54,6 @@ a:hover {
 }
 
 /* Remove old gradient */
-.window-title.shadow {
-    box-shadow: 0 1px 3px rgba(0,0,0,0.06) !important;
-}
 
 .window-body {
     background: #fff;
@@ -65,15 +62,9 @@ a:hover {
     border-radius: 0 0 10px 10px;
 }
 
-.window-body.shadow {
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
-}
-
 .form-container {
     background-color: #fff;
-    padding: 1.5rem;
     margin-bottom: 1.5rem;
-    border-radius: 8px;
 }
 
 /* ===========================
@@ -202,7 +193,7 @@ a:hover {
    TABLES
    =========================== */
 
-.table > thead {
+.table>thead {
     background-color: #f8fafc;
     color: #64748b;
     font-size: 11px;
@@ -256,7 +247,7 @@ a:hover {
     display: none;
     border-radius: 0 0 8px 8px;
     background: #fff;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 #resultList li {
@@ -277,15 +268,15 @@ a:hover {
     background-color: #ffffffee;
     padding-left: 0;
     cursor: default;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     z-index: 200;
 }
 
-.float-suggestions > * {
+.float-suggestions>* {
     padding: 6px 12px;
 }
 
-.float-suggestions > li:hover {
+.float-suggestions>li:hover {
     background-color: #f1f5f9;
 }
 
