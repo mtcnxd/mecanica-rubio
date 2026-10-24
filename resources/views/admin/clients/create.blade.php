@@ -7,7 +7,7 @@
         <h6 class="window-title shadow text-uppercase fw-bold"><span class="ms-3">Cliente</span></h6>
         <div class="window-body shadow p-4">
             <form action="{{ route('admin.client.store') }}" method="POST">
-                <div class="form-container">
+                <div class="form-container col-md-12">
                     @method('POST')
                     @csrf
                     <div class="row">
