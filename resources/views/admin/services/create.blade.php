@@ -7,7 +7,7 @@
         <h6 class="window-title shadow text-uppercase fw-bold"><span class="ms-3">Servicio</span></h6>
         <div class="window-body shadow p-4">
             <form action="{{ route('admin.service.store') }}" method="POST">
-                <div class="form-container border">
+                <div class="form-container">
                     @csrf
                     <div class="row">
                         <div class="col-md-12">
@@ -75,14 +75,12 @@
                     </div>
                 </div>
 
-                <div class="row mt-3">
-                    <div class="col-md-12 text-end">
-                        <a href="{{ route('admin.service.index') }}" class="btn btn-sm btn-secondary">Cancelar</a>
-                        <button type="submit" class="btn btn-sm btn-success">
-                            <x-feathericon-save class="table-icon" style="margin: -2px 5px 2px"/>
-                            Guardar
-                        </button>
-                    </div>
+                <div class="form-container">
+                    <a href="{{ route('admin.service.index') }}" class="btn btn-sm btn-secondary">Cancelar</a>
+                    <button type="submit" class="btn btn-sm btn-success">
+                        <x-feathericon-save class="table-icon" style="margin: -2px 5px 2px"/>
+                        Guardar
+                    </button>
                 </div>
             </form>
         </div>

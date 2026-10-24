@@ -11,7 +11,7 @@
     <h6 class="window-title shadow text-uppercase fw-bold"><span class="ms-3">Servicio</span></h6>
     <div class="window-body shadow p-4">
         <form action="{{ route('admin.service.update', $service) }}" method="POST">
-            <div class="form-container border mb-0">
+            <div class="form-container">
                 @csrf
                 @method('PATCH')
                 <div class="row pt-0 pb-0">
@@ -94,7 +94,7 @@
                 </div>
             </div>
 
-            <div class="col-md-12 bg-white border border-top-0 border-bottom-0" style="height: 350px; overflow-y: scroll">
+            <div class="form-container bg-white border" style="height: 350px; overflow-y: scroll">
                 <table class="table table-hover table-borderless dataTable no-footer">
                     <thead>
                         <th width="30px">#</th>
@@ -137,7 +137,7 @@
                 </table>
             </div>
 
-            <div class="form-container border">
+            <div class="form-container">
                 <div class="row">
                     <div class="col-md-6">
                         <label>Comentarios</label>
@@ -160,24 +160,22 @@
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-md-12 text-end">
-                    <a href="{{ route('admin.service.index') }}" class="btn btn-sm btn-secondary">Atras</a>
-                    <button class="btn btn-sm btn-secondary" id="getPdf">
-                        <x-feathericon-file-text class="table-icon" style="margin: -2px 5px 2px"/>
-                        Descargar
+            <div class="form-container">
+                <a href="{{ route('admin.service.index') }}" class="btn btn-sm btn-secondary">Atras</a>
+                <button class="btn btn-sm btn-secondary" id="getPdf">
+                    <x-feathericon-file-text class="table-icon" style="margin: -2px 5px 2px"/>
+                    Descargar
+                </button>
+                @if ($service->status != 'Entregado')
+                    <button type="submit" class="btn btn-sm btn-success">
+                        <x-feathericon-save class="table-icon" style="margin: -2px 5px 2px"/>
+                        Guardar
                     </button>
-                    @if ($service->status != 'Entregado')
-                        <button type="submit" class="btn btn-sm btn-success">
-                            <x-feathericon-save class="table-icon" style="margin: -2px 5px 2px"/>
-                            Guardar
-                        </button>
-                        <button class="btn btn-sm btn-success" id="setAsCompleted">
-                            <x-feathericon-check-circle class="table-icon" style="margin: -2px 5px 2px"/>
-                            Entregado
-                        </button>
-                    @endif
-                </div>
+                    <button class="btn btn-sm btn-success" id="setAsCompleted">
+                        <x-feathericon-check-circle class="table-icon" style="margin: -2px 5px 2px"/>
+                        Entregado
+                    </button>
+                @endif
             </div>
 
         </form>
