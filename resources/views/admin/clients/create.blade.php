@@ -3,7 +3,7 @@
 @section('content')
 <div class="window-container">
     @include('includes.warnings')
-    <div class="col-md-7">
+    <div class="col-md-12">
         <h6 class="window-title shadow text-uppercase fw-bold"><span class="ms-3">Cliente</span></h6>
         <div class="window-body shadow p-4">
             <form action="{{ route('admin.client.store') }}" method="POST">
