@@ -3,8 +3,8 @@
 @section('content')
 <div class="window-container">
     @include('includes.alert')
-    <h6 class="window-title shadow text-uppercase fw-bold"><span class="ms-3">Buscar</span></h6>
-    <div class="window-body shadow py-4">
+    <h6 class="window-title text-uppercase fw-bold"><span class="ms-3">Buscar</span></h6>
+    <div class="window-body py-4">
         <form action="{{ route('admin.service.index') }}" method="GET">
             <div class="row m-1 mb-3 pb-3" id="filters">
                 <div class="col-md-3">
@@ -83,7 +83,7 @@
         </div>
     </div>
 
-    <div class="row mt-5">
+    <div class="row mt-4">
         <div class="col-md-4">
             <div class="widget-simple shadow" style="solid 2px var(--blue-gray-100);">
                 <div class="widget-simple-body fs-3" style="min-height: 40px;">

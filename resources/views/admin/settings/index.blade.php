@@ -5,10 +5,10 @@
     @include('includes.alert')
 
     <div class="col-md-6">
-        <h6 class="window-title shadow text-uppercase fw-bold"><span class="ms-3">Configuracion</span></h6>
-        <div class="window-body shadow p-4">
+        <h6 class="window-title text-uppercase fw-bold"><span class="ms-3">Configuracion</span></h6>
+        <div class="window-body p-4">
             <form action="{{ route('admin.setting.store') }}" method="POST">
-                <div class="form-container border">
+                <div class="form-container">
                     <p class="fw-bold">Nuevo indice</p>
                     @csrf
                     <div class="row">
@@ -33,7 +33,7 @@
             </form>
 
             <form action="" method="POST">
-                <div class="form-container border">
+                <div class="form-container">
                     <p class="fw-bold">Editar indice</p>
                     @csrf
                     @method('POST')

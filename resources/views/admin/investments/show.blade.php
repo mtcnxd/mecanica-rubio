@@ -8,10 +8,10 @@
 @section('content')
 <div class="window-container">
     @include('includes.alert')
-    <h6 class="window-title shadow text-uppercase fw-bold">
+    <h6 class="window-title text-uppercase fw-bold">
         <span class="ms-3">{{ $investment->name }}</span>
     </h6>
-    <div class="window-body shadow py-4">        
+    <div class="window-body py-4">        
         <div class="row p-4 pt-0">
             <div class="col-md-3">
                 <x-card_simple_overview_1

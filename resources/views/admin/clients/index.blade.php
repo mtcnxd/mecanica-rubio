@@ -3,14 +3,10 @@
 @section('content')
 <div class="window-container">
     @include('includes.alert')
-    <h6 class="window-title shadow text-uppercase fw-bold d-flex justify-content-between align-items-center">
+    <h6 class="window-title text-uppercase fw-bold d-flex justify-content-between align-items-center">
         <span class="ms-3">Clientes</span>
-        <a href="{{ route('admin.client.create') }}" class="btn btn-sm btn-success me-2">
-            <x-feathericon-user-plus class="table-icon" style="margin: -2px 3px 0"/>
-            Nuevo cliente
-        </a>
     </h6>
-    <div class="window-body shadow py-4">
+    <div class="window-body py-4 table-responsive">
         <table class="table table-hover table-borderless bg-white mb-4" id="clients">
             <thead>
                 <tr>

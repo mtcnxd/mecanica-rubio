@@ -2,8 +2,8 @@
 
 @section('content')
 <div class="window-container">
-    <h6 class="window-title shadow text-uppercase fw-bold"><span class="ms-3">automovil</span></h6>
-    <div class="window-body shadow p-4">
+    <h6 class="window-title text-uppercase fw-bold"><span class="ms-3">automovil</span></h6>
+    <div class="window-body p-4">
         <div class="form-container border">
             <form method="POST">
                 <p class="fw-bold fs-5">Cliente</p>
