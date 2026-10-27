@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Service;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
 
@@ -38,6 +39,28 @@ class ServicesController extends Controller
     {
         try {
             return $this->orderService->createPDF($id);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    public function changeQuoteToService(Request $request)
+    {
+        try {
+            $id = $request->input('id');
+
+            Service::where('id', $id)->update([
+                'quote' => false,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Hola mundo',
+            ]);
 
         } catch (\Exception $e) {
             return response()->json([

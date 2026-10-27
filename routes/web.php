@@ -2,8 +2,8 @@
 
 use App\Http\Controllers\Admin\CalendarController;
 use App\Http\Controllers\Admin\CarsController;
-use App\Http\Controllers\Admin\ClientsController;
 use App\Http\Controllers\Admin\ChartsController;
+use App\Http\Controllers\Admin\ClientsController;
 use App\Http\Controllers\Admin\EmployeesController;
 use App\Http\Controllers\Admin\ExpensesController;
 use App\Http\Controllers\Admin\FinanceController;
@@ -79,23 +79,23 @@ Route::prefix('admin')
     ->group(function () {
         Route::get('dashboard', [ChartsController::class, 'index'])->name('dashboard.index');
 
-        Route::name('service.')->prefix('service')->group(function(){
+        Route::name('service.')->prefix('service')->group(function () {
             Route::get('calendar', [CalendarController::class, 'index'])->name('calendar.index');
             Route::resource('quote', QuotesController::class)->only('index', 'show');
         });
 
         Route::resource('client', ClientsController::class)->except('destroy');
-        Route::resource('car', CarsController::class)->except('destroy','edit','update');
+        Route::resource('car', CarsController::class)->except('destroy');
         Route::resource('service', ServicesController::class)->except('destroy');
-        Route::resource('employee', EmployeesController::class)->except('destroy','update');
+        Route::resource('employee', EmployeesController::class)->except('destroy', 'update');
         Route::resource('user', UsersController::class)->except('destroy');
-        Route::resource('setting', SettingsController::class)->only('index','store');
+        Route::resource('setting', SettingsController::class)->only('index', 'store');
         Route::resource('profile', ProfileController::class)->only('index');
 
         // Route::resource('vacations', VacationsController::class);
         // Route::resource('payroll',)
 
-        Route::name('finance.')->prefix('finance')->group(function(){
+        Route::name('finance.')->prefix('finance')->group(function () {
             Route::get('income', [FinanceController::class, 'index'])->name('income');
             Route::get('monthly-closing', [FinanceController::class, 'monthlyClosing'])->name('monthly-closing');
 

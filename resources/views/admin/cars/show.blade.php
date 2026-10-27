@@ -4,7 +4,7 @@
 <div class="window-container">
     <h6 class="window-title text-uppercase fw-bold"><span class="ms-3">automovil</span></h6>
     <div class="window-body p-4">
-        <div class="form-container border">
+        <div class="form-container">
             <form method="POST">
                 <p class="fw-bold fs-5">Cliente</p>
                 <div class="row pt-0">
@@ -67,7 +67,7 @@
             </form>
         </div>
 
-        <div class="form-container border">
+        <div class="form-container">
             <form method="POST">
                 <p class="fw-bold fs-5">Automovil</p>
                 <div class="row pt-0">
@@ -78,7 +78,7 @@
                                 <div class="input-group">
                                     <input type="text" class="form-control" value="{{ $car->brand }}" disabled>
                                     <span class="input-group-text">
-                                        <a href="#">
+                                        <a href="{{ route('admin.car.edit', $car->id) }}">
                                             <x-feathericon-edit class="table-icon"/>
                                         </a>
                                     </span>
