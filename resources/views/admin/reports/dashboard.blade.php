@@ -67,7 +67,7 @@
     <!--
     <hr class="mb-5" style="color: var(--orange-800);">
     -->
-    <div class="row mt-5">
+    <div class="row mt-4">
         <div class="col-md-5">
             <div class="widget-simple bg-white rounded">
                 <canvas id="services"></canvas>
@@ -98,7 +98,7 @@
         </div>
     </div>
 
-    <div class="row mt-5">
+    <div class="row mt-4">
         <div class="col-md-4">
             <x-card_simple_overview_1 
                 title="Tiempo promedio de entrega en los ultimos 6 meses" 

@@ -39,7 +39,7 @@ a:hover {
    =========================== */
 
 .window-title {
-    background: #fff;
+    background: #fafafa;
     border: 1px solid #e2e8f0;
     border-radius: 10px 10px 0 0;
     margin-bottom: 0;
@@ -74,7 +74,7 @@ a:hover {
 .window-title-icon {
     width: 18px;
     height: 18px;
-    color: #94a3b8;
+    color: #c0c0c0;
 }
 
 .button-icon {
@@ -86,7 +86,7 @@ a:hover {
 .table-icon {
     width: 17px;
     height: 17px;
-    color: #94a3b8;
+    color: #fff;
     transition: color 0.15s;
 }
 

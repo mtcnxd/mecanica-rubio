@@ -3,8 +3,8 @@
 @section('content')
 <div class="window-container">
     <div class="col-md-7">    
-        <h6 class="window-title shadow text-uppercase fw-bold"><span class="ms-3">Egreso</span></h6>
-        <div class="window-body shadow p-4">
+        <h6 class="window-title text-uppercase fw-bold"><span class="ms-3">Egreso</span></h6>
+        <div class="window-body p-4">
             <form action="{{ route('admin.finance.expense.store') }}" method="POST" enctype="multipart/form-data">
                 <div class="form-container">
                     @csrf

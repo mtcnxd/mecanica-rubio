@@ -4,10 +4,10 @@
 <div class="window-container">
     @include('includes.alert')
     <div class="col-md-7">    
-        <h6 class="window-title shadow text-uppercase fw-bold"><span class="ms-3">Nuevo Empleado</span></h6>
-        <div class="window-body shadow p-4">
+        <h6 class="window-title text-uppercase fw-bold"><span class="ms-3">Nuevo Empleado</span></h6>
+        <div class="window-body p-4">
             <form action="{{ route('admin.employee.store') }}" method="POST">
-                <div class="form-container border">
+                <div class="form-container">
                     @method('POST')
                     @csrf
                     <div class="row">

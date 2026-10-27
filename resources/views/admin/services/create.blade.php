@@ -3,9 +3,9 @@
 @section('content')
 <div class="window-container">
     @include('includes.alert')
-    <div class="col-md-7">
-        <h6 class="window-title shadow text-uppercase fw-bold"><span class="ms-3">Servicio</span></h6>
-        <div class="window-body shadow p-4">
+    <div class="col-md-12">
+        <h6 class="window-title text-uppercase fw-bold"><span class="ms-3">Servicio</span></h6>
+        <div class="window-body p-4">
             <form action="{{ route('admin.service.store') }}" method="POST">
                 <div class="form-container">
                     @csrf

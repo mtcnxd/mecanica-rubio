@@ -4,8 +4,8 @@
 @include('includes.alert')
 <div class="window-container">
     <div class="col-md-7">
-        <h6 class="window-title shadow text-uppercase fw-bold"><span class="ms-3">automovil</span></h6>
-        <div class="window-body shadow p-4">
+        <h6 class="window-title text-uppercase fw-bold"><span class="ms-3">automovil</span></h6>
+        <div class="window-body p-4">
             <form action="{{ route('admin.car.store') }}" method="POST">
                 <div class="form-container">
                     @method('POST')

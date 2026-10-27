@@ -3,15 +3,13 @@
 @section('content')
 <div class="window-container">
     @include('includes.alert')
-    <h6 class="window-title shadow text-uppercase fw-bold d-flex justify-content-between align-items-center">
+    <h6 class="window-title text-uppercase fw-bold d-flex justify-content-between align-items-center">
         <span class="ms-3">Cliente</span>
-        <a href="{{ route('admin.client.edit', $client->id) }}" class="btn btn-sm btn-outline-secondary me-2">
-            <x-feathericon-edit class="table-icon" style="margin: -2px 3px 0"/>
+        <a href="{{ route('admin.client.edit', $client->id) }}" class="btn btn-sm me-2 fs-7">
             Editar
         </a>
     </h6>
-    <div class="window-body shadow p-4">
-
+    <div class="window-body p-4">
         {{-- Client profile header --}}
         <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
             <span class="client-avatar me-3">{{ Str::limit($client->name, 1, null) }}</span>
@@ -38,7 +36,7 @@
         </div>
 
         {{-- Client info --}}
-        <div class="form-container border">
+        <div class="form-container">
             <div class="row">
                 <div class="col-md-6">
                     <div class="row">
@@ -101,14 +99,14 @@
                     <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" aria-selected="true">
                         <x-feathericon-tool class="table-icon" style="margin: 0 0 2px 5px"/>
                         Servicios
-                        <span class="badge bg-secondary ms-1">{{ $client->services->count() }}</span>
+                        <span class="badge bg-success pt-2 ms-1">{{ $client->services->count() }}</span>
                     </button>
                 </li>
                 <li class="nav-item">
                     <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" aria-selected="false">
                         <x-feathericon-key class="table-icon" style="margin: 0 0 2px 5px"/>
                         Autos
-                        <span class="badge bg-secondary ms-1">{{ $client->cars->count() }}</span>
+                        <span class="badge bg-success pt-2 ms-1">{{ $client->cars->count() }}</span>
                     </button>
                 </li>
             </ul>
@@ -175,7 +173,7 @@
         </div>
 
         <div class="row">
-            <div class="col-md-12 text-end">
+            <div class="col-md-12">
                 <a href="{{ route('admin.client.index') }}" class="btn btn-sm btn-success">Atras</a>
             </div>
         </div>
