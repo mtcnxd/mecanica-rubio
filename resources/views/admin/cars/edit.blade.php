@@ -2,11 +2,11 @@
 
 @section('content')
 <div class="window-container">
-    <div class="col-md-7">
-        <h6 class="window-title shadow text-uppercase fw-bold"><span class="ms-3">automovil</span></h6>
-        <div class="window-body shadow p-4">
-            <div class="form-container border">
-                <form action="{{ route('cars.update', $auto->id) }}" method="POST">
+    <div class="col-md-6">
+        <h6 class="window-title text-uppercase fw-bold"><span class="ms-3">automovil</span></h6>
+        <div class="window-body p-4">
+            <div class="form-container">
+                <form action="{{ route('admin.car.update', $auto->id) }}" method="POST">
                     @csrf
                     @method('PUT')
                     
@@ -63,7 +63,7 @@
                         </div>    
                         <div class="col-md-4">
                             <label>Año</label>
-                            <input type="text" class="form-control" name="year" value="{{ isset($auto) ? $auto->year : '' }}" required>
+                            <input type="number" class="form-control" name="year" value="{{ isset($auto) ? $auto->year : '' }}" required>
                         </div>
                         <div class="col-md-4">
                             <label>Placa</label>
@@ -80,11 +80,13 @@
                     
                     <div class="row">
                         <div class="col-md-12 mt-3 text-end">
+                            <!--
                             <a href="{{ route('admin.car.index') }}" class="btn btn-sm btn-secondary">Cancelar</a>
                             <button type="submit" class="btn btn-sm btn-success">
                                 <x-feathericon-save class="table-icon" style="margin: -2px 5px 2px"/>
                                 Guardar
                             </button>
+                            -->
                         </div>
                     </div>
                 </form>

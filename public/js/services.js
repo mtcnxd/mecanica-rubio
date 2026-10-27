@@ -119,9 +119,55 @@ class ServiceItems {
             }
         });
     }
+
+    changeQuoteToService(serviceId) {
+        $.ajax({
+            url: this.rutes.serviceQuote.replace(':id', serviceId),
+            method: 'POST',
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify({ id: serviceId }),
+            success: (response) => {
+                console.log(response);
+
+                if (response.success == false) {
+                    serviceItems.showMessageAlert(response.message, 'error');
+                    return;
+                }
+
+                this.showMessageAlert(response.message)
+                    .then(() => {
+                        location.reload();
+                    });
+            }
+        });
+    }
 }
 
 const serviceItems = new ServiceItems(rutes)
+
+$("#chgService").on('click', function (event) {
+    event.preventDefault();
+
+    const serviceId = $("#service").val();
+
+    if (confirm("¿Confirma convertir esta cotizacion a un servicio?")) {
+
+        $("#selectClient").modal("show");
+
+        // serviceItems.changeQuoteToService(serviceId);
+    }
+});
+
+$("#client-name").on('keyup', function (event) {
+    const value = $("#client-name").val();
+
+    if (value.length < 3) {
+        return;
+    }
+
+    console.log(value);
+});
 
 $("#setAsCompleted").on('click', function (event) {
     event.preventDefault();

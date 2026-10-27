@@ -6,16 +6,21 @@
     <h6 class="window-title text-uppercase fw-bold"><span class="ms-3">Cotizacion</span></h6>
     <div class="window-body p-4">
         <form action="{{ route('admin.service.update', $service->id) }}" method="POST">
-            <div class="form-container border mb-0">
+            <div class="form-container">
                 @csrf
                 @method('PATCH')
                 <div class="row pt-0 pb-0">
                     <div class="col-md-6">
                         <div class="row">
                             <div class="col-md-12">
-                                <label>Cliente</label>    
-                                <input type="text" class="form-control" name="client" value="#{{ $service->client->id }} - {{ $service->client->name }}" disabled>
-                                <input type="hidden" value="{{ $service->id }}" id="service">
+                                <label>Cliente</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        #{{ $service->client->id }}
+                                    </span>
+                                    <input type="hidden" value="{{ $service->id }}" id="service">
+                                    <input type="text" class="form-control" name="client" value="{{ $service->client->name }}" disabled />
+                                </div>
                             </div>
                         </div>
                         <div class="row mt-3">
@@ -47,7 +52,7 @@
                 </div>
             </div>
 
-            <div class="col-md-12 bg-white border border-top-0 border-bottom-0" style="height: 350px; overflow-y: scroll">
+            <div class="form-container bg-white border" style="height: 350px; overflow-y: scroll">
                 <table class="table table-hover table-borderless dataTable no-footer">
                     <thead>
                         <th width="30px">#</th>
@@ -88,7 +93,7 @@
                 </table>
             </div>
 
-            <div class="form-container border">
+            <div class="form-container">
                 <div class="row">
                     <div class="col-md-6">
                         <label>Comentarios</label>
@@ -116,6 +121,35 @@
     </div>
 </div>
 @endsection
+
+<div class="modal modal fade" id="selectClient" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Selecciona cliente</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="client-name">
+                            <span class="input-group-text">
+                                <a href="{{  route('admin.client.create') }}">
+                                    Nuevo cliente
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success" id="addItemInvoice">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section('modal')
 <div class="modal modal-xl fade" id="createItem" tabindex="-1">
@@ -180,7 +214,8 @@
         serviceItemsIndex : "{{ route('api.service.service-item.index') }}",
         serviceItemsDestroy : "{{ route('api.service.service-item.destroy', ':id') }}",
         serviceUpdate : "{{ route('api.service.update', ':id') }}",
-        servicePdf : "{{ route('api.service.pdf', ':id') }}"
+        servicePdf : "{{ route('api.service.pdf', ':id') }}",
+        serviceQuote: "{{ route('api.service.changeQuoteToService', ':id') }}",
     }
 </script>
 <script src="{{ asset('js/services.js')}}"></script>
