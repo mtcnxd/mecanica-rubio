@@ -11,7 +11,7 @@ class EmployeeService
 
     public function getAll()
     {
-        $employees = Employee::all();
+        $employees = Employee::orderBy('name', 'asc')->get();
 
         if ($employees->isEmpty()){
             throw new \Exception("Aun no existen empleados registraron");

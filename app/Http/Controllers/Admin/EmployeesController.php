@@ -24,14 +24,15 @@ class EmployeesController extends Controller
     public function index()
     {
         $employees = [];
+
         try {
             $employees = $this->employeeService->getAll();
-            return view('admin.employees.index', compact('employees'));
-        
+
         } catch (Exception $e) {
-            return view('admin.employees.index', compact('employees'))
-                ->with('warning', 'Error | Message: '. $e->getMessage());
+            session()->flash('error', $e->getMessage());
         }
+
+        return view('admin.employees.index', compact('employees'));
     }
 
     public function create()

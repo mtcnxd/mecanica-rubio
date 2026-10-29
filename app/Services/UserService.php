@@ -11,9 +11,9 @@ class UserService
         return User::all();
     }
 
-    public function storeUser($data): bool
+    public function storeUser($data): User
     {
-
+        return User::create($data);
     }
 
     public function updateUser(array $data, string $id): User
