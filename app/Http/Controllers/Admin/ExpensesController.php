@@ -3,15 +3,28 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ExpenseRequest;
+use App\Services\FinanceService;
 use Illuminate\Http\Request;
 use App\Traits\Notificator;
 use App\Models\Expense;
-use App\Models\User;
 
 class ExpensesController extends Controller
 {
     use Notificator;
-    
+
+    protected $categories = [
+        'Combustible',
+        'Herramientas',
+        'Servicio externo',
+        'Servicio publico',
+        'Otros',
+    ];
+
+    public function __construct(
+        private FinanceService $financeService
+    ){ }
+
     public function index()
     {
         $expenses = Expense::whereBetween('created_at', [now()->subDays(45), now()])
@@ -23,44 +36,44 @@ class ExpensesController extends Controller
 
     public function create()
     {
-        $employees = User::orderBy('name')->get();
+        $categories = $this->categories;
+        $employees  = \App\Models\User::orderBy('name')->get();
 
-        return view('admin.expenses.create', compact('employees'));
+        return view('admin.expenses.create', compact('employees', 'categories'));
     }
 
     public function edit(string $id)
     {
-        $expense = Expense::where('expenses.id', $id)
-            ->first();
+        try {
+            $categories = $this->categories;
+            $expense    = $this->financeService->getExpense($id);
 
-        return view('admin.expenses.edit', compact('expense'));
+            return view('admin.expenses.edit', compact('expense', 'categories'));
+
+        } catch (\Exception $e) {
+            session()->flash('warning', $e->getMessage());
+            return view('error-page');
+        }
     }
 
-    public function store(Request $request)
+    public function store(ExpenseRequest $request)
     {
+        dd($request);
+
         try {
             if($request->hasFile('attach')){
-                $newFilename = time() .'.'. $request->attach->extension();
-                $request->attach->move(public_path('uploads/expenses'), $newFilename);
+                $filename = time() .'.'. $request->attach->extension();
+                $request->attach->move(public_path('uploads/expenses'), $filename);
             }
 
-            Expense::create([
-                'name'         => $request->name,
-                'description'  => $request->description,
-                'status'       => $request->status,
-                'amount'       => $request->amount,
-                'price'        => $request->price,
-                'employee_id'  => $request->employee_id,
-                'attach'       => isset($newFilename) ? $newFilename : '',
-                'expense_date' => now()
-            ]);
+            $this->financeService->storeExpense($request->validated());
 
             $this->sendNotification(
                 sprintf("*Expense created:* __%s__ \n*Total:* __%s__", $request->name, $request->price)
             );
 
             session()->flash('message', 'Egreso creado correctamente');
-        
+
         } catch (\Exception $err){
             session()->flash('warning', 'ERROR: '. $err->getMessage());
 		}
@@ -71,28 +84,23 @@ class ExpensesController extends Controller
     public function update(Request $request, string $id)
     {
         try {
+            $data = [
+                'category'     => $request->category,
+                'expense_date' => $request->expense_date,
+                'status'       => $request->status,
+            ];
+
             if ($request->hasFile('attach')){
-                $newFilename = time() .'.'. $request->attach->extension();
-                $request->attach->move(public_path('uploads/expenses'), $newFilename);
-    
-                Expense::where('id', $id)->update([
-                    "attach"       => isset($newFilename) ? $newFilename : '',
-                    "expense_date" => $request->expense_date,
-                    "status"       => $request->status
-                ]);
-    
-                session()->flash('message', 'Egreso actualizado correctaamente');
-    
-                return to_route('admin.finance.expense.index');
+                $filename = time() .'.'. $request->attach->extension();
+                $request->attach->move(public_path('uploads/expenses'), $filename);
+
+                $data['attach'] = $filename;
             }
-            
-            Expense::where('id', $id)->update([
-                "expense_date" => $request->expense_date,
-                "status"       => $request->status
-            ]);
-    
+
+            $this->financeService->updateExpense($data, $id);
+
             session()->flash('message', 'Egreso actualizado correctaamente');
-        
+
         } catch (\Exception $err){
             session()->flash('warning', 'ERROR: '. $err->getMessage());
 		}
@@ -100,16 +108,22 @@ class ExpensesController extends Controller
         return to_route('admin.finance.expense.index');
     }
 
-    public function deleteItem(Request $request)
+    public function deleteItem(Request $request): array
     {
-        DB::table('expenses')
-            ->where('id', $request->id)
-            ->delete();
-
-        return response()->json([
-            "success" => true,
-            "message" => 'Eliminado correctamente'
-        ]);
+        try {
+            Expense::where('id', $request->id)->delete();
+    
+            return response()->json([
+                "success" => true,
+                "message" => 'Eliminado correctamente',
+            ]);
+        
+        } catch (\Exception $err) {
+            return response()->json([
+                "success" => false,
+                "message" => $er->getMessage(),
+            ]);
+        }
     }
 
     public function getImageAttached(Request $request)

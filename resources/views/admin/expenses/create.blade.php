@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="window-container">
-    <div class="col-md-7">    
+    <div class="col-md-8">
         <h6 class="window-title text-uppercase fw-bold"><span class="ms-3">Egreso</span></h6>
         <div class="window-body p-4">
             <form action="{{ route('admin.finance.expense.store') }}" method="POST" enctype="multipart/form-data">
@@ -10,18 +10,35 @@
                     @csrf
                     <div class="row">
                         <div class="col-md-12">
+                            <label>Responsable</label>
+                            <select class="form-select" name="employee_id" required>
+                                @foreach ($employees as $employee)
+                                    <option value="{{ $employee->id }}">{{ $employee->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-6">
                             <label>Concepto</label>    
                             <div class="input-group">
                                 <input type="text" class="form-control" name="name" required>
                             </div>
                         </div>
+                        <div class="col-md-6">
+                            <label>Categoria</label>    
+                            <div class="input-group">
+                                <select class="form-select" name="category" required>
+                                    <option selected disabled>Seleccione una categoria</option>
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category }}">{{ $category }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                    <div class="row mt-3">
-                        <div class="col-md-12">
-                            <label>Descripción</label>
-                            <textarea class="form-control" cols="30" rows="4" name="description"></textarea>
-                        </div>                
-                    </div>             
+
                     <div class="row mt-3">
                         <div class="col-md-6">
                             <label>Cantidad</label>
@@ -35,16 +52,14 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="row mt-3">
                         <div class="col-md-12">
-                            <label>Responsable</label>
-                            <select class="form-select" name="employee_id" required>
-                                @foreach ($employees as $employee)
-                                    <option value="{{ $employee->id }}">{{ $employee->name }}</option>
-                                @endforeach
-                            </select>
+                            <label>Descripción</label>
+                            <textarea class="form-control" cols="30" rows="4" name="description"></textarea>
                         </div>
                     </div>
+
                     <div class="row mt-3">
                         <div class="col-md-6">
                             <label>Estatus</label>
@@ -67,7 +82,6 @@
                         Guardar
                     </button>
                 </div>
-
             </form>
         </div>
     </div>
