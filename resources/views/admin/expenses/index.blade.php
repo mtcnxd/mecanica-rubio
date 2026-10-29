@@ -39,12 +39,13 @@
             <thead>
                 <tr>
                     <th width="40px">ID</th>
-                    <th width="250px">Egreso</th>
+                    <th width="200px">Egreso</th>
                     <th width="500px">Descripción</th>
+                    <th width="100px">Categoria</th>
                     <th width="100px">Estatus</th>
                     <th width="100px">Fecha</th>
                     <th width="100px" class="text-end">Total</th>
-                    <th width="105px">&nbsp;</th>
+                    <th width="105px">Opciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -57,6 +58,7 @@
                             <a href="{{ route('admin.finance.expense.edit', $expense->id) }}">{{ $expense->name }}</a>
                         </td>
                         <td>{{ Str::limit($expense->description, 60) }}</td>
+                        <td>{{ $expense->category }}</td>
                         <td>
                             @if ($expense->status == 'Pagado')
                                 <span class="badge text-bg-success">{{ $expense->status }}</span>
@@ -67,12 +69,14 @@
                         <td>{{ $expense->expense_date->format('d-m-Y') }}</td>
                         <td class="text-end">{{ Number::currency($expense->total) }}</td>
                         <td>
-                            <button class="btn" id="{{ $expense->id }}" onclick="removeItemExpense(this.id)">
-                                <x-feathericon-trash-2 class="table-icon" style="margin: -2px 5px 0 0"/>
-                            </button>
                             @if ($expense->attach)
                                 <button class="btn attach" data-bs-target="#attached" data-bs-toggle="modal" id="{{ $expense->id }}" onclick="getImageAttached(this.id)">
-                                    <x-feathericon-paperclip class="table-icon" style="margin: -2px 5px 0 0"/>
+                                    <x-feathericon-paperclip class="table-icon" style="margin: -2px 5px 0 0; color:#555;"/>
+                                </button>
+                            @endif
+                            @if ($expense->status != 'Pagado')
+                                <button class="btn" id="{{ $expense->id }}" onclick="removeItemExpense(this.id)">
+                                    <x-feathericon-trash-2 class="table-icon" style="margin: -2px 5px 0 0; color:#555;"/>
                                 </button>
                             @endif
                         </td>
