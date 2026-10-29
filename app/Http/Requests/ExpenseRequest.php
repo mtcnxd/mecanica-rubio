@@ -22,26 +22,24 @@ class ExpenseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'         => 'required',
-            'category'     => 'required',
-            'description'  => 'required',
-            'status'       => 'required',
-            'amount'       => 'required',
-            'price'        => 'required',
-            'employee_id'  => 'required',
+            'employee_id'   => '',
+            'name'          => 'required',
+            'category'      => 'required',
+            'status'        => 'required',
+            'amount'        => 'required',
+            'price'         => 'required',
+            'attach'        => 'file|mimes:pdf,jpeg,png,jpg,gif|max:2048',
         ];
     }
 
     public function messages()
     {
         return [
-            'name.required'        => 'El nombre es requerido',
-            'category.required'    => 'La categoria es requerida',
-            'description.required' => 'La descripcion es requerida',
-            'status.required'      => 'El estado es requerido',
-            'amount.required'      => 'El monto es requerido',
-            'price.required'       => 'El precio es requerido',
-            'employee_id.required' => 'El empleado es requerido',
+            'name.required'     => 'El concepto es requerido',
+            'category.required' => 'La categoria es requerida',
+            'status.required'   => 'El estado es requerido',
+            'amount.required'   => 'El monto es requerido',
+            'price.required'    => 'El precio es requerido',
         ];
     }
 }

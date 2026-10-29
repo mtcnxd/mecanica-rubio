@@ -2,8 +2,8 @@
 
 @section('content')
 @include('includes.alert')
+
 <div class="window-container">
-    @include('includes.alert')
     <h6 class="window-title text-uppercase fw-bold"><span class="ms-3">Listado de egresos</span></h6>
     <div class="window-body py-4">
         <div class="row m-1 mb-3 pb-3" id="filters">

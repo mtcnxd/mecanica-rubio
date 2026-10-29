@@ -42,40 +42,27 @@ class ExpensesController extends Controller
         return view('admin.expenses.create', compact('employees', 'categories'));
     }
 
-    public function edit(string $id)
-    {
-        try {
-            $categories = $this->categories;
-            $expense    = $this->financeService->getExpense($id);
-
-            return view('admin.expenses.edit', compact('expense', 'categories'));
-
-        } catch (\Exception $e) {
-            session()->flash('warning', $e->getMessage());
-            return view('error-page');
-        }
-    }
-
     public function store(ExpenseRequest $request)
     {
-        dd($request);
-
         try {
-            if($request->hasFile('attach')){
+            $data = $request->validated();
+
+            if ($request->hasFile('attach')){
                 $filename = time() .'.'. $request->attach->extension();
                 $request->attach->move(public_path('uploads/expenses'), $filename);
+                $data['attach'] = $filename;
             }
 
-            $this->financeService->storeExpense($request->validated());
+            $this->financeService->storeExpense($data);
 
             $this->sendNotification(
                 sprintf("*Expense created:* __%s__ \n*Total:* __%s__", $request->name, $request->price)
             );
 
-            session()->flash('message', 'Egreso creado correctamente');
+            session()->flash('success', 'Egreso creado correctamente');
 
         } catch (\Exception $err){
-            session()->flash('warning', 'ERROR: '. $err->getMessage());
+            session()->flash('error', $err->getMessage());
 		}
 
         return to_route('admin.finance.expense.index');
@@ -106,6 +93,20 @@ class ExpensesController extends Controller
 		}
 
         return to_route('admin.finance.expense.index');
+    }
+
+    public function edit(string $id)
+    {
+        try {
+            $categories = $this->categories;
+            $expense    = $this->financeService->getExpense($id);
+
+            return view('admin.expenses.edit', compact('expense', 'categories'));
+
+        } catch (\Exception $e) {
+            session()->flash('warning', $e->getMessage());
+            return view('error-page');
+        }
     }
 
     public function deleteItem(Request $request): array

@@ -38,12 +38,12 @@ class FinanceService
         return Expense::create([
             'name'         => $data['name'],
             'category'     => $data['category'],
-            'description'  => $data['description'],
+            'description'  => $data['description'] ?? null,
             'status'       => $data['status'],
             'amount'       => $data['amount'],
             'price'        => $data['price'],
             'employee_id'  => $data['employee_id'],
-            'attach'       => isset($data['attach']) ? $data['attach'] : '',
+            'attach'       => $data['attach'] ?? null,
             'expense_date' => now()
         ]);
     }

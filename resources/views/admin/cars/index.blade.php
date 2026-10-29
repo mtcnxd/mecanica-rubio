@@ -1,8 +1,9 @@
 @extends('includes.body')
 
 @section('content')
+@include('includes.alert')
+
 <div class="window-container">
-    @include('includes.alert')
     <h6 class="window-title text-uppercase fw-bold"><span class="ms-3">Buscar auto</span></h6>
     <div class="window-body py-4">
         <table class="table table-hover table-borderless bg-white mb-4" id="autos">

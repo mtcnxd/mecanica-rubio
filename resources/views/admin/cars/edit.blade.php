@@ -1,6 +1,8 @@
 @extends('includes.body')
 
 @section('content')
+@include('includes.alert')
+
 <div class="window-container">
     <div class="col-md-6">
         <h6 class="window-title text-uppercase fw-bold"><span class="ms-3">automovil</span></h6>
