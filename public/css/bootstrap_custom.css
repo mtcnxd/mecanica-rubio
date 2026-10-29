@@ -54,7 +54,7 @@
     --bs-table-bg: transparent;
 }
 
-.table > thead {
+.table>thead {
     background-color: #f8fafc;
     border-bottom: 1px solid #e2e8f0;
 }
@@ -159,7 +159,7 @@
 .card {
     border: 1px solid #e2e8f0;
     border-radius: 12px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
 }
 
 .card-header {
@@ -173,6 +173,7 @@
 .badge {
     font-weight: 500;
     letter-spacing: 0.02em;
+    padding-top: 0.6em;
 }
 
 /* Logout button in forms */
