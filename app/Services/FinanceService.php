@@ -16,6 +16,49 @@ class FinanceService
 {
     use Notificator;
 
+    public function updateExpense(array $data, string $id) : Expense
+    {
+        $expense = Expense::find($id);
+
+        $expense->category     = $data['category'];
+        $expense->expense_date = $data['expense_date'];
+        $expense->status       = $data['status'];
+
+        if (isset($data['attach'])) {
+            $expense->attach = $data['attach'];
+        }
+
+        $expense->save();
+
+        return $expense;
+    }
+
+    public function storeExpense(array $data): Expense
+    {
+        return Expense::create([
+            'name'         => $data['name'],
+            'category'     => $data['category'],
+            'description'  => $data['description'] ?? null,
+            'status'       => $data['status'],
+            'amount'       => $data['amount'],
+            'price'        => $data['price'],
+            'employee_id'  => $data['employee_id'],
+            'attach'       => $data['attach'] ?? null,
+            'expense_date' => now()
+        ]);
+    }
+
+    public function getExpense(string $id): Expense
+    {
+        $expense = Expense::find($id);
+
+        if (is_null($expense)) {
+            throw new \Exception("NO SE ENCONTRO EL GASTO CON ID: {$id}");
+        }
+
+        return $expense;
+    }
+
     public function deleteExpenseItem(string $id) : bool
     {
         $expenseItem = Expense::find($id);

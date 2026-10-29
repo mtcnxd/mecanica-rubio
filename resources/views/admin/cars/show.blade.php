@@ -66,7 +66,6 @@
                 </div>
             </form>
         </div>
-
         <div class="form-container">
             <form method="POST">
                 <p class="fw-bold fs-5">Automovil</p>
@@ -141,8 +140,8 @@
                                     <a href="{{ route('admin.service.show', $service->id) }}">{{ Str::limit($service->fault, 80) }}</a>
                                 </td>
                                 <td>{{ $service->service_type }}</td>
-                                <td>{{ $service->entry_date?->format('d-m-Y') }}</td>
-                                <td>{{ $service->finished_date?->format('d-m-Y') }}</td>
+                                <td>{{ $service?->entry_date?->format('d/m/Y') }}</td>
+                                <td>{{ $service?->finished_date?->format('d/m/Y') }}</td>
                                 <td>
                                     @if ($service->status == 'Finalizado')
                                         <span class="badge text-bg-success">{{ $service->status }}</span>    

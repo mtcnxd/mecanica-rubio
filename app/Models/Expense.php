@@ -18,6 +18,7 @@ class Expense extends Model
         'price',
         'status',
         'responsible',
+        'category',
         'total',
         'expense_date',
         'attach',
@@ -34,7 +35,7 @@ class Expense extends Model
 
     public function getAttachAttribute($value)
     {
-        return asset('storage/' . $value);
+        return $value ? $value : null;
     }
 
     public function getTotalAttribute()

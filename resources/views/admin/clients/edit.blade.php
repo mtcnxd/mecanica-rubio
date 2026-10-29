@@ -1,43 +1,44 @@
 @extends('includes.body')
 
 @section('content')
+@include('includes.alert')
+
 <div class="window-container">
-    @include('includes.warnings')
     <div class="col-md-7">
-        <h6 class="window-title shadow text-uppercase fw-bold"><span class="ms-3">Editar cliente</span></h6>
-        <div class="window-body shadow p-4">
+        <h6 class="window-title text-uppercase fw-bold"><span class="ms-3">Editar cliente</span></h6>
+        <div class="window-body p-4">
             <form action="{{ route('admin.client.update', $client->id) }}" method="POST">
-                <div class="form-container border">
+                <div class="form-container">
                     @method('PUT')
                     @csrf
                     <div class="row">
                         <div class="col-md-12">
-                            <label>Nombre</label>
-                            <input type="text" class="form-control" name="name" value="{{ isset($client) ? $client->name : '' }}">
+                            <label for="name">Nombre</label>
+                            <input type="text" class="form-control" name="name" value="{{ $client ? $client->name : '' }}">
                         </div>
                     </div>
 
                     <div class="row mt-3">
                         <div class="col-md-12">
-                            <label>Correo</label>
-                            <input type="text" class="form-control" name="email" value="{{ isset($client) ? $client->email : '' }}">
+                            <label for="email">Correo</label>
+                            <input type="text" class="form-control" name="email" value="{{ $client ? $client->email : '' }}">
                         </div>
                     </div>
 
                     <div class="row mt-3">
                         <div class="col-md-6">
-                            <label>Teléfono</label>
-                            <input type="number" class="form-control" name="phone" value="{{ isset($client) ? $client->phone : '' }}">
+                            <label for="phone">Teléfono</label>
+                            <input type="number" class="form-control" name="phone" value="{{ $client ? $client->phone : '' }}">
                         </div>
                         <div class="col-md-6">
-                            <label>Código Postal</label>
-                            <input type="text" class="form-control" id="postcode" name="postcode" value="{{ isset($client) ? $client->postcode : '' }}">
+                            <label for="postcode">Código Postal</label>
+                            <input type="text" class="form-control" id="postcode" name="postcode" value="{{ $client ? $client->postcode : '' }}">
                         </div>
                     </div>
 
                     <div class="row mt-3">
                         <div class="col-md-12">
-                            <label>Colónia</label>
+                            <label for="address">Colónia</label>
                             <select class="form-select" id="address" name="address">
                                 @if ( isset($client) )
                                     <option>{{ $client->address }}</option>

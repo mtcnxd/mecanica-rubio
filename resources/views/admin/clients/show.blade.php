@@ -1,20 +1,23 @@
 @extends('includes.body')
 
 @section('content')
+@include('includes.alert')
+
 <div class="window-container">
-    @include('includes.alert')
     <h6 class="window-title text-uppercase fw-bold d-flex justify-content-between align-items-center">
         <span class="ms-3">Cliente</span>
-        <a href="{{ route('admin.client.edit', $client->id) }}" class="btn btn-sm me-2 fs-7">
-            Editar
-        </a>
     </h6>
     <div class="window-body p-4">
         {{-- Client profile header --}}
         <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
             <span class="client-avatar me-3">{{ Str::limit($client->name, 1, null) }}</span>
             <div>
-                <h5 class="mb-1 fw-bold">{{ $client->name }}</h5>
+                <h5 class="mb-1 fw-bold">
+                    {{ $client->name }}
+                    <a href="{{ route('admin.client.edit', $client->id) }}" class="btn btn-link btn-sm me-2 fs-7">
+                        Editar
+                    </a>
+                </h5>
                 <div class="text-muted fs-7">
                     @if($client->email)
                         <x-feathericon-mail class="table-icon me-1" style="margin-top:-2px; color: var(--blue-gray-500)"/>

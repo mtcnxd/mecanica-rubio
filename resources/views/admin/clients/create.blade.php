@@ -1,9 +1,10 @@
 @extends('includes.body')
 
 @section('content')
+@include('includes.alert')
+
 <div class="window-container">
-    @include('includes.warnings')
-    <div class="col-md-6">
+    <div class="col-md-7">
         <h6 class="window-title text-uppercase fw-bold"><span class="ms-3">Cliente</span></h6>
         <div class="window-body p-4">
             <form action="{{ route('admin.client.store') }}" method="POST">
@@ -23,6 +24,7 @@
                             <input type="text" class="form-control" name="email" id="email" value="{{old('email')}}">
                         </div>
                     </div>
+
                     <div class="row mt-3">
                         <div class="col-md-6">
                             <label for="phone">Teléfono</label>
@@ -33,6 +35,7 @@
                             <input type="text" class="form-control" name="postcode" id="postcode">
                         </div>
                     </div>
+
                     <div class="row mt-3">
                         <div class="col-md-12">
                             <label for="address">Colónia</label>

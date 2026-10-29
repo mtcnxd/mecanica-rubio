@@ -15,7 +15,6 @@
                     <th>Dirección</th>
                     <th>Autos</th>
                     <th class="text-end">Cliente desde</th>
-                    <th class="text-end">Editar</th>
                 </tr>
             </thead>
             <tbody>
@@ -39,11 +38,6 @@
                         @if ($client->created_at)
                             <span title="{{ $client->created_at->diffForHumans() }}">{{ $client->created_at->format('j M Y') }}</span>
                         @endif
-                    </td>
-                    <td class="text-end">
-                        <a href="{{ route('admin.client.edit', $client->id) }}">
-                            <x-feathericon-edit class="table-icon"/>
-                        </a>
                     </td>
                 </tr>
             @endforeach
