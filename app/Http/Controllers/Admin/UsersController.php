@@ -43,11 +43,16 @@ class UsersController extends Controller
             /**
              * User phone number is the default password
              */
-            $request->merge([
-                'password' => bcrypt($request->input('phone'))
-            ]);
+            $data = [
+                'name'     => $request["name"],
+                'phone'    => $request["phone"],
+                'email'    => $request["email"],
+                'password' => bcrypt($request->input('phone')),
+                'status'   => $request["status"],
+                'comments' => $request["comments"],
+            ];
 
-            $this->userService->storeUser($request->except('_method','_token'));
+            $this->userService->storeUser($data);
 
             session()->flash(
                 'success', sprintf(

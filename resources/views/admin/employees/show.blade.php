@@ -2,10 +2,13 @@
 
 @section('content')
 @include('includes.alert')
+
 <div class="window-container">
-    <h6 class="window-title shadow text-uppercase fw-bold"><span class="ms-3">Empleado</span></h6>
-    <div class="window-body shadow p-4">
-        <div class="form-container border">
+    <h6 class="window-title text-uppercase fw-bold">
+        <span class="ms-3">Empleado</span>
+    </h6>
+    <div class="window-body p-4">
+        <div class="form-container">
             <p class="fs-5 fw-bold">Detalles empleado</p>
             @method('PUT')
             @csrf
@@ -94,9 +97,82 @@
                 </div>
             </div>
         </div>
-        
+    </div>
 
-        <div class="form-container border">
+    <div class="row">
+        <div class="col-md-6">
+            <h6 class="window-title text-uppercase fw-bold mt-3">
+                <span class="ms-3">Solicitudes de ausencia</span>
+            </h6>
+            <div class="window-body p-4">
+                <div class="form-container">
+                    <form id="vacations">
+                        <p class="fs-5 fw-bold">Solicitudes de ausencia</p>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="date">Fecha de ausencia</label>
+                                <input type="date" class="form-control" name="date" id="date">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="date">Motivo de ausencia</label>
+                                <select class="form-select" name="type" id="type">
+                                    <option>Permiso</option>
+                                    <option>Salud</option>
+                                    <option>Vacaciones</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mt-3">
+                            <label for="comment">Comentario</label>
+                            <textarea class="form-control" name="comment" id="comment"></textarea>
+                        </div>
+                        <div class="col-md-12 mt-3 text-end">
+                            <button type="button" class="btn btn-sm btn-success" onclick="createRow()">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h6 class="window-title text-uppercase fw-bold mt-3">
+                <span class="ms-3">Solicitudes de ausencia</span>
+            </h6>
+            <div class="window-body p-4">
+                <div class="form-container">
+                    <div class="row">
+                        <p class="fs-5 fw-bold">Antiguedad</p>
+                        <div class="col-md-6">
+                            <label>Fecha de inicio</label> 
+                            <input type="date" value="{{ Carbon\Carbon::parse($employee->created_at)->format('Y-m-d') }}" class="form-control" disabled>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Antiguedad</label>
+                            <input type="text" value="{{ Carbon\Carbon::parse($employee->created_at)->diffInMonths() }} meses" class="form-control" disabled>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-3">
+                        <p class="fs-5 fw-bold">Vacaciones</p>
+                        <div class="col-md-6">
+                            <label>Dias tomados</label> 
+                            <input type="text" value="" class="form-control" disabled>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label>Dias pendientes</label>
+                            <input type="text" value="" class="form-control" disabled>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h6 class="window-title text-uppercase fw-bold mt-3">
+        <span class="ms-3">Solicitudes de ausencia</span>
+    </h6>
+    <div class="window-body p-4">
+        <div class="form-container">
             <form id="vacations">
                 <p class="fs-5 fw-bold">Historial de solicitudes</p>
                 <div class="row">
@@ -135,73 +211,16 @@
                 </div>
             </form>
         </div>
+    </div>
 
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-container border">
-                    <form id="vacations">
-                        <p class="fs-5 fw-bold">Solicitudes de ausencia</p>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label for="date">Fecha de ausencia</label>
-                                <input type="date" class="form-control" name="date" id="date">
-                            </div>
-                            <div class="col-md-6">
-                                <label for="date">Motivo de ausencia</label>
-                                <select class="form-select" name="type" id="type">
-                                    <option>Permiso</option>
-                                    <option>Salud</option>
-                                    <option>Vacaciones</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-12 mt-3">
-                            <label for="comment">Comentario</label>
-                            <textarea class="form-control" name="comment" id="comment"></textarea>
-                        </div>
-                        <div class="col-md-12 mt-3 text-end">
-                            <button type="button" class="btn btn-sm btn-success" onclick="createRow()">Guardar</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="form-container border">
-                    
-                    <div class="row">
-                        <p class="fs-5 fw-bold">Antiguedad</p>
-                        <div class="col-md-6">
-                            <label>Fecha de inicio</label> 
-                            <input type="date" value="{{ Carbon\Carbon::parse($employee->created_at)->format('Y-m-d') }}" class="form-control" disabled>
-                        </div>
-                        <div class="col-md-6">
-                            <label>Antiguedad</label>
-                            <input type="text" value="{{ Carbon\Carbon::parse($employee->created_at)->diffInMonths() }} meses" class="form-control" disabled>
-                        </div>
-                    </div>
-                    
-                    <div class="row mt-3">
-                        <p class="fs-5 fw-bold">Vacaciones</p>
-                        <div class="col-md-6">
-                            <label>Dias tomados</label> 
-                            <input type="text" value="" class="form-control" disabled>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label>Dias pendientes</label>
-                            <input type="text" value="" class="form-control" disabled>
-                        </div>
-                    </div>
-                    
-                </div>
-            </div>
-        </div>
-
-        <div class="form-container border">
+    <h6 class="window-title text-uppercase fw-bold mt-3">
+        <span class="ms-3">Caja de ahorro</span>
+    </h6>
+    <div class="window-body p-4">
+        <div class="form-container">
             <form id="savings">
-                <p class="fs-5 fw-bold">Caja de ahorro</p>
-                <div class="row">
+                <p class="fs-5 fw-bold">Detalles caja de ahorro</p>
+                <div class="row" style="overflow: scroll; max-height: 500px;">
                     <table class="table table-hover">
                         <thead>
                             <tr>
@@ -218,7 +237,7 @@
                                     <td>
                                         <a href="{{ route('admin.finance.payroll.show', $payrollItem->salary_id) }}">Nomina #{{ $payrollItem->salary_id }}</a>
                                     </td>
-                                    <td>{{ $payrollItem->payroll?->paid_date->format('d-m-Y') }}</td>
+                                    <td>{{ $payrollItem->payroll?->paid_date->format('d/m/Y') }}</td>
                                     <td>{{ $payrollItem->concept }}</td>
                                     <td class="text-end">{{ Number::currency($payrollItem->amount) }}</td>
                                 </tr>
@@ -228,7 +247,9 @@
                         <tfoot>
                             <tr style="border-bottom-color: #fff;">
                                 <td colspan="3">&nbsp;</td>
-                                <td class="text-end">{{ Number::currency($employee->payrollItems()->sum('amount')) }}</td>
+                                <td class="text-end fw-bold fs-5">
+                                    {{ Number::currency($employee->payrollItems()->sum('amount')) }}
+                                </td>
                             </tr>
                         </tfoot>
                     </table>

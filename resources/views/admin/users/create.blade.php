@@ -13,17 +13,19 @@
                     <div class="row">
                         <div class="col-md-12">
                             <label>Nombre</label>
-                            <input type="text" class="form-control" name="name" required>
+                            <select class="form-select" name="name">
+                                <option selected disabled>Seleccione empleado para crear usuario</option>
+                                @foreach ($employees as $employee)
+                                    <option value="{{ $employee->name }}">{{ $employee->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                     <div class="row mt-3">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <label>Correo</label>
                             <input type="text" class="form-control" name="email" required>
                         </div>
-                    </div>
-
-                    <div class="row mt-3">
                         <div class="col-md-6">
                             <label>Teléfono</label>
                             <input type="number" class="form-control" name="phone" required>
@@ -35,8 +37,7 @@
                             <label>Rol</label>
                             <select class="form-select" name="status">
                                 <option value="admin">Administrador</option>
-                                <option value="client">Cliente</option>
-                                <option value="user">Usuario</option>
+                                <option value="limit">Limitado</option>
                             </select>
                         </div>
                         <div class="col-md-6">
