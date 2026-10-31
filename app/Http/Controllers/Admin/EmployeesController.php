@@ -51,7 +51,7 @@ class EmployeesController extends Controller
         
             } catch (Exception $e) {
             return to_route('admin.employee.index')
-                ->with('warning', 'Error | Message: '. $e->getMessage());
+                ->with('error', $e->getMessage());
         }
     }
 

@@ -89,7 +89,7 @@ class ExpensesController extends Controller
             session()->flash('message', 'Egreso actualizado correctaamente');
 
         } catch (\Exception $err){
-            session()->flash('warning', 'ERROR: '. $err->getMessage());
+            session()->flash('error', $err->getMessage());
 		}
 
         return to_route('admin.finance.expense.index');
@@ -104,7 +104,7 @@ class ExpensesController extends Controller
             return view('admin.expenses.edit', compact('expense', 'categories'));
 
         } catch (\Exception $e) {
-            session()->flash('warning', $e->getMessage());
+            session()->flash('error', $e->getMessage());
             return view('error-page');
         }
     }
