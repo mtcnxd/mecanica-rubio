@@ -41,9 +41,9 @@
             <x-feathericon-chevron-right class="sidebar-chevron"/>
         </a>
         <div class="collapse sidebar-sub-nav" id="nav-servicios">
-            <a class="sidebar-nav-link" href="{{ route('admin.service.quote.index') }}">Cotizaciones</a>
             <a class="sidebar-nav-link" href="{{ route('admin.service.create') }}">Nuevo servicio</a>
-            <a class="sidebar-nav-link" href="{{ route('admin.service.index') }}">Lista de servicios</a>
+            <a class="sidebar-nav-link" href="{{ route('admin.service.quote.index') }}">Cotizaciones</a>
+            <a class="sidebar-nav-link" href="{{ route('admin.service.index') }}">Servicios</a>
         </div>
 
         <a class="sidebar-nav-link" href="{{ route('admin.service.calendar.index') }}">

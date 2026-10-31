@@ -143,11 +143,11 @@
                         <p class="fs-5 fw-bold">Antiguedad</p>
                         <div class="col-md-6">
                             <label>Fecha de inicio</label> 
-                            <input type="date" value="{{ Carbon\Carbon::parse($employee->created_at)->format('Y-m-d') }}" class="form-control" disabled>
+                            <input type="date" value="{{ $employee->start_date?->format('Y-m-d') }}" class="form-control" disabled>
                         </div>
                         <div class="col-md-6">
                             <label>Antiguedad</label>
-                            <input type="text" value="{{ Carbon\Carbon::parse($employee->created_at)->diffInMonths() }} meses" class="form-control" disabled>
+                            <input type="text" value="{{ $employee->start_date?->diffInMonths() }} meses" class="form-control" disabled>
                         </div>
                     </div>
                     

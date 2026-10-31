@@ -1,12 +1,15 @@
 @extends('includes.body')
 
 @section('content')
+@include('includes.alert')
+
 <div class="window-container">
-    @include('includes.alert')
-    <h6 class="window-title shadow text-uppercase fw-bold"><span class="ms-3">Nominas</span></h6>
-    <div class="window-body shadow p-4">
-        <div class="form-container border mb-0">
-            <form action="{{ route('admin.finance.payroll.update', $payroll->id) }}" method="POST">
+    <h6 class="window-title text-uppercase fw-bold">
+        <span class="ms-3">Nominas</span>
+    </h6>
+    <div class="window-body p-4">
+        <div class="form-container mb-0">
+            <form action="{{ route('admin.finance.payroll.update', $payroll) }}" method="POST">
                 @method('PATCH')
                 @csrf
                 <div class="row pt-0 pb-0">
@@ -18,7 +21,7 @@
                                     <input type="text" class="form-control" value="{{ $payroll->employee->name }}" disabled>
                                     <span class="input-group-text" id="basic-addon2">
                                         <a href="{{ route('admin.employee.show', $payroll->employee) }}">
-                                            <x-feathericon-user class="table-icon" style="margin: -2px 5px 2px"/>
+                                            <x-feathericon-user class="table-icon" style="margin: -2px 5px 2px;"/>
                                         </a>
                                     </span>
                                 </div>
@@ -87,7 +90,7 @@
                             <td>
                                 @if ($payroll->status != 'Pagado')
                                     <a href="#" class="removeItem" id="{{ $item->id }}">
-                                        <x-feathericon-trash-2 class="table-icon"/>
+                                        <x-feathericon-trash-2 class="table-icon" style="color:#555;"/>
                                     </a>
                                 @endif
                             </td>
@@ -100,7 +103,7 @@
                                 @if ($payroll->status != 'Pagado')
                                     <a href="#" id="addConcept">
                                         Agregar
-                                        <x-feathericon-plus-circle class="table-icon" style="margin: 0 0 2px 5px"/>
+                                        <x-feathericon-plus-circle class="table-icon" style="margin: 0 0 2px 5px; color:#555;"/>
                                     </a>
                                 @endif
                             </td>

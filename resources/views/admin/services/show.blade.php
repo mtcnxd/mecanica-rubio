@@ -1,13 +1,13 @@
 @extends('includes.body')
 
 @section('content')
+@include('includes.alert')
 
 @php
     $disabled = $service->status == 'Entregado' ? 'disabled' : null;
 @endphp
 
 <div class="window-container">
-    @include('includes.alert')
     <h6 class="window-title text-uppercase fw-bold"><span class="ms-3">Servicio</span></h6>
     <div class="window-body p-4">
         <form action="{{ route('admin.service.update', $service) }}" method="POST">
@@ -112,7 +112,7 @@
                             <td class="text-end">{{ Number::currency($item->amount * $item->price) }}</td>
                             <td>
                                 <a href="#" class="removeItem" data-id="{{ $item->id }}">
-                                    <x-feathericon-trash-2 class="table-icon"/>
+                                    <x-feathericon-trash-2 class="table-icon" style="color: #555;"/>
                                 </a>
                             </td>
                         </tr>
@@ -124,7 +124,7 @@
                                 <td colspan="3">
                                     <a href="#" data-bs-toggle="modal" data-bs-target="#createItem" id="addItem">
                                         Agregar
-                                        <x-feathericon-plus-circle class="table-icon" style="margin: 0 0 2px 5px"/>
+                                        <x-feathericon-plus-circle class="table-icon" style="margin: 0 0 2px 5px; color: #555;"/>
                                     </a>
                                 </td>
                                 <td class="text-end fw-bold">
@@ -149,9 +149,9 @@
                             <input type="text" class="form-control" name="status" value="{{ $service->status }}" disabled>
                         @else
                             <select class="form-select" name="status" {{ $disabled }}>
-                                <option {{$service->status == "Cancelado" ? 'selected' : '' }}>Cancelado</option>
+                                <option {{$service->status == 'Cancelado' ? 'selected' : '' }}>Cancelado</option>
                                 <option {{$service->status == 'Pendiente' ? 'selected' : '' }}>Pendiente</option>
-                                <option {{$service->status == 'Esperando cliente' ? 'selected' : '' }}>Esperando cliente</option>
+                                <option {{$service->status == 'Esperando cliente' ? 'selected' : ''}}>Esperando cliente</option>
                                 <option {{$service->status == 'Esperando refaccion' ? 'selected' : '' }}>Esperando refaccion</option>
                                 <option {{$service->status == 'Finalizado' ? 'selected' : '' }} value="Finalizado">Finalizado [NO PAGADO]</option>
                             </select>
@@ -160,14 +160,14 @@
                 </div>
             </div>
 
-            <div class="form-container">
+            <div class="form-container text-end">
                 <a href="{{ route('admin.service.index') }}" class="btn btn-sm btn-secondary">Atras</a>
                 <button class="btn btn-sm btn-secondary" id="getPdf">
                     <x-feathericon-file-text class="table-icon" style="margin: -2px 5px 2px"/>
                     Descargar
                 </button>
                 @if ($service->status != 'Entregado')
-                    <button type="submit" class="btn btn-sm btn-success">
+                    <button type="submit" class="btn btn-sm btn-secondary">
                         <x-feathericon-save class="table-icon" style="margin: -2px 5px 2px"/>
                         Guardar
                     </button>

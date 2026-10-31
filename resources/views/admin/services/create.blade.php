@@ -1,10 +1,14 @@
 @extends('includes.body')
 
 @section('content')
+@include('includes.alert')
+
 <div class="window-container">
-    @include('includes.alert')
-    <div class="col-md-12">
-        <h6 class="window-title text-uppercase fw-bold"><span class="ms-3">Servicio</span></h6>
+    <div class="row">
+    <div class="col-md-7">
+        <h6 class="window-title text-uppercase fw-bold">
+            <span class="ms-3">Servicio</span>
+        </h6>
         <div class="window-body p-4">
             <form action="{{ route('admin.service.store') }}" method="POST">
                 <div class="form-container">
@@ -32,7 +36,7 @@
                         <div class="col-md-6">
                             <label for="odometer">Odómetro</label>
                             <div class="input-group">
-                            <input type="text" class="form-control" name="odometer" id="odometer">
+                            <input type="text" class="form-control" name="odometer" id="odometer" value="{{ old('odometer') }}">
                                 <span class="input-group-text">Km</span>
                             </div>
                         </div>
@@ -40,29 +44,36 @@
                     <div class="row mt-3">
                         <div class="col-md-12">
                             <label for="fault">Servicio / Fallo reportado</label>
-                            <textarea class="form-control" cols="30" rows="4" name="fault" required></textarea>
+                            <textarea class="form-control" cols="30" rows="4" name="fault" required>{{ old('fault') }}</textarea>
                         </div>
                     </div>
                     <div class="row mt-3">
+                        <p class="fw-bold">Tipo de servicio requerido</p>
                         <div class="col-md-12">
-                            <label class="me-3">
-                                <input type="radio" value="Fallo" name="service_type" id="type" checked>
-                                Fallo/Reparación
-                            </label>
-                            <label class="me-3">
-                                <input type="radio" value="Menor" name="service_type" id="type">
-                                Servicio Menor
-                            </label>
-                            <label>
-                                <input type="radio" value="Mayor" name="service_type" id="type">
-                                Servicio Mayor
-                            </label>
+                            <div class="row">
+                                <label class="me-3">
+                                    <input type="radio" value="Fallo" name="service_type" id="type" checked>
+                                    Fallo/Reparación
+                                </label>
+                            </div>
+                            <div class="row mt-3">
+                                <label class="me-3">
+                                    <input type="radio" value="Menor" name="service_type" id="type">
+                                    Servicio Menor
+                                </label>
+                            </div>
+                            <div class="row mt-3">
+                                <label>
+                                    <input type="radio" value="Mayor" name="service_type" id="type">
+                                    Servicio Mayor
+                                </label>
+                            </div>
                         </div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-md-12">
                             <label for="comments">Comentarios</label>
-                            <textarea class="form-control" cols="30" rows="4" name="comments"></textarea>
+                            <textarea class="form-control" cols="30" rows="4" name="comments">{{ old('comments') }}</textarea>
                         </div>
                     </div>
                     <div class="row mt-3">
@@ -84,6 +95,7 @@
                 </div>
             </form>
         </div>
+    </div>
     </div>
 </div>
 @endsection

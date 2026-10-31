@@ -45,7 +45,7 @@ class CarsController extends Controller
             session()->flash('success', 'Los datos se guardaron correctamente');
 
         } catch (\Exception $e){
-            session()->flash('warning', "ERROR | MESSAGE: {$e->getMessage()}");
+            session()->flash('error', $e->getMessage());
 		}
 
         return to_route('admin.car.index');
@@ -87,7 +87,7 @@ class CarsController extends Controller
             return to_route('car.index')->with('message', 'Los datos se guardaron correctamente');
 
         } catch (\Exception $e){
-            session()->flash('warning', "ERROR | MESSAGE: {$e->getMessage()}");
+            session()->flash('error', $e->getMessage());
             return to_route('admin.car.index');
 
         }
