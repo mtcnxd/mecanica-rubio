@@ -45,7 +45,7 @@ class MonthlySummary extends Command
             $diff = Number::currency($totalEnd - $totalStart);
             $message = sprintf("Last month you saved: <b>%s MXN</b>", $diff);
 
-            $this->telegram($message);
+            $this->sendNotification($message, "HTML");
         }
     }
 }

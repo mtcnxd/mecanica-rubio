@@ -9,6 +9,8 @@ use Illuminate\Support\Number;
 use App\Services\OrderService;
 use App\Services\ClientService;
 use App\Traits\Notificator;
+use App\Http\Requests\ServiceStoreRequest;
+use App\Http\Requests\ServiceUpdateRequest;
 use App\Models\Service;
 use App\Models\ServiceItems;
 use App\Events\ServiceCompleted;
@@ -44,10 +46,26 @@ class ServicesController extends Controller
         return view('admin.services.create', compact('clients'));
     }
 
-    public function store(Request $request)
+    public function store(ServiceStoreRequest $request)
     {
         try {
-            $service = $this->orderService->createOrder($request->all());
+            $service = $this->orderService->createOrder($request->validated());
+
+            if ($service->quote == false) {
+                $this->sendNotification(
+                    sprintf("<b>✅ New service order:</b> <u>%s</u>\r
+                             <b>Client:</b> <u>%s</u>\r
+                             <b>Car model:</b> <u>%s</u>\r
+                             <b>Fault:</b> <u>%s</u>\r
+                             <a href='https://mecanicarubio.com/admin/service/%s'>View Details</a>",
+                                $service->id,
+                                $service->client->name,
+                                $service->car->fullName,
+                                $service->fault,
+                                $service->id
+                            ), "HTML"
+                );
+            }
 
             return to_route('admin.service.index')
                 ->with('success', "Servicio creado correctamente | Folio: #{$service->id}");
@@ -69,35 +87,12 @@ class ServicesController extends Controller
         return view('admin.services.show', compact('service'));
     }
 
-    public function update(Request $request, string $id)
+    public function update(ServiceUpdateRequest $request, string $id)
     {
-        $finishedDate = now();
-        $service = $this->orderService->find($id);
-
-        if (!$service){
-            throw new ServiceNotFoundException("El servicio folio #{$id}: no fue encontrado");
-        }
-
-        if ($request->status == 'Entregado'){
-            $finishedDate = $request->finished_date ? $request->finished_date : now();
-        }
-        
-        $request->merge([
-            'entry_date'    => isset($request->entry_date) ? Carbon::parse($request->entry_date) : null,
-            'finished_date' => ($request->status == 'Entregado') ? Carbon::parse($finishedDate) : null,
-        ]);
-
         try {
-            $service->update($request->except('_token','_method'));
-            session()->flash('success', 'Guardado con exito');
-        }
+            $service = $this->orderService->updateOrderService($request->validated(), $id);
 
-        catch(\Exception $err){
-            session()->flash('warning', 'Ocurrio un error | Mensaje: '. $err->getMessage());
-        }
-
-        if ($request->status == 'Entregado'){
-            try {
+            if ($request->status == 'Entregado'){
                 $this->telegram(
                     sprintf("<b>Service completed:</b> #%s\n\r<b>Car model:</b> %s\n\r<b>Client:</b> %s\n\r<b>Fault:</b> %s\n\r<b>Total:</b> %s", 
                         $service->id,
@@ -110,10 +105,10 @@ class ServicesController extends Controller
 
                 session()->flash('success', 'Guardado con exito');
             }
-            
-            catch (\Exception $err) {
-                session()->flash('warning', 'Ocurrio un error | Mensaje: '. $err->getMessage());
-            }
+        
+        } catch(\Exception $err){
+            session()->flash('warning', 'Ocurrio un error | Mensaje: '. $err->getMessage());
+            return view('admin.services.show', compact('service'));
         }
 
         return to_route('admin.service.index');
