@@ -284,6 +284,12 @@ a:hover {
    MISC UTILITIES
    =========================== */
 
+label {
+    font-weight: 700 !important;
+    margin-bottom: .5rem !important;
+    color: #64748b;
+}
+
 .btn-white {
     background-color: #f1f5f9;
     border: 1px solid #e2e8f0;

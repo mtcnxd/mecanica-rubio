@@ -41,7 +41,7 @@ class PayrollController extends Controller
             $cookieType     = Cookie::get('type');
         
         } catch (\Exception $e){
-            session()->flash('warning', 'Error | Message: '. $e->getMessage());
+            session()->flash('error', $e->getMessage());
         }
 
         return view('admin.payrolls.create', compact('employees', 'items', 'cookieEmployee', 'cookieType'));
@@ -51,10 +51,12 @@ class PayrollController extends Controller
     {
         try {
             $this->payrollService->createPayroll($request->all());
-            return to_route('admin.finance.payroll.index')->with('success', 'El registro se guardo correctamente');
+            return to_route('admin.finance.payroll.index')
+                ->with('success', "El registro se guardo correctamente");
 
         } catch (\Exception $e) {
-            return to_route('admin.finance.payroll.index')->with('warning', 'Error | Message: '. $e->getMessage());
+            return to_route('admin.finance.payroll.index')
+                ->with('error', $e->getMessage());
         }
     }
 

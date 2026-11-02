@@ -39,10 +39,10 @@ class ClientsController extends Controller
                 sprintf("*Client created:* __%s__ \n\r*Client:* __%s__ \n\r*Phone:* __%s__", $client->id, $client->name, $client->phone)
             );
 
-            session()->flash('success', sprintf('El cliente %s se guardó correctamente', $client->name));
+            session()->flash('success', "El cliente {$client->name} se guardó correctamente");
 
         } catch (\Exception $e) {
-            session()->flash('warning', sprintf('Ocurrio un error | %s ', $e->getMessage()));
+            session()->flash('error', $e->getMessage());
         }
 
         return to_route('admin.client.index');
@@ -66,10 +66,11 @@ class ClientsController extends Controller
     {
         try {
             $this->clientService->update($id, $request->validated());
-            session()->flash('success', sprintf('El cliente %s se actualizo correctamente', $request->name));
+            
+            session()->flash('success', "El cliente {$request->name} se actualizo correctamente");
 
         } catch (\Exception $err) {
-            session()->flash('warning', sprintf('Error al actualizar | %s ', $err->getMessage()));
+            session()->flash('error', $err->getMessage());
         }
 
         return to_route('admin.client.index');

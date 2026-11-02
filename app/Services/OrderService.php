@@ -6,6 +6,7 @@ use App\Models\Service;
 use App\Models\ServiceItems;
 use App\Models\Calendar;
 use App\Events\ServiceCompletedEvent;
+use Carbon\Carbon;
 use Illuminate\Support\Number;
 use App\Traits\Notificator;
 use PDF;
@@ -13,6 +14,11 @@ use PDF;
 class OrderService
 {
     use Notificator;
+
+    public function find(string $id) : Service
+    {
+        return Service::findOrFail($id);
+    }
 
     public function all()
     {
@@ -22,37 +28,39 @@ class OrderService
             ->get();
     }
 
-    public function find(int $id): ?Service
+    public function updateOrderService(array $data, int $id): Service
     {
-        return Service::find($id);
+        if ($data['status'] == 'Cancelado' && is_null($data['notes'])) {
+            throw new \Exception("Debe escribir el motivo de la cancelación en comentarios");
+        }
+
+        $service = Service::findOrFail($id);
+
+        $service->update([
+            'odometer'      => $data['odometer'] ?? null,
+            'total'         => $data['total'],
+            'notes'         => $data['notes'],
+            'status'        => $data['status'],
+            'entry_date'    => $data['entry_date'] ? Carbon::parse($data['entry_date']) : null,
+        ]);
+
+        return $service;
     }
 
     public function createOrder(array $data): Service
     {
-        $isQuote = false;
+        $isQuote = isset($data['quote']) ? true : false;
 
-        if (isset($data['quote']) && $data['quote'] == 'quote') {
-            $isQuote = true;
-        }
-
-        $data['entry_date'] = now();
-        $data['quote'] = $isQuote;
-
-        $service = Service::create($data);
-
-        if (!$isQuote) {
-            $this->sendNotification(
-                sprintf("<b>Service created:</b><u>%s</u>\n<b>Client:</b><u>%s</u>\n<b>Car model:</b><u>%s</u>\n<b>Fault:</b>%s\n<a href='https://mecanicarubio.com/admin/service/%s'>Ver Detalles</a>",
-                    $service->id,
-                    $service->client->name,
-                    $service->car->fullName,
-                    $service->fault,
-                    $service->id
-                ), "HTML"
-            );
-        }
-
-        return $service;
+        return Service::create([
+            "entry_date"    => now(),
+            "client_id"     => $data['client_id'],
+            "car_id"        => $data['car_id'],
+            "odometer"      => $data['odometer'],
+            "fault"         => $data['fault'],
+            "service_type"  => $data['service_type'],
+            "comments"      => $data['comments'],
+            "quote"         => $isQuote,
+        ]);
     }
 
     public function markAsCompleted(string $id)

@@ -70,7 +70,7 @@
                             <td class="text-end">{{ Number::currency($item->amount * $item->price) }}</td>
                             <td>
                                 <a href="#" class="removeItem" data-id="{{ $item->id }}">
-                                    <x-feathericon-trash-2 class="table-icon"/>
+                                    <x-feathericon-trash-2 class="table-icon" style="color:#555;"/>
                                 </a>
                             </td>
                         </tr>
@@ -81,7 +81,7 @@
                             <td colspan="3">
                                 <a href="#" data-bs-toggle="modal" data-bs-target="#createItem" id="addItem">
                                     Agregar
-                                    <x-feathericon-plus-circle class="table-icon" style="margin: 0 0 2px 5px"/>
+                                    <x-feathericon-plus-circle class="table-icon" style="margin: 0 0 2px 5px; color:#555;"/>
                                 </a>
                             </td>
                             <td class="text-end fw-bold">
@@ -102,20 +102,18 @@
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-md-12 text-end">
-                    <button class="btn btn-sm btn-secondary" id="getPdf">
-                        <x-feathericon-file-text class="table-icon" style="margin: -2px 5px 2px"/>
-                        Descargar
-                    </button>
-                    <button type="button" class="btn btn-sm btn-secondary" id="chgService">
-                        Servicio
-                    </button>
-                    <button type="submit" class="btn btn-sm btn-success">
-                        <x-feathericon-save class="table-icon" style="margin: -2px 5px 2px"/>
-                        Guardar
-                    </button>
-                </div>
+            <div class="form-container text-end">
+                <button class="btn btn-sm btn-secondary" id="getPdf">
+                    <x-feathericon-file-text class="table-icon" style="margin: -2px 5px 2px"/>
+                    Descargar
+                </button>
+                <button type="button" class="btn btn-sm btn-secondary" id="chgService">
+                    Servicio
+                </button>
+                <button type="submit" class="btn btn-sm btn-success">
+                    <x-feathericon-save class="table-icon" style="margin: -2px 5px 2px"/>
+                    Guardar
+                </button>
             </div>
         </form>
     </div>

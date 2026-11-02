@@ -28,7 +28,7 @@ class InvestmentsController extends Controller
 
             return view('admin.investments.index', compact('results', 'charts'));
         } catch (\Exception $er) {
-            session()->flash('warning', $er->getMessage());
+            session()->flash('error', $er->getMessage());
 
             return view('error-page');
         }
@@ -41,7 +41,7 @@ class InvestmentsController extends Controller
 
             session()->flash('success', sprintf('El registro almacenado con exito'));
         } catch (\Exception $er) {
-            session()->flash('warning', sprintf('FAILED UPDATE DATA | MESSAGE: %s', $er->getMessage()));
+            session()->flash('error', sprintf('FAILED UPDATE DATA | MESSAGE: %s', $er->getMessage()));
         }
 
         return to_route('investment.index');
