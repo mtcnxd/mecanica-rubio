@@ -106,12 +106,13 @@ class ServicesController extends Controller
                 );
             }
 
-            session()->flash('success', 'Servicio actualizado correctamente');
+            session()->flash('success', 'Servicio actualizado');
+            return view('admin.services.show', compact('service'));
         
         } catch(\Exception $err){
-            session()->flash('error', $err->getMessage());
+            return back()->withErrors([
+                'errors' => $err->getMessage()
+            ]);
         }
-
-        return view('admin.services.show', compact('service'));
     }
 }

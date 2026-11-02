@@ -54,16 +54,10 @@ class UsersController extends Controller
 
             $this->userService->storeUser($data);
 
-            session()->flash(
-                'success', sprintf(
-                    'El usuario %s fue creado correctamente, su número de teléfono es la contraseña inicial', $request->input('name')
-                )
-            );
+            session()->flash('success', "El usuario {$request->input('name')} fue creado correctamente, su número de teléfono es la contraseña inicial");
         
         } catch (\Exception $e) {
-            session()->flash(
-                'success', sprintf('Error al crear usuario: %s', $e->getMessage())
-            );
+            session()->flash('error', $e->getMessage());
         }
 
         return to_route('user.index');

@@ -6,6 +6,7 @@ use App\Models\Service;
 use App\Models\ServiceItems;
 use App\Models\Calendar;
 use App\Events\ServiceCompletedEvent;
+use Carbon\Carbon;
 use Illuminate\Support\Number;
 use App\Traits\Notificator;
 use PDF;
@@ -29,19 +30,18 @@ class OrderService
 
     public function updateOrderService(array $data, int $id): Service
     {
-        if ($data['status'] == "Cancelado" && is_null($data['notes'])) {
-            throw new \Exception("Debe escribir en comentarios el motivo de la cancelación");
-        }
-
-        if ($data['status'] == 'Entregado'){
-            $finishedDate = $data['finished_date'] ? $data['finished_date'] : now();
+        if ($data['status'] == 'Cancelado' && is_null($data['notes'])) {
+            throw new \Exception("Debe escribir el motivo de la cancelación en comentarios");
         }
 
         $service = Service::findOrFail($id);
 
         $service->update([
-            'entry_date'    => isset($request->entry_date) ? Carbon::parse($request->entry_date) : null,
-            'finished_date' => ($request->status == 'Entregado') ? Carbon::parse($finishedDate) : null,
+            'odometer'      => $data['odometer'] ?? null,
+            'total'         => $data['total'],
+            'notes'         => $data['notes'],
+            'status'        => $data['status'],
+            'entry_date'    => $data['entry_date'] ? Carbon::parse($data['entry_date']) : null,
         ]);
 
         return $service;

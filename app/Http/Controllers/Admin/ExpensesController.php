@@ -86,7 +86,7 @@ class ExpensesController extends Controller
 
             $this->financeService->updateExpense($data, $id);
 
-            session()->flash('message', 'Egreso actualizado correctaamente');
+            session()->flash('success', 'Egreso actualizado correctamente');
 
         } catch (\Exception $err){
             session()->flash('error', $err->getMessage());

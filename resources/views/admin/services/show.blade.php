@@ -8,7 +8,9 @@
 @endphp
 
 <div class="window-container">
-    <h6 class="window-title text-uppercase fw-bold"><span class="ms-3">Servicio</span></h6>
+    <h6 class="window-title text-uppercase fw-bold">
+        <span class="ms-3">Servicio</span>
+    </h6>
     <div class="window-body p-4">
         <form action="{{ route('admin.service.update', $service) }}" method="POST">
             <div class="form-container">
