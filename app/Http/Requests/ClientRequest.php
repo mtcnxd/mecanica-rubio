@@ -22,7 +22,7 @@ class ClientRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'  => 'required|string|min:10|max:255',
+            'name'  => ['required', 'string', 'max:255', 'regex:/^\S+\s+\S+/'],
             'phone' => 'required|string|min:10|max:10',
             'email' => 'nullable|email',
         ];
@@ -32,7 +32,7 @@ class ClientRequest extends FormRequest
     {
         return [
             'name.required'  => 'El nombre es requerido',
-            'name.min'       => 'El nombre debe tener al menos 10 caracteres',
+            'name.regex'     => 'El nombre debe contener al menos un nombre y un apellido',
             'phone.required' => 'El teléfono es requerido',
             'phone.min'      => 'El teléfono debe tener al menos 10 caracteres',
             'email.email'    => 'El correo no tiene un formato valido'

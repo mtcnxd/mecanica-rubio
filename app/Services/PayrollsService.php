@@ -69,7 +69,7 @@ class PayrollsService
         $payroll = Payroll::find($id);
         
         $payroll->update([
-            'status' => $data['action'],
+            'status'    => $data['action'],
             'paid_date' => now(),
         ]);
 
