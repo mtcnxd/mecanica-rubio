@@ -5,7 +5,9 @@
 
 <div class="window-container">
     <div class="col-md-7">
-        <h6 class="window-title text-uppercase fw-bold"><span class="ms-3">automovil</span></h6>
+        <h6 class="window-title text-uppercase fw-bold">
+            <span class="ms-3">automovil</span>
+        </h6>
         <div class="window-body p-4">
             <form action="{{ route('admin.car.store') }}" method="POST">
                 <div class="form-container">
@@ -16,7 +18,7 @@
                             <label for="select-brand">Marca</label>    
                             <div class="input-group">
                                 <select class="form-select" id="select-brand" name="brand">
-                                    <option>- Seleccione una marca -</option>
+                                    <option selected disabled>- Seleccionar marca -</option>
                                     @foreach ($brands as $brand)
                                         <option>{{ $brand->brand }}</option>
                                     @endforeach
@@ -30,7 +32,7 @@
                             <label for="select-model">Modelo</label>
                             <div class="input-group">
                                 <select class="form-select" id="select-model" name="model">
-                                    <option>- Seleccione un modelo -</option>
+                                    <option selected disabled>- Seleccionar modelo -</option>
                                 </select>
                                 <span class="input-group-text">
                                     <a href="#" data-bs-toggle="modal" data-bs-target="#createModel">Agregar</a>
@@ -43,12 +45,12 @@
                         <div class="col-md-4">
                             <label>VIN</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" name="serie" placeholder="Vehicle Identification Number">
+                                <input type="text" class="form-control" name="serie" value="{{ old('serie') }}" placeholder="Vehicle Identification Number">
                             </div>
                         </div>    
                         <div class="col-md-4">
                             <label>Año</label>
-                            <input type="text" class="form-control" name="year" required>
+                            <input type="text" class="form-control" name="year" value="{{ old('year') }}" required>
                         </div>
                         <div class="col-md-4">
                             <label>Placa</label>
@@ -59,7 +61,8 @@
                     <div class="row mt-3">
                         <div class="col-md-12">
                             <label>Cliente</label>
-                            <select id="client" class="form-select" name="client">
+                            <select id="client_id" class="form-select" name="client_id">
+                                <option selected disabled>- Seleccionar cliente -</option>
                                 @foreach ($clients as $client)
                                     <option value="{{ $client->id }}">{{ $client->name }}</option>
                                 @endforeach
@@ -74,10 +77,10 @@
                     </div>
                 </div>
 
-                <div class="form-container">
+                <div class="col-md-12 text-end">
                     <a href="{{ route('admin.car.index') }}" class="btn btn-sm btn-secondary">Cancelar</a>
                     <button type="submit" class="btn btn-sm btn-success">
-                        <x-feathericon-save class="table-icon" style="margin: -2px 5px 2px"/>
+                        <x-feathericon-save class="table-icon" style="margin: -2px 5px 2px;"/>
                         Guardar
                     </button>
                 </div>
@@ -164,7 +167,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 $(document).ready(function() {
-    $('#client').select2();
+    $('#client_id').select2();
 
     $("#select-brand").on('change', function(event){
         const brand = $(this).val();

@@ -120,10 +120,10 @@
                 </div>
             </div>
             
-            <div class="form-container">
+            <div class="col-md-12 text-end">
                 <a href="{{ route('admin.finance.payroll.index') }}" class="btn btn-sm btn-secondary">Cancelar</a>
                 <button type="submit" class="btn btn-sm btn-success">
-                    <x-feathericon-save class="table-icon" style="margin: -2px 5px 2px"/>
+                    <x-feathericon-save class="table-icon" style="margin: -2px 5px 2px;"/>
                     Guardar
                 </button>
             </div>

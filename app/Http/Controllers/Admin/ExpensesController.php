@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ExpenseRequest;
+use App\Http\Requests\ExpenseStoreRequest;
 use App\Services\FinanceService;
 use Illuminate\Http\Request;
 use App\Traits\Notificator;
@@ -42,7 +42,7 @@ class ExpensesController extends Controller
         return view('admin.expenses.create', compact('employees', 'categories'));
     }
 
-    public function store(ExpenseRequest $request)
+    public function store(ExpenseStoreRequest $request)
     {
         try {
             $data = $request->validated();

@@ -36,19 +36,25 @@ class CarsController extends Controller
     public function store(CarRequest $request)
     {        
         try {
-            $car = $this->carService->createClientCar($request->validated());
+            $car = $this->carService->createCar($request->validated());
 
             $this->sendNotification(
-                sprintf("*Car created:* __%s__ \n\r*Car:* __%s__ \n\r*Client:* __%s__", $car->id, $car->fullName, $car->client->name)
+                sprintf("*New car created:* __%s__ \n\r*Car:* __%s__ \n\r*Client:* __%s__", 
+                    $car->id, 
+                    $car->fullName, 
+                    $car->client->name
+                )
             );
 
-            session()->flash('success', 'Los datos se guardaron correctamente');
+            session()->flash('success', "Guardado correctamente | Folio: #{$car->id}");
+            return to_route('admin.car.index');
 
         } catch (\Exception $e){
-            session()->flash('error', $e->getMessage());
+            return back()->withErrors([
+                'error' => $e->getMessage()
+            ]);
 		}
 
-        return to_route('admin.car.index');
     }
 
     public function show(string $id)

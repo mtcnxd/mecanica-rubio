@@ -23,21 +23,24 @@ class CarRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'brand'  => '',
-            'model'  => '',
-            'year'   => '',
-            'client' => '',
-            'plate'  => '',
-            'color'  => '',
-            'vin'    => '',
-            'status' => '',
+            'client_id' => 'required',
+            'brand'     => 'required',
+            'model'     => 'required',
+            'year'      => 'required',
+            'serie'     => 'required',
+            'plate'     => 'nullable',
+            'color'     => 'nullable',
         ];
     }
 
     public function messages()
     {
         return [
-            //
+            'brand.required'     => 'La marca es requerida',
+            'model.required'     => 'El modelo es requerido',
+            'client_id.required' => 'El cliente es requerido',
+            'year.required'      => 'El año es requerido',
+            'serie.required'     => 'El VIN es requerido',
         ];
     }
 }

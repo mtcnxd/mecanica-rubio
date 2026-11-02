@@ -53,7 +53,7 @@ class ServicesController extends Controller
 
             if ($service->quote == false) {
                 $this->sendNotification(
-                    sprintf("<b>✅ New service order:</b> <u>%s</u>\r
+                    sprintf("<b>✅ New service order:</b> <u>%s</u>\n\r
                              <b>Client:</b> <u>%s</u>\r
                              <b>Car model:</b> <u>%s</u>\r
                              <b>Fault:</b> <u>%s</u>\r
@@ -68,7 +68,7 @@ class ServicesController extends Controller
                 );
             }
 
-            session()->flash('success', "Servicio creado correctamente | Folio: #{$service->id}");
+            session()->flash('success', "Guardado correctamente | Folio: #{$service->id}");
 
         } catch(StoreServiceException $err){
             session()->flash('error', $err->getMessage());

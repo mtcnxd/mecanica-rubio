@@ -132,26 +132,28 @@
             </div>
         </div>
     </div>
+
     <hr style="color: var(--orange-800);">
-    <div class="row col-md-4">
-        <div class="col">
-            <form action="">
-                <input type="hidden" id="income" value="{{ $income }}">
-                <input type="hidden" id="expenses" value="{{ $expenses }}">
-                <input type="hidden" id="balance" value="{{ ($montlyData['balance'] + $income - $expenses) }}">
-            
-                <button class="btn btn-sm btn-outline-success" id="print" onclick="downloadPDF()">
-                    Imprimir
-                </button>
+
+    <div class="col-md-12 text-end">
+        <input type="hidden" id="income" value="{{ $income }}">
+        <input type="hidden" id="expenses" value="{{ $expenses }}">
+        <input type="hidden" id="balance" value="{{ ($montlyData['balance'] + $income - $expenses) }}">
     
-                <button class="btn btn-sm btn-outline-success" id="closeMonth">
-                    Conciliar mes actual
-                </button>
-                
-                <img src="{{ asset('/images/image.gif') }}" width="20px" height="20px" style="display:none;" class="ms-2" id="loader">
-            </form>
-        </div>
-    </div>    
+        <button class="btn btn-sm btn-outline-secondary" id="print" onclick="downloadPDF()">
+            Imprimir
+        </button>
+
+        <button class="btn btn-sm btn-outline-secondary">
+            Meses anteriores
+        </button>
+
+        <button class="btn btn-sm btn-success" id="closeMonth">
+            Conciliar mes actual
+        </button>
+        
+        <img src="{{ asset('/images/image.gif') }}" width="20px" height="20px" style="display:none;" class="ms-2" id="loader">
+    </div>
 </div>
 @endsection
 

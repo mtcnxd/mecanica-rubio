@@ -16,7 +16,7 @@ class CarService
 
     public function find(string $id)
     {
-        return Car::find($id);
+        return Car::findOrFail($id);
     }
 
     public function getCarsByClient(string $id)
@@ -72,10 +72,8 @@ class CarService
         return true;
     }
 
-    public function createClientCar(array $data) : Car
+    public function createCar(array $data) : Car
     {
-        $data['client_id'] = $data['client'];
-        
         return Car::create($data);
     }
 
