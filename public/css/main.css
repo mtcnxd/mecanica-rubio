@@ -152,7 +152,7 @@ a:hover {
 }
 
 .widget-simple:hover {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--amber-600);
 }
 
 .widget-simple-head {

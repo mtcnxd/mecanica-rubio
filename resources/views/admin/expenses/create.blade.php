@@ -34,7 +34,7 @@
                                 <label>Categoria</label>    
                                 <div class="input-group">
                                     <select class="form-select" name="category" required>
-                                        <option selected disabled>Seleccione una categoria</option>
+                                        <option selected disabled>Seleccione categoria</option>
                                         @foreach ($categories as $category)
                                             <option value="{{ $category }}">{{ $category }}</option>
                                         @endforeach
@@ -53,6 +53,18 @@
                                 <div class="input-group">
                                     <span class="input-group-text">$</span>
                                     <input type="text" class="form-control" name="price" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <label>Servicio asociado</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="service_id" placeholder="Folio de servicio">
+                                    <button type="button" class="input-group-text" data-bs-toggle="modal" data-bs-target="#serviceSearchModal">
+                                        <x-feathericon-search class="table-icon" style="margin: -2px 5px 2px"/>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -91,4 +103,31 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('modal')
+<div class="modal fade" id="serviceSearchModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Buscar servicio</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-3 pt-2 text-end">
+                        Cliente
+                    </div>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control" id="new_brand">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-sm btn-primary" id="newBrand">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>  
 @endsection

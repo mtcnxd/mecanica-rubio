@@ -19,6 +19,7 @@ class Expense extends Model
         'status',
         'responsible',
         'category',
+        'service_id',
         'total',
         'expense_date',
         'attach',

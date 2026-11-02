@@ -21,6 +21,7 @@ class FinanceService
         $expense = Expense::find($id);
 
         $expense->category     = $data['category'];
+        $expense->service_id   = $data['service_id'] ?? null;
         $expense->expense_date = $data['expense_date'];
         $expense->status       = $data['status'];
 
@@ -38,6 +39,7 @@ class FinanceService
         return Expense::create([
             'name'         => $data['name'],
             'category'     => $data['category'],
+            'service_id'   => $data['service_id'] ?? null,
             'description'  => $data['description'] ?? null,
             'status'       => $data['status'],
             'amount'       => $data['amount'],
