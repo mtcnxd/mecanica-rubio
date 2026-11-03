@@ -143,7 +143,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-success" id="addItemInvoice">Aceptar</button>
+                <button type="button" class="btn btn-success" id="">Aceptar</button>
             </div>
         </div>
     </div>
