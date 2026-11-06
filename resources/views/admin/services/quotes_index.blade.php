@@ -1,9 +1,12 @@
 @extends('includes.body')
 
 @section('content')
+@include('includes.alert')
+
 <div class="window-container">
-    @include('includes.alert')
-    <h6 class="window-title text-uppercase fw-bold"><span class="ms-3">Cotizaciones</span></h6>
+    <h6 class="window-title text-uppercase fw-bold">
+        <span class="ms-3">Cotizaciones</span>
+    </h6>
     <div class="window-body py-4">
         <div class="row m-1 mb-3 pb-3" id="filters">
             <div class="col-md-3">
@@ -47,6 +50,7 @@
                     <th>Automovil</th>
                     <th width="330px">Servicio/Fallo</th>
                     <th width="100px" class="text-center">Estatus</th>
+                    <th class="text-end">Ultima edición</th>
                     <th class="text-end">Total</th>
                 </tr>
             </thead>
@@ -56,13 +60,20 @@
                     <td>{{ $quote->id }}</td>
                     <td>
                         <a href="{{ route('admin.service.quote.show', $quote->id) }}">
-                            {{ $quote->client->name }}</td>
+                            {{ $quote->client->name }}
                         </a>
-                    <td>{{ $quote->car->fullName }}
-                    <td>{{ $quote->fault }}
-                    <td>{{ $quote->status }}
                     </td>
-                    <td class="text-end">{{ "$".number_format($quote->total, 2) }}</td>
+                    <td>{{ $quote->car->fullName }}</td>
+                    <td>{{ $quote->fault }}</td>
+                    <td>
+                        <span class="badge bg-warning">{{ $quote->status }}</span>
+                    </td>
+                    <td class="text-end">
+                        {{ $quote->updated_at->toDateString() }}
+                    </td>
+                    <td class="text-end">
+                        {{ Number::currency($quote->total) }}
+                    </td>
                 </tr>
                 @endforeach
             </tbody>
