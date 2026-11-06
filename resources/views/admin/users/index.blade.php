@@ -5,7 +5,7 @@
 
 <div class="window-container">
     <h6 class="window-title text-uppercase fw-bold">
-        <span class="ms-3">Usuarios del sistema</span>
+        <span class="ms-3">Usuarios</span>
     </h6>
     <div class="window-body">
         <table class="table table-hover table-borderless bg-white" id="services">

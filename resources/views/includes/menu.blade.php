@@ -95,37 +95,30 @@
         {{-- Configuración --}}
         <div class="sidebar-section-label">Configuración</div>
 
-        <a class="sidebar-nav-link" data-bs-toggle="collapse" href="#nav-usuarios" role="button" aria-expanded="false">
-            <x-feathericon-users/>
-            <span>Usuarios</span>
-            <x-feathericon-chevron-right class="sidebar-chevron"/>
-        </a>
-        <div class="collapse sidebar-sub-nav" id="nav-usuarios">
-            <a class="sidebar-nav-link" href="{{ route('admin.user.create') }}">Nuevo usuario</a>
-            <a class="sidebar-nav-link" href="{{ route('admin.user.index') }}">Lista de usuarios</a>
-        </div>
-
-        <a class="sidebar-nav-link" data-bs-toggle="collapse" href="#nav-empleados" role="button" aria-expanded="false">
-            <x-feathericon-briefcase/>
-            <span>Empleados</span>
-            <x-feathericon-chevron-right class="sidebar-chevron"/>
-        </a>
-        <div class="collapse sidebar-sub-nav" id="nav-empleados">
-            <a class="sidebar-nav-link" href="{{ route('admin.employee.create') }}">Nuevo empleado</a>
-            <a class="sidebar-nav-link" href="{{ route('admin.employee.index') }}">Lista de empleados</a>
-        </div>
-
         <a class="sidebar-nav-link" href="{{ route('admin.setting.index') }}">
             <x-feathericon-settings/>
             <span>Configuración</span>
         </a>
 
-        @if (Auth::user()->id == 1)
-        <div class="sidebar-section-label">Admin</div>
-        <a class="sidebar-nav-link" href="{{ route('admin.investment.index') }}">
-            <x-feathericon-activity/>
-            <span>Inversiones</span>
-        </a>
+        @if (Auth::user()->rol == 'Admin')
+            <div class="sidebar-section-label">Admin</div>
+
+            <a class="sidebar-nav-link" href="{{ route('admin.user.index') }}">
+                <x-feathericon-users/>
+                <span>Usuarios</span>
+            </a>
+
+            <a class="sidebar-nav-link" href="{{ route('admin.employee.index') }}">
+                <x-feathericon-briefcase/>
+                <span>Empleados</span>
+            </a>
+
+            @if (Auth::user()->id == 1)
+                <a class="sidebar-nav-link" href="{{ route('admin.investment.index') }}">
+                    <x-feathericon-activity/>
+                    <span>Inversiones</span>
+                </a>
+            @endif
         @endif
 
     </nav>
