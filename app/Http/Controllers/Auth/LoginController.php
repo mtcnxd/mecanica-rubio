@@ -31,6 +31,7 @@ class LoginController extends Controller
                 ->with('message', 'El correo que intentas registrar no existe como cliente');
         }
 
+        /*
         User::create([
             'name'     => $request->name,
             'phone'    => '0000000000',
@@ -40,7 +41,8 @@ class LoginController extends Controller
             'rol'      => 'Client',
             'token'    => hash('md5',$request->name),
         ]);
-
+        */
+        
         return to_route('user.register')
             ->with('message', 'Enviamos un correo para validar su cuenta');
     }

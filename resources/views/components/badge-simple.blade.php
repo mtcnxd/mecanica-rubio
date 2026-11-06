@@ -11,7 +11,7 @@
 @endif
 
 @if ($status == 'Cancelado')
-    <span class="badge text-bg-danger">{{ $status }}</span>
+    <span class="badge text-bg-secondary">{{ $status }}</span>
 @endif
 
 @if ($status == 'Esperando cliente')

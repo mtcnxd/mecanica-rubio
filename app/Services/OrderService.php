@@ -2,13 +2,15 @@
 
 namespace App\Services;
 
+use App\Models\User;
 use App\Models\Service;
 use App\Models\ServiceItems;
 use App\Models\Calendar;
 use App\Events\ServiceCompletedEvent;
-use Carbon\Carbon;
 use Illuminate\Support\Number;
+use Illuminate\Support\Facades\Auth;
 use App\Traits\Notificator;
+use Carbon\Carbon;
 use PDF;
 
 class OrderService
@@ -22,6 +24,13 @@ class OrderService
 
     public function all()
     {
+        $userLogged = Auth::user();
+
+        if ($userLogged && $userLogged->rol == 'Admin'){
+            return Service::where('quote', false)
+                ->get();
+        }
+
         return Service::whereNotIn('status',['Cancelado'])
             ->where('quote', false)
             ->get();
