@@ -106,6 +106,23 @@ class ServicesController extends Controller
                 );
             }
 
+            if ($service->status == 'Cancelado'){
+                $this->sendNotification(
+                    sprintf("<b>⚠ Service cancelled:</b> #%s\r
+                            <b>Car:</b> %s\r
+                            <b>Client:</b> %s\r
+                            <b>Fault:</b> %s\r
+                            <b>Total:</b> %s", 
+                            $service->id,
+                            $service->car->fullName,
+                            $service->client->name,
+                            $service->fault, 
+                            Number::currency($service->total)
+                    ),
+                    "HTML"
+                );
+            }
+
             session()->flash('success', 'Servicio actualizado');
             return view('admin.services.show', compact('service'));
         
