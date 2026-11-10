@@ -16,8 +16,8 @@ class ExpensesController extends Controller
     protected $categories = [
         'Combustible',
         'Herramientas',
-        'Servicio externo',
-        'Servicio publico',
+        'Refacciones',
+        'Servicio',
         'Otros',
     ];
 
@@ -27,7 +27,7 @@ class ExpensesController extends Controller
 
     public function index()
     {
-        $expenses = Expense::whereBetween('created_at', [now()->subDays(45), now()])
+        $expenses = Expense::whereBetween('created_at', [now()->subMonths(2), now()])
             ->orderBy('created_at', 'asc')
             ->get();
 
@@ -53,10 +53,10 @@ class ExpensesController extends Controller
                 $data['attach'] = $filename;
             }
 
-            $this->financeService->storeExpense($data);
+            $expense = $this->financeService->storeExpense($data);
 
             $this->sendNotification(
-                sprintf("*Expense created:* __%s__ \n*Total:* __%s__", $request->name, $request->price)
+                sprintf("*Expense created:* __%s__ \n*Category:* __%s__  \n*Total:* __%s__", $expense->name, $expense->category, $expense->price)
             );
 
             session()->flash('success', 'Egreso creado correctamente');
