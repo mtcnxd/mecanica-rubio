@@ -90,7 +90,7 @@
                 @else
                     <div class="row">
                         <div class="card p-2">
-                            <img src="/public/uploads/expenses/{{ $expense->attach }}" width="auto">
+                            <img src="/uploads/expenses/{{ $expense->attach }}" width="auto">
                         </div>
                     </div>
                 @endif
